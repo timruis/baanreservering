@@ -60,6 +60,7 @@ class SecurityController extends AbstractController
             $User->setFirstname($data->getFirstname());
             $User->setLastname($data->getLastname());
             $User->setActivateUser(false);
+            $User->setPayed(false);
             $em->persist($User);
             $em->flush();
             return $this->redirectToRoute('app_login');
