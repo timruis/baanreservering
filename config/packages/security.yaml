@@ -1,0 +1,53 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        master_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                provider: master_provider
+            json_login:
+                check_path:    app_api_login
+                username_path: security.credentials.login
+                password_path: security.credentials.password
+            logout:
+                path: /logout
+                target: /
+
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 2592000 # 30 days in seconds
+                path:     /
+                always_remember_me: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/Coworker, roles: ROLE_Coworker }
+        - { path: ^/Trainer, roles: ROLE_Trainer }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/Register, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/, roles: ROLE_USER}

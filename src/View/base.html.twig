@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}In Zon En Wind{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="{{ asset('css/style.css')}}" rel="stylesheet">
+        <link href="{{ asset('css/responsive.css')}}" rel="stylesheet">
+        <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+         {% block stylesheets %}{% endblock %}
+    </head>
+    <!-- page wrapper -->
+    <body class="boxed_wrapper">
+
+    {% block topslideshow %}
+    {% endblock %}
+
+
+    {% block navbar %}
+
+            <!-- Main Header -->
+            <header class="main-header main-header2 header-style-two">
+                <!-- header-upper -->
+                <div class="header-upper">
+                    <div class="container">
+                        <div class="inner-container clearfix">
+                            <div class="logo-box pull-left">
+                                <figure class="logo"><a href="{{ path('homepage') }}"><img style="margin-top:-10px;height: 80px;" src="{{ asset('images/logo.jpg') }}" alt=""></a></figure>
+                            </div>
+                            <div class="nav-outer clearfix">
+                                <div class="menu-area">
+                                    <nav class="main-menu navbar-expand-lg">
+                                        <div class="navbar-header">
+                                            <!-- Toggle Button -->
+                                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                            </button>
+                                        </div>
+                                        <div class="navbar-collapse collapse clearfix">
+                                            <ul class="navigation clearfix">
+                                                <li {% if menuItem == "Home" %}class="current" {% endif %}>
+                                                    <a href="{{ path('homepage') }}">Home</a>
+                                                </li>
+                                                <li {% if menuItem == "Collection" %}class="current" {% endif %}>
+                                                    <a href="{{ path('collection') }}">Collection</a>
+                                                </li>
+                                                <li {% if menuItem == "Bespoke" %}class="current" {% endif %}>
+                                                    <a href="{{ path('bespoke') }}">Bespoke</a>
+                                                </li>
+                                                <li {% if menuItem == "Projects" %}class="current" {% endif %}>
+                                                    <a href="{{ path('Project') }}">Projects</a>
+                                                </li>
+                                                <li {% if menuItem == "Contact" %}class="current" {% endif %}>
+                                                    <a href="{{ path('contact') }}">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <div class="outer-box">
+                                    <div class="search-outer">
+                                        <div class="header-flyout-searchbar">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- header-upper end -->
+
+                <!--Sticky Header-->
+                <div class="sticky-header">
+                    <div class="container clearfix">
+                        <figure class="logo-box"><a href="index.html"><img style="margin-top:-5px;height:45px;" src="{{ asset('images/logo.jpg') }}" alt=""></a></figure>
+                        <div class="menu-area">
+                            <nav class="main-menu navbar-expand-lg">
+                                <div class="navbar-header">
+                                    <!-- Toggle Button -->
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+                                <div class="navbar-collapse collapse clearfix">
+                                    <ul class="navigation clearfix">
+                                        <li {% if menuItem == "Home" %}class="current" {% endif %}>
+                                            <a href="{{ path('homepage') }}">Home</a>
+                                        </li>
+                                        <li {% if menuItem == "Collection" %}class="current" {% endif %}>
+                                            <a href="{{ path('collection') }}">Collection</a>
+                                        </li>
+                                        <li {% if menuItem == "Bespoke" %}class="current" {% endif %}>
+                                            <a href="{{ path('bespoke') }}">Bespoke</a>
+                                        </li>
+                                        <li {% if menuItem == "Projects" %}class="current" {% endif %}>
+                                            <a href="{{ path('Project') }}">Projects</a>
+                                        </li>
+                                        <li {% if menuItem == "Contact" %}class="current" {% endif %}>
+                                            <a href="{{ path('contact') }}">Contact</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div><!-- sticky-header end -->
+            </header>
+            <!-- End Main Header -->
+        {% endblock %}
+        {% block body %}{% endblock %}
+
+        {% block footer %}
+            <!-- main-footer -->
+            <footer class="main-footer" style="background-image: url('{{ asset('images/background/footer-bg.jpg') }}');">
+                <div class="container">
+                    <div class="widget-section">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                                <div class="logo-widget footer-widget">
+                                    <div class="widget-content">contact
+                                        <figure class="footer-logo"><a href="{{path('homepage')}}"><img style="height: 200px;" src="{{ asset('images/logo.jpg') }}" alt=""></a></figure>
+                                        <h2 class="text-light">Infinity. Beyond perfection</h2>
+                                        <br>
+                                        <ul class="social-links">
+                                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                                            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                                <div class="post-widget footer-widget">
+                                    <h4 class="widget-title">Latest news</h4>
+                                    <div class="widget-content">
+                                        <div class="post"><a href="blog-single-1.html">Aenean tristique justo et nibh molestie, non porttitor eros suscipit</a></div>
+                                        <div class="post"><a href="blog-single-1.html">Phasellus dapibus dictum augue, ut</a></div>
+                                        <div class="post"><a href="blog-single-1.html">Mauris blandit vitae. Praesent non mi</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                                <div class="gallery-widget footer-widget">
+                                    <h4 class="widget-title">flicker</h4>
+                                    <div class="widget-content">
+                                        <ul class="list clearfix">
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-1.jpg" alt=""></a></figure></li>
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-2.jpg" alt=""></a></figure></li>
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-3.jpg" alt=""></a></figure></li>
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-4.jpg" alt=""></a></figure></li>
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-5.jpg" alt=""></a></figure></li>
+                                            <li><figure><a href="single-project-1.html"><img src="images/resource/footer-6.jpg" alt=""></a></figure></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
+                                <div class="contact-widget footer-widget">
+                                    <h4 class="widget-title">Contact us</h4>
+                                    <div class="widget-content">
+                                        <ul class="list">
+                                            <li>
+                                                <span>Address :</span>
+                                                Josephine Bakerstraat 18, 1311GA, Almere
+                                            </li>
+                                            <li>
+                                                <span>Call Us :</span>
+                                                <a href="tel:+31(0)6 10 300 288">+31(0)6 10 300 288</a>
+                                            </li>
+                                            <li>
+                                                <span>Call Us :</span>
+                                                <a href="tel:+31(0)20 2443211">+31(0) 20 2443211</a>
+                                            </li>
+
+                                            <li>
+                                                <span>Email :</span>
+                                                <a href="mailto:info@infinityhardwoodflooring.com">info@infinityhardwoodflooring.com</a>
+                                            </li>
+                                            <li>
+                                                <span>Get in Contact :</span>
+                                                <a href="{{ path('contact') }}" style="border-color: #c6a47e;" class="btn btn-outline-">
+                                                    Contact Formulier
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom centred">
+                        <div class="copyright"><a href="{{ path('app_login') }}">&copy;</a> <a href="#">In Zon En Wind</a> 2019. All Rights Reserved. </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- main-footer end -->
+
+
+
+            <!--Scroll to top-->
+            <button class="scroll-top scroll-to-target" data-target="html">
+                <span class="fa fa-arrow-up"></span>
+            </button>
+
+
+        {% endblock %}
+        <!-- jequery plugins -->
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/popper.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script>
+            $.post("{{ path('Courter') }}",   // url
+                {
+                    Link: window.location.href
+                }, // data to be submit
+            )
+        </script>
+        <script src="{{ asset('js/owl.js') }}"></script>
+        <script src="{{ asset('js/wow.js') }}"></script>
+        <script src="{{ asset('js/validation.js') }}"></script>
+        <script src="{{ asset('js/jquery.fancybox.js') }}"></script>
+        <script src="{{ asset('js/appear.js') }}"></script>
+        <script src="{{ asset('js/isotope.js') }}"></script>
+        <script src="{{ asset('js/parallax.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+
+        {% block javascripts %}{% endblock %}
+
+        <!-- main-js -->
+        <script src="{{ asset('js/script.js') }}"></script>
+    </body>
+</html>

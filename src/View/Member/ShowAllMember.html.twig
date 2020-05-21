@@ -1,0 +1,134 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}ISSIMI - {{ Title }}{% endblock %}
+
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('DataTables') }}
+
+
+            {{ parent() }}
+        {% endblock %}
+
+        {% block body %}
+
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Member Info</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Credit Card -->
+
+                            <div style="padding:1em;overflow-x: scroll;">
+                                <div class="card-title">
+                                    <h3 class="text-center">Table Of Member</h3>
+                                </div>
+                                <hr>
+                                <h1>All Member</h1>
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Members ID</th>
+                                        <th>Foto</th>
+                                        <th>voornaam</th>
+                                        <th>Achternaam</th>
+                                        <th>Email</th>
+                                        <th>Telefoon</th>
+                                        {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                                        <th>Change</th>
+                                        <th>Delete</th>
+                                        <th>Betaald</th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Member in Members %}
+                                        <tr class="tbrw{{ Member.Id }}
+                                               {% if Member.payed == 0 %}
+                                                    yellow
+                                                {% endif %}">
+                                            <td>{{ Member.id }}</td>
+                                            <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/Images/profile/') }}{{ Member.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                            </td>
+                                            <td>{{ Member.Firstname }}</td>
+                                            <td>{{ Member.Lastname }}</td>
+                                            <td>{{ Member.Email }}</td>
+                                            <td>{{ Member.Mobile }}</td>
+                                            {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                                            <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
+                                            <td>
+                                                <button type="button" id="{{ Member.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
+                                                    Delete <span class="fas fa-times-circle"></span>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <label for="payed">heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
+                                            </td>
+                                            {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+
+
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    $('.payed').on('click', function (e) {
+                        var userid = $(this).val();
+                        $.post("{{ path('Payment') }}", {id: userid});
+                        $(".tbrw"+userid).toggleClass("yellow")
+                    });
+
+                    $('[data-toggle="modal"]').on('click', function (e) {
+                        // convert target (e.g. the button) to jquery object
+                        var $target = $(e.target);
+
+                        // modal targeted by the button
+                        var modalSelector = $target.data('target');
+                        // retrieve the dom element corresponding to current attribute
+                        var $modalAttribute = $(modalSelector + ' #modal-link');
+                        var dataValue = $target.data('link');
+                        $modalAttribute.attr('href', dataValue);
+                    });
+
+                </script>
+            {% endblock %}
+

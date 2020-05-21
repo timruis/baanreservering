@@ -1,0 +1,10 @@
+@import '~datatables.net-bs4';
+
+div.dataTables_wrapper div.dataTables_filter label{
+    font-size: 30px;
+}
+
+div.dataTables_wrapper div.dataTables_filter input{
+    background: white;
+    font-size: 30px;
+}

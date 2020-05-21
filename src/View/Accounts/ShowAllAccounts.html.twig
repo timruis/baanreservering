@@ -1,0 +1,126 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}In Zon En Wind - {{ Title }}{% endblock %}
+
+
+        {% block stylesheets %}
+            <!-- DataTables -->
+            <link rel="stylesheet" href="{{ asset('vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}">
+
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/list.css') }}">
+            {{ parent() }}
+        {% endblock %}
+
+        {% block body %}
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Account Info</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Credit Card -->
+                            <div style="padding:1em;overflow-x: scroll;">
+                                <div class="card-title">
+                                    <h3 class="text-center">Table Of Account</h3>
+                                </div>
+                                <hr>
+                                <a href="{{ path('Account-Registry') }}" class="btn btn-outline-primary pull-right">
+                                    Create <span class="fa fa-plus-circle"></span>
+                                </a>
+                                <h1>All Account</h1>
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Accounts ID</th>
+                                        <th>Account</th>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                        <th>Change</th>
+                                        <th>Delete</th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Account in Accounts %}
+                                        <tr>
+                                            <td>{{ Account.id }}</td>
+                                            <td>{{ Account.Username }}</td>
+                                            <td>{{ Account.Email }}</td>
+                                            <td>{{ Account.Password }}</td>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <td><a class="btn btn-outline-primary" href="{{ path('Account-Change',{AccountId: Account.id}) }}">Change <span class="fa fa-pencil-square"></span></a></td>
+                                                <td>
+                                                    <button type="button" id="{{ Account.id }}" class="DeleteCerification btn btn-outline-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Account-Delete',{AccountId: Account.id}) }}">
+                                                        Delete <span class="fa fa-times-rectangle"></span>
+                                                    </button>
+                                                </td>
+                                            {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fa fa-times-rectangle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+                <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+                <script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>
+                <script src="{{ asset('vendors/jszip/dist/jszip.min.js') }}"></script>
+                <script src="{{ asset('vendors/pdfmake/build/pdfmake.min.js') }}"></script>
+                <script src="{{ asset('vendors/pdfmake/build/vfs_fonts.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+                <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
+                <script src="{{ asset('assets/js/init-scripts/data-table/datatables-init.js') }}"></script>
+                <script>
+                    $('[data-toggle="modal"]').on('click', function (e) {
+                        // convert target (e.g. the button) to jquery object
+                        var $target = $(e.target);
+
+                        // modal targeted by the button
+                        var modalSelector = $target.data('target');
+                        // retrieve the dom element corresponding to current attribute
+                        var $modalAttribute = $(modalSelector + ' #modal-link');
+                        var dataValue = $target.data('link');
+                        $modalAttribute.attr('href', dataValue);
+                    });
+
+                </script>
+            {% endblock %}
+

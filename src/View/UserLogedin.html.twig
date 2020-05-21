@@ -1,0 +1,192 @@
+<!Doctype html>
+<html class="chrome fa-events-icons-ready">
+<head>
+
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>{% block title %}In Zon En Wind{% endblock %}</title>
+    {% block stylesheets %}
+        <!-- Favicon-->
+        {{ encore_entry_link_tags('UserPanel') }}
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin,cyrillic-ext"
+                  rel="stylesheet" type="text/css">
+        {% endblock %}
+</head>
+
+
+<body class="theme-IZEW">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait... Till IZEW Inspection is loaded</p>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+<!-- Search Bar -->
+<div class="search-bar">
+    <div class="search-icon">
+        <i class="material-icons">search</i>
+    </div>
+    <input type="text" placeholder="START TYPING...">
+    <div class="close-search">
+        <i class="material-icons">close</i>
+    </div>
+</div>
+<!-- #END# Search Bar -->
+<!-- Top Bar -->
+<nav class="navbar nav-wrapper">
+    <button id="toggle" class="p-3 h-100 MenuButton waves-effect sidebar-trigger waves-teal btn-flat">
+        <i style="font-size: 50px;" class="d-flex justify-content-center MenuButton white-text material-icons">
+            menu
+        </i>
+    </button>
+        <div class="navbar-header">
+            <a class="hide-on-med-and-down right navbar-brand p-t-10" style="line-height: 13px;" href="{{ path('dashboard') }}"><span
+                        class="font-bold">
+                    <img class=" pull-left p-t-5 m-t--10" style="height: 40px;" src="{{ asset('images/logo.jpg') }}">
+                  </span>
+                <span class="p-t-10 font-bold">
+                    In Zon En Wind - Baan reservering systeem
+                </span>
+            </a>
+        </div>
+</nav>
+<!-- #Top Bar -->
+<section>
+    <!-- Left Sidebar -->
+
+    <aside id="leftsidebar" class="sidebar">
+        <!-- User Info -->
+        <div class="user-info"
+             style="background: url({{ asset('uploads/images/profile/') }}{% if app.user.BackgroundImage is defined and app.user.BackgroundImage is not empty  %}{{ app.user.BackgroundImage }}{% else %}background.png{% endif %}) no-repeat no-repeat; background-size: cover;">
+            <div class="image">
+                <img src="{{ asset('uploads/images/profile/') }}{% if app.user.ProfileImage is defined and app.user.ProfileImage is not empty %}{{ app.user.ProfileImage }}{% else %}profile.png{% endif %}" width="48" height="48" style="
+    object-fit: cover;
+"
+                     alt="User">
+            </div>
+            <div class="info-container">
+                <div class="name" data-toggle="dropdown" aria-haspopup="true"
+                     aria-expanded="false">{{ app.user.username }}</div>
+                <div class="email">{{ app.user.email }}</div>
+                <div class="btn-group user-helper-dropdown">
+                    <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="{{ path('accountSettings') }}" class=" waves-effect waves-block">
+                                <i class="material-icons">account_circle</i>
+                                Account Settings
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('PasswordChanger') }}" class=" waves-effect waves-block">
+                                <i class="material-icons">lock</i>
+                                Change Password
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin-Tools') }}" class=" waves-effect waves-block">
+                                    <i class="material-icons">supervisor_account</i>
+                                    Admin Tools
+                                </a>
+                            </li>
+                        {% endif %}
+                        <hr/>
+                        <li><a href="{{ path('logout') }}" class=" waves-effect waves-block">
+                                <i class="material-icons">input</i>
+                                Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>    <!-- #User Info -->
+        <!-- Menu -->
+        <div class="menu">
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; ">
+                <ul class="list" style="overflow: hidden; width: auto;">
+                    <!--<li class="header">MAIN NAVIGATION</li>-->
+                    <li>
+                        <a href="{{ path('dashboard') }}" class="waves-effect waves-cyan">
+                            <i class="material-icons">dashboard</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="slimScrollRail"
+                 style="width: 4px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
+
+            </div>
+        </div>
+        <!-- #Menu -->
+        <!-- Footer -->
+        <div class="legal">
+            <div class="copyright">
+                © 2019 <a href="javascript:void(0);">User Panel</a>.
+            </div>
+        </div>
+        <!-- #Footer -->
+    </aside>
+    <!-- #END# Left Sidebar -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                    {% block body %}
+
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% block modals %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script>
+        $("#toggle").click(function(){
+            $( "body" ).toggleClass( "ls-closed" );
+            }
+        );
+        $.post("{{ path('Courter') }}",   // url
+            {
+                Link: window.location.href
+            }, // data to be submit
+        )
+    </script>
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {{ encore_entry_script_tags('UserPanel') }}
+    {% if is_granted('ROLE_ADMIN') == false %}
+        {{ encore_entry_script_tags('DisableControl') }}
+    {% endif %}
+{% endblock %}
+
+
+</body>
+</html>

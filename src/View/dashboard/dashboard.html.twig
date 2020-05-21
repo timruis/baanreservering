@@ -1,0 +1,134 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} IZEW - DASHBOARD{% endblock %}
+
+
+{% block body %}
+    <h1> welcome to IZEW webpanel!!!</h1>
+    {% if app.user.ProfileImage is null %}
+        <div class="alert alert-danger">
+            <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto toe. <a class="badge badge-important" href="{{ path('accountSettings') }}">doe
+                het hier</a>
+        </div>
+    {% endif %}
+    {% if app.user.Firstname is null or app.user.Lastname is null %}
+        <div class="alert alert-danger">
+            <strong>Configureer uw profiel!</strong> Uw voor en achternaam zijn nog niet ingevoerd. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">doe het hier</a>
+        </div>
+    {% endif %}
+    {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+        <div class="alert alert-danger">
+            <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd bent. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
+        </div>
+    {% endif %}
+    {% if app.user.BackgroundImage is null %}
+        <div class="alert alert-danger">
+            <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
+        </div>
+    {% endif %}
+    <div class="row w-100">
+        <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+            <h3 id="monthYear">
+
+            </h3>
+            <div class="span12">
+                <table class="table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th><span id="Day1"></span></th>
+                        <th><span id="Day2"></span></th>
+                        <th><span id="Day3"></span></th>
+                        <th><span id="Day4"></span></th>
+                        <th><span id="Day5"></span></th>
+                        <th><span id="Day6"></span></th>
+                        <th><span id="Day7"></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    <tr>
+                        <td>{{ "now"|date("d/m/Y") }}</td>
+                        {% for i in 1..6 %}
+                            {% set date = '+'~i ~ ' day' %}
+                            <td>{{ "now"|date_modify(date)|date("d/m/Y") }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><a class="btn
+                            {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+                                   disabled
+                                {% endif %}
+                            " href="{{ path('CourtReservation',{date:"now"|date("d-m-Y")}) }}">kies</a></td>
+                        {% for i in 1..6 %}
+                            {% set date = '+'~i ~ ' day' %}
+                            <td><a class="btn
+                                {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+                                   disabled
+                                {% endif %}" href="{{ path('CourtReservation',{date:"now"|date_modify(date)|date("Y-m-d")}) }}">
+                                    kies</a></td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var dt = new Date();
+        var day = dt.getDay();
+        dt.getDay();
+        const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
+            "juli", "August", "september", "oktober", "november", "december"
+        ];
+
+        document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
+
+        for (i = 1; i < 8; i++) {
+            console.log(i+day);
+            switch (day) {
+                case 1:
+                    console.log("maandag");
+                    document.getElementById('Day' + i).innerHTML = "ma";
+                    break;
+                case 2:
+                    console.log("dinsdag");
+                    document.getElementById('Day' + i).innerHTML = "di";
+                    break;
+                case 3:
+                    console.log("woensdag");
+                    document.getElementById('Day' + i).innerHTML = "wo";
+                    break;
+                case 4:
+                    console.log("donderdag");
+                    document.getElementById('Day' + i).innerHTML = "do";
+                    break;
+                case 5:
+                    console.log("vrijdag");
+                    document.getElementById('Day' + i).innerHTML = "vr";
+                    break;
+                case 6:
+                    console.log("zaterdag");
+                    document.getElementById('Day' + i).innerHTML = "za";
+                    break;
+                case 7:
+                    console.log("zondag");
+                    document.getElementById('Day' + i).innerHTML = "zo";
+                    break;
+            }
+            if (day === 7) {
+                day = 1;
+            } else {
+                day++;
+            }
+        }
+        dt.getFullYear();
+        dt.getDate();
+    </script>
+{% endblock %}

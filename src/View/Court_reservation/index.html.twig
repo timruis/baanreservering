@@ -1,0 +1,85 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} IZEW - DASHBOARD{% endblock %}
+
+
+{% block body %}
+    <h1> welcome to IZEW webpanel!!!</h1>
+    {% if app.user.ProfileImage is null %}
+        <div class="alert alert-danger">
+            <strong>Configure your profile!</strong> Your Profile Image is not set yet. <a class="badge badge-important"
+                                                                                           href="{{ path('accountSettings') }}">do
+                it here</a>
+        </div>
+    {% endif %}
+    {% if app.user.Firstname is null or app.user.Lastname is null %}
+        <div class="alert alert-danger">
+            <strong>Configure your profile!</strong> Your Firstname or Lastname is not set yet. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
+        </div>
+    {% endif %}
+    {% if app.user.BackgroundImage is null %}
+        <div class="alert alert-danger">
+            <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
+        </div>
+    {% endif %}
+    <div class="row w-100">
+        <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+            <h3 id="monthYear">
+
+            </h3>
+            <div class="span12">
+                <table class="table-condensed table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Tijd</th>
+                        <th>baan 1</th>
+                        <th>baan 2</th>
+                        <th>baan 3</th>
+                        <th>baan 4</th>
+                        <th>baan 5</th>
+                        <th>baan 6</th>
+                        <th>baan 7</th>
+                        <th>baan 8</th>
+                        <th>baan 9</th>
+                        <th>baan 10</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set Previousdate = 0 %}
+                    {% set PreviousTime = 0 %}
+                    {% for t in times %}
+                    <tr>
+                        <th> {{ t }}</th>
+                        {% for c in 1..10 %}
+                            <td>
+                                {% set stringdate = ChosenDate~" "~t~":00" %}
+                                {% set date = stringdate|date('U') %}
+                                {% if date~c~2 in allReservations or date~c~4 in allReservations or  Previousdate~c~4 in allReservations or date~c~3 in allReservations or  Previousdate~c~3 in allReservations %}
+                                    <a class="btn btn-danger">bezet</a>
+                                {% else %}
+                                    <a class="btn
+                                    {% if date(stringdate) < date() or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                        disabled
+                                    {% endif %}"
+                                       href="{{ path('RegisterGame',{time:date,Court:c}) }}">kies</a>
+                                {% endif %}
+                        </td>
+                            {% set PreviousTime = ChosenDate~" "~t~":00" %}
+                        {% endfor %}
+                    </tr>
+                        {% set Previousdate = PreviousTime|date('U') %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    </script>
+{% endblock %}

@@ -1,0 +1,349 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} In Zon En Wind - DASHBOARD{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('DataTables') }}
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-52115242-14');
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A project management Bootstrap theme by Medium Rare">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="col-12">
+        <div class="page-header mb-4">
+            <div class="media">
+                <div style="height: 75px;width: 75px;">
+                <img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/Images/profile/') }}{{ app.user.ProfileImage }}" class="avatar avatar-lg mt-1">
+                </div>
+                    <div class="media-body ml-3">
+                    <h1 class="mb-0">{{ app.user.username }}</h1>
+                    <p class="lead">{{ app.user.email }}</p>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#UserCourter" role="tab" aria-controls="UserCourter" aria-selected="false">User Courter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false">Notification</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade  active show" id="users" role="tabpanel" data-filter-list="content-list-body">
+                <div class="row content-list-head">
+                    <div class="col-auto">
+                        <h3>Users <span class="count">{{ TotalUsers|length }} </span></h3>
+                        <button class="btn btn-round" data-toggle="modal" data-target="#user-add-modal">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </div>
+                    <form class="col-md-auto">
+                        <div class="input-group input-group-round">
+                            <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="material-icons">filter_list</i>
+                          </span>
+                            </div>
+                            <input id="UserFilter" type="search" onkeyup="Search('UserFilter','UserBlock','Card-Block','card-body')" class="form-control filter-list-input" placeholder="Filter users" aria-label="Filter users">
+                        </div>
+                    </form>
+                </div>
+                <!--end of content list head-->
+                <div id="UserBlock" class="content-list-body row filter-list-1565473567104">
+                {% for Account in Accounts %}
+                    <div class="col-md-6 Card-Block">
+                        <div class="card card-user">
+                            <div class="card-body">
+                                <div class="dropdown card-options">
+                                    <button class="btn-options" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="{{ path('Account-Change',{AccountId: Account.id}) }}">
+                                            Change <span class="fas fa-pen-square"></span>
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger DeleteCerification" data-toggle="modal" data-target="#DeleteCerification" id="{{ Account.id }}" onclick="ModalDelete('{{ path('Account-Delete',{AccountId: Account.id}) }}')">
+                                                Delete <span class="fas fa-times-circle"></span>
+                                            </a>
+                                    </div>
+                                </div>
+                                <div class="card-title">
+                                    <img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/Images/profile/') }}{{ app.user.ProfileImage }}" class="avatar avatar-lg mt-1">
+
+                                    <a href="#">
+                                        <h5 data-filter-by="text" class="H5-filter-by-text">{{ Account.Firstname }} {{ Account.Lastname }} / {{ Account.username }}</h5>
+                                    </a>
+                                    <span>{% for role in Account.roles %}{{ role }}, {% endfor %}</span>
+                                </div>
+                                {{ Account.Email }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!--end of content-list-body-->
+            </div>
+            <div class="tab-pane fade" id="UserCourter" role="tabpanel" data-filter-list="content-list-body">
+                <div class="content-list">
+                    <div class="row content-list-head">
+                        <div class="col-auto">
+                            <h3>UserCourter</h3>
+                        </div>
+                    </div>
+                        <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Link</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for PageVisit in PageVisits %}
+                                <tr>
+                                    <td><a class="badge badge-dark" href="{{ PageVisit.CurrentUrl }}">{{ PageVisit.CurrentUrl }}</a></td>
+                                    <td>{{ PageVisit.Time|date("F jS \\a\\t g:ia") }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+                <!--end of content list-->
+            </div>
+            <div class="tab-pane fade" id="notification" role="tabpanel" data-filter-list="content-list-body">
+                <div class="row content-list-head">
+                    <div class="col-auto">
+                        <h3>Notification</h3>
+                    </div>
+                    <form class="col-md-auto">
+                        <div class="input-group input-group-round">
+                            <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="material-icons">filter_list</i>
+                          </span>
+                            </div>
+                            <input type="search" class="form-control filter-list-input" placeholder="Filter notification" aria-label="Filter Notification">
+                        </div>
+                    </form>
+                </div>
+                <!--end of content list head-->
+                <div class="content-list-body row filter-list-1565473567098"><div class="col-12">
+                        <div class="card card-task">
+                            <div class="progress">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <a href="#">
+                                        <h6 data-filter-by="text" class="H6-filter-by-text">Client objective meeting</h6>
+                                    </a>
+                                    <span class="text-small">Today</span>
+                                </div>
+                                <div class="card-meta">
+                                    <div class="d-flex align-items-center">
+                                        <i class="material-icons">playlist_add_check</i>
+                                        <span>3/4</span>
+                                    </div>
+                                    <div class="dropdown card-options">
+                                        <button class="btn-options" type="button" id="task-dropdown-button-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">Mark as done</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#">Archive</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="col-12">
+                        <div class="card card-task">
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 20%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <a href="#">
+                                        <h6 data-filter-by="text" class="H6-filter-by-text">Target market trend analysis</h6>
+                                    </a>
+                                    <span class="text-small">5 days</span>
+                                </div>
+                                <div class="card-meta">
+                                    <ul class="avatars">
+
+                                        <li>
+                                            <a href="#" data-toggle="tooltip" title="Peggy">
+                                                <img alt="Peggy Brown" class="avatar" src="{{asset('assets/img/avatar-female-2.jpg') }}">
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" data-toggle="tooltip" title="David">
+                                                <img alt="David Whittaker" class="avatar" src="{{asset('assets/img/avatar-male-4.jpg') }}">
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                    <div class="d-flex align-items-center">
+                                        <i class="material-icons">playlist_add_check</i>
+                                        <span>2/10</span>
+                                    </div>
+                                    <div class="dropdown card-options">
+                                        <button class="btn-options" type="button" id="task-dropdown-button-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">Mark as done</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#">Archive</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><div class="col-12">
+                        <div class="card card-task">
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <a href="#">
+                                        <h6 data-filter-by="text" class="H6-filter-by-text">Assemble Outcomes Report for client</h6>
+                                    </a>
+                                    <span class="text-small">7 days</span>
+                                </div>
+                                <div class="card-meta">
+                                    <ul class="avatars">
+
+                                        <li>
+                                            <a href="#" data-toggle="tooltip" title="Marcus">
+                                                <img alt="Marcus Simmons" class="avatar" src="{{asset('assets/img/avatar-male-work-1.jpg') }}">
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" data-toggle="tooltip" title="Claire">
+                                                <img alt="Claire Connors" class="avatar" src="{{asset('assets/img/avatar-female-work-1.jpg') }}">
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" data-toggle="tooltip" title="David">
+                                                <img alt="David Whittaker" class="avatar" src="{{asset('assets/img/avatar-male-4.jpg') }}">
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                    <div class="d-flex align-items-center">
+                                        <i class="material-icons">playlist_add_check</i>
+                                        <span>0/6</span>
+                                    </div>
+                                    <div class="dropdown card-options">
+                                        <button class="btn-options" type="button" id="task-dropdown-button-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="material-icons">more_vert</i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">Mark as done</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-danger" href="#">Archive</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div></div>
+                <!--end of content list-->
+            </div>
+            <!--end of tab-->
+        </div>
+        <form class="modal fade" id="user-add-modal" name="user" method="post" tabindex="-1" aria-hidden="true">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New user</h5>
+                        <button type="button" class="close btn btn-round" data-dismiss="modal" aria-label="Close">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+                    <!--end of modal head-->
+                    <div class="modal-body">
+                                <h6>User Details</h6>
+
+                                        {{ form_widget(NewAccount) }}
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--end of modal body-->
+                    <div class="modal-footer">
+                        <button role="button" class="btn btn-primary" type="submit">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </form>
+    </div>
+
+
+{% endblock %}
+
+        {% block modals %}
+            <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            If you click delete the object will be permanently be deleted.
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    function ModalDelete(Link) {
+                        var modalSelector = "#deleteLinkBtn";
+                        $("#deleteLinkBtn").attr("href", Link);
+                    }
+
+
+
+                </script>
+
+            {% endblock %}

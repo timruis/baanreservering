@@ -1,0 +1,31 @@
+{
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.29.1",
+        "core-js": "^3.0.0",
+        "jquery": "^3.5.0",
+        "regenerator-runtime": "^0.13.2",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    },
+    "dependencies": {
+        "animate.css": "^3.7.2",
+        "bootstrap": "^4.4.1",
+        "bootstrap-colorpicker": "^3.2.0",
+        "datatables.net-bs4": "^1.10.20",
+        "dropzone": "^5.7.0",
+        "jquery-ui-bundle": "^1.12.1-migrate",
+        "jquery.dropzone": "^1.0.5",
+        "material-icons": "^0.3.1",
+        "materialize": "^1.0.0",
+        "materialize-css": "^1.0.0",
+        "node-waves": "^0.7.6",
+        "popper.js": "^1.16.1"
+    }
+}

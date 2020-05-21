@@ -1,0 +1,41 @@
+{% extends 'loginbase.html.twig' %}
+
+{% block title %}IZEW - Login!{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body{
+            background-image: url("images/{{ imgnumber }}.jpg");
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 50%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <!-- Tabs Titles -->
+            <h2> <a class="" href="{{ path("app_login") }}">Sign In </a></h2>
+            <h2 class="active">  Sign up </h2>
+
+            <!-- Icon -->
+            <div class="fadeIn first">
+                <h1><img src="{{ asset('images/logo.jpg') }}" id="icon" style="width:100px;height:100px;object-fit: cover;" /></h1>
+            </div>
+
+            {{ form_start(UserReg) }}
+            {{ form_widget(UserReg) }}
+            {{ form_end(UserReg) }}
+            <!-- Remind Password -->
+            <div id="formFooter">
+                <a class="underlineHover" href="#">Forgot Password?</a>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

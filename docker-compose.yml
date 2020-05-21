@@ -1,0 +1,81 @@
+version: '3'
+services:
+  nginx-proxy:
+    build: .docker/proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  baanizew_apache:
+      build: .docker/apache
+      container_name: baanizew_sf4_apache
+      environment:
+        VIRTUAL_HOST: ferrari-database.com,telaiodatabase.nl, research.trifall.net,research.baanizew.com, research.localhost
+        VIRTUAL_PORT: 80
+      expose:
+        - 80
+      ports:
+        - 8086:80
+      volumes:
+        - .docker/config/vhosts:/etc/apache2/sites-enabled
+        - .:/home/wwwroot/sf4
+      depends_on:
+        - baanizew_php
+      restart: always
+
+  baanizew_mysql:
+      image: mysql
+      command: "--default-authentication-plugin=mysql_native_password"
+      container_name: baanizew_sf4_mysql
+      volumes:
+        - .docker/data/db:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: 86f414e97b
+        MYSQL_DATABASE: baanizew_car-register
+        MYSQL_USER: baanizew
+        MYSQL_PASSWORD: b9666c7663dc2
+      restart: always
+      ports:
+        - 33060:3306
+
+  baanizew_php:
+      build: .docker/php
+      container_name: baanizew_sf4_php
+      volumes:
+        - .:/home/wwwroot/sf4
+      environment:
+        - maildev_host=baanizew_sf4_maildev
+      depends_on:
+        - baanizew_maildev
+        - baanizew_mysql
+      restart: always
+
+  baanizew_phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: baanizew_sf4_phpmyadmin
+      environment:
+        PMA_HOST: baanizew_mysql
+        PMA_PORT: 3306
+        PMA_USER: root
+        PMA_PASSWORD: 86f414e97b
+      ports:
+        - 8443:443
+        - 8080:80
+      links:
+        - baanizew_mysql
+      restart: always
+
+  baanizew_maildev:
+      image: djfarrelly/maildev
+      container_name: baanizew_sf4_maildev
+      ports:
+        - 8001:80
+      restart: always

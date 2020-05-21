@@ -1,0 +1,98 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}{{ parent() }} - {{ Title }} {% endblock %}
+
+        {% block body %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="card">
+                                <!-- Credit Card -->
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h3 class="text-center">Account images</h3>
+                                    </div>
+                                    <hr>
+                                    <img class="card-img cover h-100 w-100"
+                                         src="{{ asset('uploads/images/profile/') }}{% if AccountData.BackgroundImage is defined and AccountData.BackgroundImage is not empty %}{{ AccountData.BackgroundImage }}{% else %}background.png{% endif %}"
+                                         alt="Card image">
+                                    <div class="row card-img-overlay static" style="margin-top:150px; object-fit: cover;">
+                                        <div class="col">
+                                            <div style=" height: 125px;width: 125px;" class="rounded-circle border-white p-0 border-6 profile-image card text-white overflow-hidden">
+                                                <img class="card-img cover align-bottom static"
+                                                     src="{{ asset('uploads/images/profile/') }}{% if AccountData.ProfileImage is defined and AccountData.ProfileImage is not null %}{{ AccountData.ProfileImage }}{% else %}profile.png{% endif %}"
+                                                     alt="Card image">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <p>upload profiel foto</p>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_start(ImagesProf) }}
+                                            {{ form_widget(ImagesProf) }}
+                                            <button type="submit" class="btn-primary btn">Submit</button>
+                                            {{ form_end(ImagesProf) }}
+                                        </div>
+                                    </div>
+                                    <p>upload achtergrond foto</p>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_start(ImagesBack) }}
+                                            {{ form_widget(ImagesBack) }}
+                                            <button type="submit" class="btn-primary btn">Submit</button>
+                                            {{ form_end(ImagesBack) }}
+                                        </div>
+                                    </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="content mt-3">
+                        <div class="animated fadeIn">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- Credit Card -->
+
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h3 class="text-center">Account Information</h3>
+                                        </div>
+                                        <hr>
+                                        {{ form_start(Account) }}
+
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_widget(Account) }}
+                                            </div>
+                                        </div>
+                                        {{ form_end(Account) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+
+{% block javascript %}
+{{ parent() }}
+<script>
+
+
+
+</script>
+{% endblock %}
+
+
+
+

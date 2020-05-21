@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^infinityhardwoodflooring.com$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.infinityhardwoodflooring.com$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]
