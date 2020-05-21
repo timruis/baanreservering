@@ -1,5 +1,19 @@
 version: '3'
 services:
+  nginx-proxy:
+    build: .docker/proxy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
   baanizew_apache:
       build: .docker/apache
       container_name: baanizew_sf4_apache
@@ -9,7 +23,7 @@ services:
       expose:
         - 80
       ports:
-        - 8089:80
+        - 8084:80
       volumes:
         - .docker/config/vhosts:/etc/apache2/sites-enabled
         - .:/home/wwwroot/sf4
