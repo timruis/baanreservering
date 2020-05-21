@@ -196,9 +196,6 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
     {{ encore_entry_script_tags('UserPanel') }}
-    {% if is_granted('ROLE_ADMIN') == false %}
-        {{ encore_entry_script_tags('DisableControl') }}
-    {% endif %}
 {% endblock %}
 
 
