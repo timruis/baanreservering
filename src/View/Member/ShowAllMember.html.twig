@@ -37,9 +37,10 @@
                                         <th>Email</th>
                                         <th>Telefoon</th>
                                         {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
-                                        <th>Change</th>
-                                        <th>Delete</th>
-                                        <th>Betaald</th>
+                                            <th>Betaald</th>
+                                            <th>Actief</th>
+                                            <th>Change</th>
+                                            <th>Delete</th>
                                         {% endif %}
                                     </tr>
                                     </thead>
@@ -57,15 +58,19 @@
                                             <td>{{ Member.Email }}</td>
                                             <td>{{ Member.Mobile }}</td>
                                             {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
-                                            <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
-                                            <td>
-                                                <button type="button" id="{{ Member.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
-                                                    Delete <span class="fas fa-times-circle"></span>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <label for="payed">heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
-                                            </td>
+                                                <td>
+                                                    <label for="payed">Heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
+                                                </td>
+                                                <td>
+                                                    <label for="payed">Is actief</label><input class="Active" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                </td>
+                                                <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
+                                                <td>
+                                                    <button type="button" id="{{ Member.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
+                                                </td>
+
                                             {% endif %}
 
                                         </tr>
@@ -115,6 +120,10 @@
                         var userid = $(this).val();
                         $.post("{{ path('Payment') }}", {id: userid});
                         $(".tbrw"+userid).toggleClass("yellow")
+                    });
+                    $('.Active').on('click', function (e) {
+                        var userid = $(this).val();
+                        $.post("{{ path('Activate') }}", {id: userid});
                     });
 
                     $('[data-toggle="modal"]').on('click', function (e) {

@@ -18,7 +18,7 @@ class MemberManagementController extends AbstractController
 {
 
     /**
-     * @Route("/Registry/Change-Member-Info/{MemberId}", name="Member-Change")
+     * @Route("/admin/Change-Member-Info/{MemberId}", name="Member-Change")
      */
     public function ChangeMember($MemberId,EntityManagerInterface $em, Request $request)
     {
@@ -47,7 +47,7 @@ class MemberManagementController extends AbstractController
         ]);
     }
     /**
-     * @Route("/Registry/Delete-Member-Info/{MemberId}", name="Member-Delete")
+     * @Route("/admin/Delete-Member-Info/{MemberId}", name="Member-Delete")
      */
     public function DeleteMember($MemberId,EntityManagerInterface $em, Request $request)
     {
@@ -62,7 +62,7 @@ class MemberManagementController extends AbstractController
     }
 
     /**
-     * @Route("/Members", name="Listed-Member")
+     * @Route("/admin/Members", name="Members")
      */
     public function ListedMember()
     {
@@ -77,9 +77,9 @@ class MemberManagementController extends AbstractController
     }
 
     /**
-     * @Route("/check/payment", name="Payment")
+     * @Route("/admin/check/payment", name="Payment")
      */
-    public function changepated(Request $request)
+    public function changepayed(EntityManagerInterface $em,Request $request)
     {
 
         $id = $request->get('id');
@@ -89,9 +89,27 @@ class MemberManagementController extends AbstractController
         }else {
             $User->setPayed(true);
         }
-
+        $em->flush();
         return new \Symfony\Component\HttpFoundation\Response(
-            json_encode($User)
+            json_encode($User->getPayed())
+        );
+    }
+    /**
+     * @Route("/admin/check/active", name="Activate")
+     */
+    public function changeActive(EntityManagerInterface $em,Request $request)
+    {
+
+        $id = $request->get('id');
+        $User = $this->getDoctrine()->getRepository(User::class)->find(1);
+        if ($User->getActivateUser()){
+            $User->setActivateUser(false);
+        }else {
+            $User->setActivateUser(true);
+        }
+        $em->flush();
+        return new \Symfony\Component\HttpFoundation\Response(
+            json_encode($User->getActivateUser())
         );
     }
 

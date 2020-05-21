@@ -1,0 +1,143 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}ISSIMI - {{ Title }}{% endblock %}
+
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('DataTables') }}
+
+
+            {{ parent() }}
+        {% endblock %}
+
+        {% block body %}
+
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">CourtReservations Info</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Credit Card -->
+
+                            <div style="padding:1em;overflow-x: scroll;">
+                                <div class="card-title">
+                                    <h3 class="text-center">Table Of CourtReservations</h3>
+                                </div>
+                                <hr>
+                                <h1>All CourtReservations</h1>
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>CourtReservationss ID</th>
+                                        <th>Foto</th>
+                                        <th>voornaam</th>
+                                        <th>Achternaam</th>
+                                        <th>Email</th>
+                                        <th>Telefoon</th>
+                                        {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                                            <th>Betaald</th>
+                                            <th>Actief</th>
+                                            <th>Change</th>
+                                            <th>Delete</th>
+                                        {% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for CourtReservation in CourtReservations %}
+                                        <tr class="tbrw{{ CourtReservation.Id }}
+                                               {% if CourtReservation.payed == 0 %}
+                                                    yellow
+                                                {% endif %}">
+                                            <td>{{ CourtReservation.id }}</td>
+                                            <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/Images/profile/') }}{{ CourtReservations.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                            </td>
+                                            <td>{{ CourtReservation.Firstname }}</td>
+                                            <td>{{ CourtReservation.Lastname }}</td>
+                                            <td>{{ CourtReservation.Email }}</td>
+                                            <td>{{ CourtReservation.Mobile }}</td>
+                                            {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                                                <td>
+                                                    <label for="payed">Heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if CourtReservations.payed == 1 %}checked{% endif %}  name="payed" value="{{ CourtReservations.id }}"/>
+                                                </td>
+                                                <td>
+                                                    <label for="payed">Is actief</label><input class="Active" type="checkbox" style="opacity: 1;pointer-events: all;" {% if CourtReservations.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ CourtReservations.id }}"/>
+                                                </td>
+                                                <td><a class="btn btn-primary" href="{{ path('CourtReservations-Change',{CourtReservationsId: CourtReservations.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
+                                                <td>
+                                                    <button type="button" id="{{ CourtReservations.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('CourtReservations-Delete',{CourtReservationsId: CourtReservations.id}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
+                                                </td>
+
+                                            {% endif %}
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+
+
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    $('.payed').on('click', function (e) {
+                        var userid = $(this).val();
+                        $.post("{{ path('Payment') }}", {id: userid});
+                        $(".tbrw"+userid).toggleClass("yellow")
+                    });
+                    $('.Active').on('click', function (e) {
+                        var userid = $(this).val();
+                        $.post("{{ path('Activate') }}", {id: userid});
+                    });
+
+                    $('[data-toggle="modal"]').on('click', function (e) {
+                        // convert target (e.g. the button) to jquery object
+                        var $target = $(e.target);
+
+                        // modal targeted by the button
+                        var modalSelector = $target.data('target');
+                        // retrieve the dom element corresponding to current attribute
+                        var $modalAttribute = $(modalSelector + ' #modal-link');
+                        var dataValue = $target.data('link');
+                        $modalAttribute.attr('href', dataValue);
+                    });
+
+                </script>
+            {% endblock %}
+
