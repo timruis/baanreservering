@@ -129,7 +129,7 @@
                     <li>
                         <a href="{{ path('Listed-CourtReservations') }}" class=" waves-effect waves-cyan">
                             <i class="material-icons">check</i>
-                            <span>Reserveringen</span>
+                            <span>Jouw Reserveringen</span>
                         </a>
                     </li>
                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER-USER') %}
@@ -137,6 +137,12 @@
                             <a href="{{ path('Members') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">supervisor_account</i>
                                 <span>Leden Register</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin-CourtReservations') }}" class=" waves-effect waves-cyan">
+                                <i class="material-icons">check</i>
+                                <span>Alle reserveringen</span>
                             </a>
                         </li>
                     {% endif %}

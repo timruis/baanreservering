@@ -149,10 +149,26 @@ class CourtReservationController extends AbstractController
     }
 
     /**
-     * @Route("/admin/CourtReservations", name="Listed-CourtReservations")
+     * @Route("/CourtReservations", name="Listed-CourtReservations")
      */
     public function ListedCourtReservations()
     {
+        $user= $this->getUser();
+        $CourtReservations = $this->getDoctrine()->getRepository(CourtReservation::class)->findAll();
+
+        return $this->render('Court_reservation/ShowAllCourtReservations.html.twig', [
+            'CourtReservations' => $user->getCourtReservations(),
+            'Title'=> "CourtReservations"
+        ]);
+
+
+    }
+    /**
+     * @Route("/admin/CourtReservations", name="admin-CourtReservations")
+     */
+    public function ListedCourtReservationsToday()
+    {
+
         $CourtReservations = $this->getDoctrine()->getRepository(CourtReservation::class)->findAll();
 
         return $this->render('Court_reservation/ShowAllCourtReservations.html.twig', [

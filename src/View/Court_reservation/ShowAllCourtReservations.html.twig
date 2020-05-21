@@ -31,30 +31,66 @@
                                     <thead>
                                     <tr>
                                         <th>CourtReservationss ID</th>
-                                        <th>Foto</th>
-                                        <th>voornaam</th>
-                                        <th>Achternaam</th>
+                                        <th>tijd</th>
+                                        <th>baan</th>
+                                        <th>Speler</th>
                                         <th>Email</th>
                                         <th>Telefoon</th>
-                                        {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
-                                            <th>Betaald</th>
-                                            <th>Actief</th>
-                                            <th>Change</th>
-                                            <th>Delete</th>
-                                        {% endif %}
+                                        <th>hoeveelheid</th>
+                                        <th>Speeltijd</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in CourtReservations|sort %}
+                                    {% if date(CourtReservation.StartTime) < date() and date(CourtReservation.StartTime) > date() %}
                                         <tr>
                                             <td>{{ CourtReservation.id }}</td>
-                                            <td>{{ CourtReservation.StartTime|date('d-m-Y H:m:s') }}</td>
+                                            <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
+                                            <td>{{ CourtReservation.Court }}</td>
                                             <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
                                             <td>{{ CourtReservation.Player.Email }}</td>
                                             <td>{{ CourtReservation.Player.Mobile }}</td>
-                                            <td>{{ CourtReservation.amount }}</td>
-
+                                            <td>{{ CourtReservation.Players }}</td>
+                                            <td>deze group heeft recht op
+                                                <span class="badge badge-light">
+                                                {% if CourtReservation.Players == 4 %}
+                                                     1 uur
+                                                {% elseif CourtReservation.Players == 3  %}
+                                                    3 kwartier
+                                                {% elseif CourtReservation.Players == 2  %}
+                                                    één half uur
+                                                {% else  %}
+                                                    onbekende
+                                                {% endif %}
+                                                </span>
+                                                speel tijd
+                                            </td>
                                         </tr>
+                                        {% elseif date(CourtReservation.StartTime) > date() and app.user.id == CourtReservation.Player.id %}
+                                    <tr>
+                                    <td>{{ CourtReservation.id }}</td>
+                                    <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
+                                    <td>{{ CourtReservation.Court }}</td>
+                                    <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
+                                    <td>{{ CourtReservation.Player.Email }}</td>
+                                    <td>{{ CourtReservation.Player.Mobile }}</td>
+                                    <td>{{ CourtReservation.Players }}</td>
+                                    <td>u heeft recht op
+                                    <span class="badge badge-light">
+                                    {% if CourtReservation.Players == 4 %}
+                                    1 uur
+                                    {% elseif CourtReservation.Players == 3  %}
+                                    3 kwartier
+                                    {% elseif CourtReservation.Players == 2  %}
+                                    één half uur
+                                    {% else  %}
+                                    onbekende
+                                    {% endif %}
+                                    </span>
+                                    speel tijd
+                                    </td>
+                                    </tr>
+                                    {% endif %}
                                     {% endfor %}
                                     </tbody>
                                 </table>
