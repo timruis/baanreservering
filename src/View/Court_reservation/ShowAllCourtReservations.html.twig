@@ -45,33 +45,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for CourtReservation in CourtReservations %}
-                                        <tr class="tbrw{{ CourtReservation.Id }}
-                                               {% if CourtReservation.payed == 0 %}
-                                                    yellow
-                                                {% endif %}">
+                                    {% for CourtReservation in CourtReservations|sort %}
+                                        <tr>
                                             <td>{{ CourtReservation.id }}</td>
-                                            <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/Images/profile/') }}{{ CourtReservations.ProfileImage }}" class="avatar avatar-lg mt-1">
-                                            </td>
-                                            <td>{{ CourtReservation.Firstname }}</td>
-                                            <td>{{ CourtReservation.Lastname }}</td>
-                                            <td>{{ CourtReservation.Email }}</td>
-                                            <td>{{ CourtReservation.Mobile }}</td>
-                                            {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
-                                                <td>
-                                                    <label for="payed">Heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if CourtReservations.payed == 1 %}checked{% endif %}  name="payed" value="{{ CourtReservations.id }}"/>
-                                                </td>
-                                                <td>
-                                                    <label for="payed">Is actief</label><input class="Active" type="checkbox" style="opacity: 1;pointer-events: all;" {% if CourtReservations.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ CourtReservations.id }}"/>
-                                                </td>
-                                                <td><a class="btn btn-primary" href="{{ path('CourtReservations-Change',{CourtReservationsId: CourtReservations.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
-                                                <td>
-                                                    <button type="button" id="{{ CourtReservations.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('CourtReservations-Delete',{CourtReservationsId: CourtReservations.id}) }}">
-                                                        Delete <span class="fas fa-times-circle"></span>
-                                                    </button>
-                                                </td>
-
-                                            {% endif %}
+                                            <td>{{ CourtReservation.StartTime|date('d-m-Y H:m:s') }}</td>
+                                            <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
+                                            <td>{{ CourtReservation.Player.Email }}</td>
+                                            <td>{{ CourtReservation.Player.Mobile }}</td>
+                                            <td>{{ CourtReservation.amount }}</td>
 
                                         </tr>
                                     {% endfor %}
