@@ -169,9 +169,10 @@
                 $( ".form-control" ).toggle();
             });
             $( ".custom-combobox-input" ).on( "change", function() {
+                $('#reservation_OtherPlayers').prop('selectedIndex',0);
 
-               $(".custom-combobox-input").each( function () {
-                   console.log($(this).val());
+                $(".custom-combobox-input").each( function () {
+                    console.log($(this).val());
                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
                        $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
                    }
