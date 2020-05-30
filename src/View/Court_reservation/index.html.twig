@@ -60,7 +60,7 @@
                                     <a class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date(stringdate) < date() or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate) < date() or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled
                                     {% endif %}"
                                        href="{{ path('RegisterGame',{time:date,Court:c}) }}">kies</a>
