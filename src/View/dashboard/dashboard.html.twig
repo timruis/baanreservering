@@ -93,6 +93,10 @@
         for (i = 1; i < 8; i++) {
             console.log(i+day);
             switch (day) {
+                case 0:
+                    console.log("zondag");
+                    document.getElementById('Day' + i).innerHTML = "zo";
+                    break;
                 case 1:
                     console.log("maandag");
                     document.getElementById('Day' + i).innerHTML = "ma";
@@ -117,10 +121,7 @@
                     console.log("zaterdag");
                     document.getElementById('Day' + i).innerHTML = "za";
                     break;
-                case 7:
-                    console.log("zondag");
-                    document.getElementById('Day' + i).innerHTML = "zo";
-                    break;
+
             }
             if (day === 7) {
                 day = 1;

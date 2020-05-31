@@ -48,7 +48,7 @@ class CourtReservationController extends AbstractController
      */
     public function Register(EntityManagerInterface $em, Request $request,$time,$Court)
     {
-        $form = $this->createForm(ReservationType::class);
+        $form = $this->createForm(ReservationType::class, null , ['ChosenDate'=>$time]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
