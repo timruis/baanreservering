@@ -10,12 +10,14 @@ import '../css/app.css';
 import 'bootstrap-colorpicker';
 import 'dropzone';
 import 'jquery.dropzone';
-
+import Picker from 'pickerjs';
 
 $.noConflict();
 
 $(document).ready(function($) {
     "use strict";
+    makePicker('timepickerStart');
+    makePicker('timepickerEnd');
     $('.js-datepicker').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -35,9 +37,7 @@ $(document).ready(function($) {
         addRemoveLinks: true,
         dictRemoveFile: 'Remover foto',
     });
-    $('#menuToggle').on('click', function(event) {
-        $('body').toggleClass('open');
-    });
+
 
     $('.search-trigger').on('click', function(event) {
         event.preventDefault();
@@ -52,4 +52,25 @@ $(document).ready(function($) {
     });
     $('.dropdown-toggle').dropdown()
 });
+
+function makePicker(string) {
+    var elements = document.getElementsByClassName(string);
+    if (elements.length > 0) {
+        var dynamic = document.createElement("div");
+        dynamic.innerHTML = "<div class='"+string+"Container'></div>";
+        // just change the first, as you did in your post
+        elements[0].parentNode.insertBefore(dynamic, elements[0].nextSibling);
+    }
+    return new Picker(document.querySelector('.'+string), {
+        headers:true,
+        format: 'mm:ss.SSS ',
+        controls: true,
+        rows:5,
+        increment: {
+            minute: 1,
+            second: 1,
+            millisecond: 10,
+        },
+    });
+}
 

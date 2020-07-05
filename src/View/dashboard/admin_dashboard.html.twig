@@ -61,13 +61,13 @@
                             {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
                                    disabled
                                 {% endif %}
-                            " href="{{ path('CourtReservation',{date:"now"|date("d-m-Y")}) }}">kies</a></td>
+                            " href="{{ path('CourtReservationAdmin',{date:"now"|date("d-m-Y")}) }}">kies</a></td>
                         {% for i in 1..6 %}
                             {% set date = '+'~i ~ ' day' %}
                             <td><a class="btn
                                 {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
                                    disabled
-                                {% endif %}" href="{{ path('CourtReservation',{date:"now"|date_modify(date)|date("Y-m-d")}) }}">
+                                {% endif %}" href="{{ path('CourtReservationAdmin',{date:"now"|date_modify(date)|date("Y-m-d")}) }}">
                                     kies</a></td>
                         {% endfor %}
                     </tr>
@@ -113,6 +113,7 @@
                 case 6:
                     document.getElementById('Day' + i).innerHTML = "za";
                     break;
+
             }
             if (day === 6) {
                 day = 0;

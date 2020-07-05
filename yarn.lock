@@ -4439,6 +4439,11 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+pickerjs@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/pickerjs/-/pickerjs-1.2.1.tgz#a70a8f34530d4fae5a7c9e22560c9b02c1bc2b88"
+  integrity sha512-tGsSQiqaEm3fKyqCvyykxVpKPlHtJXNOgN62OEXH4kQtxeMwwTfqAvSUj4hE2BrAEs4VpSG3zH4Tmd0K0WFqmg==
+
 pify@^2.0.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"

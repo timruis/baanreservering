@@ -17,11 +17,11 @@ class DashboardController extends AbstractController
         ]);
     }
     /**
-     * @Route("/", name="homepage")
+     * @Route("/admin/reservation", name="admin-dashboard")
      */
     public function home()
     {
-        return $this->render('dashboard/dashboard.html.twig', [
+        return $this->render('dashboard/admin_dashboard.html.twig', [
             'Title'=> "Dashboard"
         ]);
     }

@@ -55,7 +55,7 @@ class AdminController extends AbstractController
         ]);
     }
     /**
-     * @Route("/admin/UserSettings", name="accountSettings")
+     * @Route("/UserSettings", name="accountSettings")
      */
     public function AccountTools(EntityManagerInterface $em, Request $request)
     {
@@ -132,7 +132,7 @@ class AdminController extends AbstractController
         ]);
     }
     /**
-     * @Route("/admin/PasswordChanger", name="PasswordChanger")
+     * @Route("/PasswordChanger", name="PasswordChanger")
      */
     public function PasswordChanger(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {

@@ -14,14 +14,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
-class ReservationType extends AbstractType
+class ReservationAdminType extends AbstractType
 {
     private $user;
-    private $ChosenDate;
-    private $TwoHoursDate;
-    /**
-     * {@inheritdoc}
-     */
 
     public function __construct(Security $security)
     {
@@ -30,27 +25,17 @@ class ReservationType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-        $this->ChosenDate =  (new \DateTime())->setTimestamp($options['ChosenDate']);
-        $this->TwoHoursDate = $this->ChosenDate->add(new \DateInterval("PT2H"));
         $builder
             ->add('OtherPlayers', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
                 'label'=>'Vul de spelers in:',
-                'expanded' => false,
                 'query_builder' => function (UserRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.CourtReservations', 'cres')
                         ->leftJoin('u.CourtReservationsTeam', 'crt')
-                        ->andWhere('u.id != :user')
                         ->andWhere('u.Payed = true')
                         ->andWhere('u.ActivateUser = true')
-                        ->andWhere('cres.StartTime is NULL  or cres.StartTime not IN (:date, :date2)')
-                        ->andWhere('crt.StartTime is NULL  or crt.StartTime not IN (:date, :date2)')
-                        ->setParameter('user', $this->user->getId())
-                        ->setParameter('date',$this->ChosenDate)
-                        ->setParameter('date2', $this->TwoHoursDate )
                         ->orderBy('u.Firstname, u.Lastname', 'ASC')
                         ;
                 },
@@ -58,12 +43,24 @@ class ReservationType extends AbstractType
                 'choice_label' => function (User $user) {
                     return  $user->getFirstname()." ".$user->getLastname() ;
                 },])
-            ->add('addedText', TextType::class, array(
+            ->add('Player', EntityType::class, [
                 'mapped' => false,
+                'class' => User::class,
+                'query_builder' => function (UserRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->leftJoin('u.CourtReservations', 'cres')
+                        ->leftJoin('u.CourtReservationsTeam', 'crt')
+                        ->andWhere('u.Payed = true')
+                        ->andWhere('u.ActivateUser = true')
+                        ->orderBy('u.Firstname, u.Lastname', 'ASC')
+                        ;
+                },
+                'label'=>'reserveerende speler',
                 'required'=>false,
-                'attr'=>['class'=>'d-none'],
-                'label' => 'Eerste Speler: '.$this->user->getFirstname().' '.$this->user->getLastname() )
-            ) // Trouble here!
+                'attr'=>['id'=>'combobox', 'class'=>'d-none'],
+                'choice_label' => function (User $user) {
+                    return  $user->getFirstname()." ".$user->getLastname() ;
+                },])
             ->add('OtherPlayers0', EntityType::class, [
                 'mapped' => false,
                 'class' => User::class,
@@ -71,14 +68,8 @@ class ReservationType extends AbstractType
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.CourtReservations', 'cres')
                         ->leftJoin('u.CourtReservationsTeam', 'crt')
-                        ->andWhere('u.id != :user')
                         ->andWhere('u.Payed = true')
                         ->andWhere('u.ActivateUser = true')
-                        ->andWhere('cres.StartTime is NULL  or cres.StartTime not IN (:date, :date2)')
-                        ->andWhere('crt.StartTime is NULL  or crt.StartTime not IN (:date, :date2)')
-                        ->setParameter('user', $this->user->getId())
-                        ->setParameter('date',$this->ChosenDate)
-                        ->setParameter('date2', $this->TwoHoursDate )
                         ->orderBy('u.Firstname, u.Lastname', 'ASC')
                         ;
                 },
@@ -97,14 +88,8 @@ class ReservationType extends AbstractType
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.CourtReservations', 'cres')
                         ->leftJoin('u.CourtReservationsTeam', 'crt')
-                        ->andWhere('u.id != :user')
                         ->andWhere('u.Payed = true')
                         ->andWhere('u.ActivateUser = true')
-                        ->andWhere('cres.StartTime is NULL  or cres.StartTime not IN (:date, :date2)')
-                        ->andWhere('crt.StartTime is NULL  or crt.StartTime not IN (:date, :date2)')
-                        ->setParameter('user', $this->user->getId())
-                        ->setParameter('date',$this->ChosenDate)
-                        ->setParameter('date2', $this->TwoHoursDate )
                         ->orderBy('u.Firstname, u.Lastname', 'ASC')
                         ;
                 },
@@ -130,14 +115,8 @@ class ReservationType extends AbstractType
                     return $er->createQueryBuilder('u')
                         ->leftJoin('u.CourtReservations', 'cres')
                         ->leftJoin('u.CourtReservationsTeam', 'crt')
-                        ->andWhere('u.id != :user')
                         ->andWhere('u.Payed = true')
                         ->andWhere('u.ActivateUser = true')
-                        ->andWhere('cres.StartTime is NULL  or cres.StartTime not IN (:date, :date2)')
-                        ->andWhere('crt.StartTime is NULL  or crt.StartTime not IN (:date, :date2)')
-                        ->setParameter('user', $this->user->getId())
-                        ->setParameter('date',$this->ChosenDate)
-                        ->setParameter('date2', $this->TwoHoursDate )
                         ->orderBy('u.Firstname, u.Lastname', 'ASC')
                         ;
                 },
@@ -151,9 +130,6 @@ class ReservationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
-            'ChosenDate',
-        ]);
 
         $resolver->setDefaults([
             'data_class' => CourtReservation::class,

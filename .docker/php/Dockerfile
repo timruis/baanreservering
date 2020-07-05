@@ -11,11 +11,13 @@ MAINTAINER Paulo Coutinho <paulo@prsolucoes.com>
 ######
 
 # define timezone
-RUN echo "America/Sao_Paulo" > /etc/timezone
+RUN echo "Europe/Amsterdam" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 RUN /bin/echo -e "LANG=\"en_US.UTF-8\"" > /etc/default/local
 
 # install dependencies
+RUN docker-php-ext-install
+RUN docker-php-ext-configure
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y build-essential

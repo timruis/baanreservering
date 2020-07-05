@@ -21,7 +21,7 @@
     form label{
     font-size:20px;
     }
-    form label[for*="reservation_addedText"]{
+    form label[for*="reservation_admin_addedText"]{
         color: black;
     }
     .custom-combobox-input {
@@ -166,13 +166,13 @@
             });
 
 
-            $( "#reservation_Player" ).combobox();
+            $( "#reservation_admin_Player" ).combobox();
 
-            $( "#reservation_OtherPlayers1" ).combobox();
+            $( "#reservation_admin_OtherPlayers1" ).combobox();
 
-            $( "#reservation_OtherPlayers2" ).combobox();
+            $( "#reservation_admin_OtherPlayers2" ).combobox();
 
-            $( "#reservation_OtherPlayers0" ).combobox();
+            $( "#reservation_admin_OtherPlayers0" ).combobox();
             $( "#toggle" ).on( "click", function() {
                 $( ".form-control" ).toggle();
             });
@@ -181,7 +181,7 @@
                 $(".custom-combobox-input").each( function () {
                     console.log($(this).val());
                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
-                       $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                       $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
                    }
                });
             });
@@ -190,7 +190,7 @@
                 $(".custom-combobox-input").each( function () {
                     console.log($(this).val());
                     if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
-                        $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                        $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
                     }
                 });
             });
