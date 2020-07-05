@@ -32,7 +32,7 @@ class MemberManagementController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->flush();
             if ($form->get('OpenList')->isClicked()) {
-                return $this->redirectToRoute('Listed-Member');
+                return $this->redirectToRoute('Members');
             }elseif ($form->get('StayOn')->isClicked()){
                 return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
             } else {
@@ -58,7 +58,7 @@ class MemberManagementController extends AbstractController
         $em= $this->getDoctrine()->getManager();
         $em->remove($Member);
         $em->flush();
-        return $this->redirectToRoute('Listed-Member');
+        return $this->redirectToRoute('Members');
     }
 
     /**
