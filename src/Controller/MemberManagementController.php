@@ -83,12 +83,13 @@ class MemberManagementController extends AbstractController
     {
 
         $id = $request->get('id');
-        $User = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $User = $this->getDoctrine()->getRepository(User::class)->find($id);
         if ($User->getPayed()){
             $User->setPayed(false);
         }else {
             $User->setPayed(true);
         }
+        $em->persist($User);
         $em->flush();
         return new \Symfony\Component\HttpFoundation\Response(
             json_encode($User->getPayed())
@@ -101,12 +102,13 @@ class MemberManagementController extends AbstractController
     {
 
         $id = $request->get('id');
-        $User = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $User = $this->getDoctrine()->getRepository(User::class)->find($id);
         if ($User->getActivateUser()){
             $User->setActivateUser(false);
         }else {
             $User->setActivateUser(true);
         }
+        $em->persist($User);
         $em->flush();
         return new \Symfony\Component\HttpFoundation\Response(
             json_encode($User->getActivateUser())

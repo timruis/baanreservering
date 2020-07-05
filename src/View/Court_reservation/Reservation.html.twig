@@ -18,6 +18,12 @@
         margin-left: -1px;
         padding: 0;
     }
+    form label{
+    font-size:20px;
+    }
+    form label[for*="reservation_addedText"]{
+        color: black;
+    }
     .custom-combobox-input {
         width: auto !important;
         margin: 0;
@@ -28,7 +34,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script type="text/javascript">
-        $( function() {
+        $( document ).ready( function() {
             $.widget("custom.combobox", {
                 _create: function () {
                     this.wrapper = $("<span>")
@@ -170,12 +176,21 @@
             });
             $( ".custom-combobox-input" ).on( "change", function() {
 
-               $(".custom-combobox-input").each( function () {
-                   console.log($(this).val());
+                $(".custom-combobox-input").each( function () {
+                    console.log($(this).val());
                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
                        $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
                    }
                });
+            });
+            $( ".custom-combobox-input" ).on( "click", function() {
+
+                $(".custom-combobox-input").each( function () {
+                    console.log($(this).val());
+                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
+                        $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                    }
+                });
             });
         });
     </script>
