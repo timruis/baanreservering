@@ -16,8 +16,6 @@ RUN dpkg-reconfigure -f noninteractive tzdata
 RUN /bin/echo -e "LANG=\"en_US.UTF-8\"" > /etc/default/local
 
 # install dependencies
-RUN docker-php-ext-install
-RUN docker-php-ext-configure
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y build-essential
@@ -72,6 +70,12 @@ RUN echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-x
 RUN echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.profiler_enable=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 RUN echo "xdebug.remote_log=\"/tmp/xdebug.log\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "upload_max_filesize = 800M" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "post_max_size = 800M" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "max_file_uploads = 800M" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "session.gc_maxlifetime = 10800" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "max_input_time = 10800" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "max_execution_time = 10800" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # install imagick
 RUN pecl install imagick
