@@ -11,7 +11,78 @@
         {% endblock %}
 
         {% block body %}
+            <h1> welcome to IZEW webpanel!!!</h1>
+            {% if app.user.ProfileImage is null %}
+                <div class="alert alert-danger">
+                    <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto toe. <a class="badge badge-important" href="{{ path('accountSettings') }}">doe
+                        het hier</a>
+                </div>
+            {% endif %}
+            {% if app.user.Firstname is null or app.user.Lastname is null %}
+                <div class="alert alert-danger">
+                    <strong>Configureer uw profiel!</strong> Uw voor en achternaam zijn nog niet ingevoerd. <a
+                            class="badge badge-important" href="{{ path('accountSettings') }}">doe het hier</a>
+                </div>
+            {% endif %}
+            {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+                <div class="alert alert-danger">
+                    <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd bent. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
+                </div>
+            {% endif %}
+            {% if app.user.BackgroundImage is null %}
+                <div class="alert alert-danger">
+                    <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
+                            class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
+                </div>
+            {% endif %}
+            <div class="row w-100">
+                <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+                    <h3 id="monthYear">
 
+                    </h3>
+                    <div class="span12">
+                        <table class="table-condensed table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th><span id="Day1"></span></th>
+                                <th><span id="Day2"></span></th>
+                                <th><span id="Day3"></span></th>
+                                <th><span id="Day4"></span></th>
+                                <th><span id="Day5"></span></th>
+                                <th><span id="Day6"></span></th>
+                                <th><span id="Day7"></span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% set day = 0 %}
+                            {% set dayButton = 0 %}
+                            {% for i in 0..4 %}
+                            <tr>
+                                {% for i in 0..6 %}
+                                    {% set date = '+'~day ~ ' day' %}
+                                    <td>{{ "now"|date_modify(date)|date("d/m/Y") }}</td>
+                                    {% set day = day+1 %}
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                {% for i in 0..6 %}
+                                    {% set date = '+'~dayButton ~ ' day' %}
+                                    <td><a class="btn
+                                {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+                                   disabled
+                                {% endif %}" href="{{ path('CourtPlayersReservationAdmin',{date:"now"|date_modify(date)|date("Y-m-d")}) }}">
+                                            kies
+                                        </a>
+                                    </td>
+                                    {% set dayButton = dayButton+1 %}
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div class="content mt-3">
                 <div class="animated fadeIn">
                     <div class="card">
@@ -42,14 +113,14 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in CourtReservations|sort %}
-                                    {% if date(CourtReservation.StartTime) > date() and app.user.id == CourtReservation.Player.id %}
+                                    {% if date(CourtReservation.StartTime) > date()  %}
                                         <tr>
                                             <td>{{ CourtReservation.id }}</td>
                                             <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                             <td>{{ CourtReservation.Court }}</td>
-                                            <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
-                                            <td>{{ CourtReservation.Player.Email }}</td>
-                                            <td>{{ CourtReservation.Player.Mobile }}</td>
+                                            <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
+                                            <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
+                                            <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
                                             <td>{{ CourtReservation.Players }}</td>
                                             <td>
                                                 deze group heeft recht op
@@ -72,9 +143,9 @@
                                                 <td>{{ CourtReservation.id }}</td>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>
-                                                <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
-                                                <td>{{ CourtReservation.Player.Email }}</td>
-                                                <td>{{ CourtReservation.Player.Mobile }}</td>
+                                                <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
                                                 <td>{{ CourtReservation.Players }}</td>
                                                 <td>
                                                     u heeft recht op
@@ -97,9 +168,9 @@
                                                 <td>{{ CourtReservation.id }}</td>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>
-                                                <td>{{ CourtReservation.Player.Firstname }} {{ CourtReservation.Player.Lastname }}</td>
-                                                <td>{{ CourtReservation.Player.Email }}</td>
-                                                <td>{{ CourtReservation.Player.Mobile }}</td>
+                                                <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
                                                 <td>{{ CourtReservation.Players }}</td>
                                                 <td>
                                                     u heeft recht op
@@ -154,22 +225,54 @@
 
             {% block javascripts %}
                 {{ parent() }}
+                <script type="text/javascript">
+                    var dt = new Date();
+                    var day = dt.getDay();
+                    dt.getDay();
+                    const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
+                        "juli", "August", "september", "oktober", "november", "december"
+                    ];
 
+                    document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
+
+                    for (i = 1; i < 8; i++) {
+                        switch (day) {
+                            case 0:
+                                document.getElementById('Day' + i).innerHTML = "zo";
+                                break;
+                            case 1:
+                                document.getElementById('Day' + i).innerHTML = "ma";
+                                break;
+                            case 2:
+                                document.getElementById('Day' + i).innerHTML = "di";
+                                break;
+                            case 3:
+                                document.getElementById('Day' + i).innerHTML = "wo";
+                                break;
+                            case 4:
+                                document.getElementById('Day' + i).innerHTML = "do";
+                                break;
+                            case 5:
+                                document.getElementById('Day' + i).innerHTML = "vr";
+                                break;
+                            case 6:
+                                document.getElementById('Day' + i).innerHTML = "za";
+                                break;
+                        }
+                        if (day === 6) {
+                            day = 0;
+                        } else {
+                            day++;
+                        }
+                    }
+                    dt.getFullYear();
+                    dt.getDate();
+                </script>
 
 
 
                 {{ encore_entry_script_tags('DataTables') }}
                 <script>
-                    $('.payed').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('Payment') }}", {id: userid});
-                        $(".tbrw"+userid).toggleClass("yellow")
-                    });
-                    $('.Active').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('Activate') }}", {id: userid});
-                    });
-
                     $('[data-toggle="modal"]').on('click', function (e) {
                         // convert target (e.g. the button) to jquery object
                         var $target = $(e.target);

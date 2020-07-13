@@ -44,7 +44,7 @@ class CourtReservationController extends AbstractController
                 }
             }
         }
-        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 38.4, -9, 90, 1);
+        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
         return $this->render('Court_reservation/index.html.twig', [
             'controller_name' => 'CourtReservationController',
             'allReservations' => $takenSpots,
@@ -53,10 +53,11 @@ class CourtReservationController extends AbstractController
             'sundown'=>$sundown
         ]);
     }
+
     /**
      * @Route("/admin/CourtReservation/{date}", name="CourtReservationAdmin")
      */
-    public function courtReservation($date)
+    public function courtPerPlayerReservation($date)
     {
         $em = $this->getDoctrine()->getManager();
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
@@ -83,7 +84,7 @@ class CourtReservationController extends AbstractController
                 }
             }
         }
-        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 38.4, -9, 90, 1);
+        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
         return $this->render('Court_reservation/admin.html.twig', [
             'controller_name' => 'CourtReservationController',
             'allReservations' => $takenSpots,
@@ -92,6 +93,7 @@ class CourtReservationController extends AbstractController
             'sundown'=>$sundown
         ]);
     }
+
     /**
      * @Route("/CourtReservation/{time}/{Court}", name="RegisterGame")
      */
