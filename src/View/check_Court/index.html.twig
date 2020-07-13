@@ -19,54 +19,56 @@
                         </div>
                         <div class="card-body">
                             <!-- Credit Card -->
+                            <h1>Tijd: {{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</h1>
+                            <h5>Baan: {{ CourtReservation.Court }}</h5>
+                             <h5>deze group heeft recht op
+                             <span >
+                                {% if CourtReservation.Players <= 4   or CourtReservation.Players >= 2  %}
+                                    1 uur
+                                {% else  %}
+                                    onbekende
+                                {% endif %}
+                             </span>
+                            speel tijd
+                             </h5>
+                            <h5>Hoeveelheid : {{ CourtReservation.Players }}</h5>
 
                             <div style="padding:1em;overflow-x: scroll;">
                                 <div class="card-title">
                                     <h3 class="text-center">Table Of CourtReservations</h3>
                                 </div>
                                 <hr>
-                                <h1>All CourtReservations</h1>
+                                <h1>Alle spelers</h1>
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>CourtReservationss ID</th>
-                                        <th>tijd</th>
-                                        <th>baan</th>
+                                        <th>Foto</th>
                                         <th>Speler</th>
                                         <th>Email</th>
                                         <th>Telefoon</th>
-                                        <th>hoeveelheid</th>
-                                        <th>Speeltijd</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
                                         {% if  CourtReservation is defined  %}
                                             <tr>
-                                                <td>{{ CourtReservation.id }}</td>
-                                                <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
-                                                <td>{{ CourtReservation.Court }}</td>
+                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
                                                 <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
                                                 <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
                                                 <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
-                                                <td>{{ CourtReservation.Players }}</td>
-                                                <td>
-                                                    deze group heeft recht op
-                                                    <span class="badge badge-light">
-                                                    {% if CourtReservation.Players == 4 %}
-                                                        1 uur
-                                                    {% elseif CourtReservation.Players == 3  %}
-                                                        3 kwartier
-                                                    {% elseif CourtReservation.Players == 2  %}
-                                                        één half uur
-                                                    {% else  %}
-                                                        onbekende
-                                                    {% endif %}
-                                                    </span>
-                                                    speel tijd
-                                                </td>
+
                                             </tr>
-                                    {% endif %}
+                                            {% for Player in CourtReservation.OtherPlayers%}
+                                            <tr>
+                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
+                                                <td>{% if Player.Firstname is defined %}{{ Player.Firstname }} {% endif %} {% if Player.Lastname is defined %}{{ Player.Lastname }}{% endif %}</td>
+                                                <td>{% if Player.Email is defined %}{{ Player.Email }}{% endif %}</td>
+                                                <td>{% if Player.Email is defined %}{{ Player.Mobile }}{% endif %}</td>
+
+                                            </tr>
+
+                                        {% endfor %}
+                                        {% endif %}
                                     </tbody>
                                 </table>
 

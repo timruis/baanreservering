@@ -177,6 +177,8 @@
                 $( ".form-control" ).toggle();
             });
             $(window).click(function() {
+                $("#reservation_OtherPlayers option:selected").prop("selected", false);
+
                 $(".custom-combobox-input").each( function () {
                     console.log($(this).val());
                     if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {

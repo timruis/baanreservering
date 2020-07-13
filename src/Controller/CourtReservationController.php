@@ -231,7 +231,7 @@ class CourtReservationController extends AbstractController
                 $InfoCourtReservation->setPlayer($data->getPlayer());
                 $em->persist($InfoCourtReservation);
                 $em->flush();
-                return $this->redirectToRoute('dashboard');
+                return $this->redirectToRoute('admin-dashboard');
 
             }
         }
