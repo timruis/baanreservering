@@ -44,7 +44,6 @@ class ReservationAdminType extends AbstractType
                     return  $user->getFirstname()." ".$user->getLastname() ;
                 },])
             ->add('Player', EntityType::class, [
-                'mapped' => false,
                 'class' => User::class,
                 'query_builder' => function (UserRepository $er) {
                     return $er->createQueryBuilder('u')

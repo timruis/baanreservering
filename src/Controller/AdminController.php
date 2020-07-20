@@ -38,10 +38,13 @@ class AdminController extends AbstractController
         if ($form->isSubmitted()) {
             $data=$form->getData();
             $InfoAccount = new User();
+            $InfoAccount->setUsername($data->getUsername());
             $InfoAccount->setFirstname($data->getFirstname());
             $InfoAccount->setLastname($data->getLastname());
             $InfoAccount->setEmail($data->getEmail());
             $InfoAccount->setRoles($data->getRoles());
+            $InfoAccount->setActivateUser(1);
+            $InfoAccount->setPayed(1);
             $InfoAccount->setPassword($this->encoder->encodePassword($InfoAccount,$data->getPassword()));
             $em->persist($InfoAccount);
             $em->flush();

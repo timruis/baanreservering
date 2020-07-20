@@ -176,22 +176,19 @@
             $( "#toggle" ).on( "click", function() {
                 $( ".form-control" ).toggle();
             });
-            $( ".custom-combobox-input" ).on( "change", function() {
 
+            $(window).click(function() {
+                $("#reservation_admin_OtherPlayers option:selected").prop("selected", false);
+                $("#reservation_admin_Player option:selected").prop("selected", false);
                 $(".custom-combobox-input").each( function () {
-                    console.log($(this).val());
-                   if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
-                       $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                   if( $(this).val().match(/([a-zA-Z])+([ -~])*/) ) {
+
+                       if(( !$(this).parent().parent().has( "select#reservation_admin_Player" ).length )) {
+                           $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                       }else{
+                           $("#reservation_admin_Player option:contains(" + $(this).val() + ")").prop("selected", true);
+                       }
                    }
-               });
-            });
-            $( ".custom-combobox-input" ).on( "click", function() {
-
-                $(".custom-combobox-input").each( function () {
-                    console.log($(this).val());
-                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
-                        $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
-                    }
                 });
             });
         });

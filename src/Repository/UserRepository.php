@@ -57,7 +57,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findByTest()
     {
-        return dd($this->createQueryBuilder('u')
+        return$this->createQueryBuilder('u')
             ->join('u.CourtReservations', 'cres')
             ->andWhere('u.Payed = true')
             ->andWhere('u.ActivateUser = true')
@@ -65,7 +65,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('date2', new \DateInterval("PT2H"))
             ->orderBy('u.Firstname, u.Lastname', 'ASC')
             ->getQuery()
-            ->getResult())
+            ->getResult()
         ;
     }
 

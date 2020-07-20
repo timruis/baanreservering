@@ -1,20 +1,169 @@
-{% extends 'base.html.twig' %}
+{% extends 'UserLogedin.html.twig' %}
 
-{% block title %}Hello CheckCourtsController!{% endblock %}
+        {% block title %}IZEW - {{ Title }}{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('DataTables') }}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'E:/Programming/inZonEnWind/src/Controller/CheckCourtsController.php'|file_link(0) }}">src/Controller/CheckCourtsController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'E:/Programming/inZonEnWind/src/View/check_Courts/index.html.twig'|file_link(0) }}">src/View/check_Courts/index.html.twig</a></code></li>
-    </ul>
-</div>
+
+            {{ parent() }}
+        {% endblock %}
+
+        {% block body %}
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">CourtReservations Info</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Credit Card -->
+                            <h1>Tijd: {{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</h1>
+                            <h5>Baan: {{ CourtReservation.Court }}</h5>
+                             <h5>deze group heeft recht op
+                             <span >
+                                {% if CourtReservation.Players <= 4   or CourtReservation.Players >= 2  %}
+                                    1 uur
+                                {% else  %}
+                                    onbekende
+                                {% endif %}
+                             </span>
+                            speel tijd
+                             </h5>
+                            <h5>Hoeveelheid : {{ CourtReservation.Players }}</h5>
+
+                            <div style="padding:1em;overflow-x: scroll;">
+                                <div class="card-title">
+                                    <h3 class="text-center">Table Of CourtReservations</h3>
+                                </div>
+                                <hr>
+                                <h1>Alle spelers</h1>
+                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Foto</th>
+                                        <th>Speler</th>
+                                        <th>Email</th>
+                                        <th>Telefoon</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% if  CourtReservation is defined  %}
+                                            <tr>
+                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
+                                                <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
+                                                <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
+
+                                            </tr>
+                                            {% for Player in CourtReservation.OtherPlayers%}
+                                            <tr>
+                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
+                                                <td>{% if Player.Firstname is defined %}{{ Player.Firstname }} {% endif %} {% if Player.Lastname is defined %}{{ Player.Lastname }}{% endif %}</td>
+                                                <td>{% if Player.Email is defined %}{{ Player.Email }}{% endif %}</td>
+                                                <td>{% if Player.Email is defined %}{{ Player.Mobile }}{% endif %}</td>
+
+                                            </tr>
+
+                                        {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+                <script type="text/javascript">
+                    var dt = new Date();
+                    var day = dt.getDay();
+                    dt.getDay();
+                    const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
+                        "juli", "August", "september", "oktober", "november", "december"
+                    ];
+
+                    document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
+
+                    for (i = 1; i < 8; i++) {
+                        switch (day) {
+                            case 0:
+                                document.getElementById('Day' + i).innerHTML = "zo";
+                                break;
+                            case 1:
+                                document.getElementById('Day' + i).innerHTML = "ma";
+                                break;
+                            case 2:
+                                document.getElementById('Day' + i).innerHTML = "di";
+                                break;
+                            case 3:
+                                document.getElementById('Day' + i).innerHTML = "wo";
+                                break;
+                            case 4:
+                                document.getElementById('Day' + i).innerHTML = "do";
+                                break;
+                            case 5:
+                                document.getElementById('Day' + i).innerHTML = "vr";
+                                break;
+                            case 6:
+                                document.getElementById('Day' + i).innerHTML = "za";
+                                break;
+                        }
+                        if (day === 6) {
+                            day = 0;
+                        } else {
+                            day++;
+                        }
+                    }
+                    dt.getFullYear();
+                    dt.getDate();
+                </script>
+
+
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    $('[data-toggle="modal"]').on('click', function (e) {
+                        // convert target (e.g. the button) to jquery object
+                        var $target = $(e.target);
+
+                        // modal targeted by the button
+                        var modalSelector = $target.data('target');
+                        // retrieve the dom element corresponding to current attribute
+                        var $modalAttribute = $(modalSelector + ' #modal-link');
+                        var dataValue = $target.data('link');
+                        $modalAttribute.attr('href', dataValue);
+                    });
+
+                </script>
+            {% endblock %}
+

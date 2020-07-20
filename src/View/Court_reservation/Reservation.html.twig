@@ -176,16 +176,8 @@
             $( "#toggle" ).on( "click", function() {
                 $( ".form-control" ).toggle();
             });
-            $( ".custom-combobox-input" ).on( "change", function() {
-
-                $(".custom-combobox-input").each( function () {
-                    console.log($(this).val());
-                   if( $(this).val().match(/([a-zA-Z])+([ -~])*/)) {
-                       $("#reservation_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
-                   }
-               });
-            });
-            $( ".custom-combobox-input" ).on( "click", function() {
+            $(window).click(function() {
+                $("#reservation_OtherPlayers option:selected").prop("selected", false);
 
                 $(".custom-combobox-input").each( function () {
                     console.log($(this).val());
