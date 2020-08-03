@@ -14,23 +14,25 @@
                                         <h3 class="text-center">Account images</h3>
                                     </div>
                                     <hr>
-                                    <img class="card-img cover h-100 w-100"
-                                         src="{{ asset('uploads/images/profile/') }}{% if AccountData.BackgroundImage is defined and AccountData.BackgroundImage is not empty %}{{ AccountData.BackgroundImage }}{% else %}background.png{% endif %}"
-                                         alt="Card image">
-                                    <div class="row card-img-overlay static" style="margin-top:150px; object-fit: cover;">
+                                    <div class="row static" style="margin-top:150px; object-fit: cover;">
                                         <div class="col">
-                                            <div style=" height: 125px;width: 125px;" class="rounded-circle border-white p-0 border-6 profile-image card text-white overflow-hidden">
+                                            <div style=" height: 125px;width: 125px;" class="rounded-circle border-white p-0 border-6 profile-image text-white overflow-hidden">
                                                 <img class="card-img cover align-bottom static"
                                                      src="{{ asset('uploads/images/profile/') }}{% if AccountData.ProfileImage is defined and AccountData.ProfileImage is not null %}{{ AccountData.ProfileImage }}{% else %}profile.png{% endif %}"
                                                      alt="Card image">
                                             </div>
                                         </div>
                                     </div>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <p>upload profiel foto</p>
+                                    <h4>Regelement profiel foto:</h4>
+                                    <ol>
+                                    <li>Voor uw profiel foto gelden dezelfde regels als voor uw pas foto.</li>
+                                    <li>Nadat uw foto geupload is word deze beoordeelt.</li>
+                                    <li>mocht deze niet goed gekeurd worden dan wordt uw foto gewijzigd of verwijderd.</li>
+                                    <li>Na het wijzigen van uw profielfoto word uw profiel weer geblokeerd totdat deze goed gekeurd word.</li>
+                                        <li>Indien alles is goedgekeurd kunt u reserveren.</li>
 
+                                    </ol>
+                                    <h4>upload profiel foto</h4>
                                     <div class="row">
                                         <div class="col">
                                             {{ form_start(ImagesProf) }}

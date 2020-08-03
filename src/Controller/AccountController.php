@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\PageVisit;
 use App\Entity\User;
-use App\Form\BackgroundImagesType;
 use App\Form\AccountType;
+use App\Form\BackgroundImagesType;
 use App\Form\PasswordChangeType;
 use App\Form\ProfileImageType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -27,7 +27,85 @@ class AccountController extends AbstractController
     {
         $this->encoder = $encoder;
     }
+    /**
+     * @Route("/UserSettings", name="accountSettings")
+     */
+    public function AccountTools(EntityManagerInterface $em, Request $request)
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(AccountType::class, $user);
+        $form->handleRequest($request);
 
+        if ( $form->isSubmitted() && $form->isValid() ) {
+            $data = $form->getData();
+            $user->setEmail($data->getEmail());
+            $user->setFirstname($data->getFirstname());
+            $user->setLastname($data->getLastname());
+            $user->setAddress($data->getAddress());
+            $user->setMobile($data->getMobile());
+            $user->setDescription($data->getDescription());
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('accountSettings');
+        }
+
+        $formProfImages = $this->createForm(ProfileImageType::class);
+        $formProfImages->handleRequest($request);
+        if ($formProfImages->isSubmitted() && $formProfImages->isValid()) {
+            $data = $formProfImages->getData();
+            $ProfileImage = $formProfImages->get('ProfileImage')->getData();
+            if (isset($ProfileImage)) {
+                $fileNameProfile = $user->getID() . 'profile.' . $ProfileImage->guessExtension();
+                try {
+                    $ProfileImage->move(
+                        $this->getParameter('profile_directory'),
+                        $fileNameProfile
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $user->setProfileImage($fileNameProfile);
+                $em->persist($user);
+                $em->flush();
+            }
+        }
+        return $this->render('Accounts/AccountSettings.html.twig', [
+            'AccountData' => $user,
+            'Account' => $form->createView(),
+            'ImagesProf' => $formProfImages->createView(),
+            'Title'=> "Admin Tools"
+        ]);
+    }
+
+
+    /**
+     * @Route("/PasswordChanger", name="PasswordChanger")
+     */
+    public function PasswordChanger(EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = $this->getUser();
+        if ( isset($_POST['current']) && $passwordEncoder->isPasswordValid($user, $_POST['current'])){
+            $currentPassword = true;
+        }else{
+            $currentPassword = false;
+        }
+        $form = $this->createForm(PasswordChangeType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $currentPassword ) {
+            $data=$form->getData();
+            $checkPass = $passwordEncoder->encodePassword($user, $data->getPassword());
+            $user->setPassword($checkPass);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirectToRoute('accountSettings');
+
+        }
+
+        return $this->render('Accounts/PasswordChange.html.twig', [
+            'Password' => $form->createView(),
+            'Title'=> "Change Password"
+        ]);
+    }
     /**
      * @Route("/Courter", name="Courter")
      * @Method("POST")
