@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -20,9 +21,10 @@ class CourtReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Court', ChoiceType::class, [
+            ->add('ChooseCourt', ChoiceType::class, [
                 'label' => 'kies de baan',
-                'multiple' => false,
+                'multiple' => true,
+                'mapped' => false,
                 'choices' => [
                     '1' => 1,
                     '2' => 2,
@@ -36,9 +38,28 @@ class CourtReservationType extends AbstractType
                     '10' => 10,
                 ]
             ])
+            ->add('Steps', ChoiceType::class, [
+                'label' => 'kies de herhalende tijd stappen',
+                'mapped' => false,
+                'choices' => [
+                    'Geen' => 0,
+                    'Dagelijks' => 1,
+                    'Wekelijks' => 2,
+                    'Maandelijks' => 3
+                ]
+            ])
             ->add('StartTime', DateType::class, [
                 'widget' => 'single_text',
-                'label'=>  'Datum',
+                'label'=>  'Start Datum',
+                // prevents rendering it as type="date", to avoid HTML5 date pickers
+                'html5' => false,
+                // adds a class that can be selected in JavaScript
+                'attr' => ['class' => 'js-datepicker'],
+            ])
+            ->add('EndDate', DateType::class, [
+                'widget' => 'single_text',
+                'label'=>  'Eind Datum',
+                'mapped' => false,
                 // prevents rendering it as type="date", to avoid HTML5 date pickers
                 'html5' => false,
                 // adds a class that can be selected in JavaScript
