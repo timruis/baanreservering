@@ -50,7 +50,7 @@
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c~2 in allReservations or date~c~4 in allReservations or  Previousdate~c~4 in allReservations or date~c~3 in allReservations or  Previousdate~c~3 in allReservations %}
+                                {% if date~c~2 in allReservations or date~c~3 in allReservations or date~c~4 in allReservations or Previousdate~c~4 in allReservations or Previousdate~c~3 in allReservations or Previousdate~c~2 in allReservations %}
                                     <a class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn

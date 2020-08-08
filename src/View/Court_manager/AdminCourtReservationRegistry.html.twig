@@ -1,0 +1,91 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} IZEW - DASHBOARD{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style>
+    #court_reservation_Court{
+        height:200px;
+    }
+    .custom-combobox {
+        position: relative;
+        display: inline-block;
+
+    }
+    .custom-combobox-toggle {
+        height: 44px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin-left: -1px;
+        padding: 0;
+    }
+    form label{
+    font-size:20px;
+    }
+    form label[for*="reservation_admin_addedText"]{
+        color: black;
+    }
+    .custom-combobox-input {
+        width: auto !important;
+        margin: 0;
+        padding: 5px 10px;
+    }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            $('.js-datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                yearRange: "1900:" + (new Date).getFullYear(),
+                dateFormat: 'yy-mm-dd'
+            }).val();
+            $('.timepicker').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 30,
+                minTime: '8',
+                maxTime: '23:00pm',
+                startTime: '8:30',
+                dynamic: true,
+                dropdown: true,
+                scrollbar: true
+            }).val();
+        });
+
+        </script>
+{% endblock %}
+
+{% block body %}
+    <h1> welcome to IZEW webpanel!!!</h1>
+
+    <div class="row w-100">
+        <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+            <div class="card-body">
+                <div class="card-title">
+                    <h3 class="text-center">Vul de baan in</h3>
+                </div>
+                <hr>
+                {{ form_start(CourtReservation) }}
+                <div class="row">
+                    <div class="col">
+                        <div class="ui-widget">
+                        {{ form_widget(CourtReservation) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(CourtReservation) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script></script>
+{% endblock %}

@@ -139,22 +139,19 @@
                                 <span>Leden Register</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ path('admin-CourtReservations') }}" class=" waves-effect waves-cyan">
-                                <i class="material-icons">check</i>
-                                <span>Alle reserveringen vandaag</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin-CourtReservations') }}" class=" waves-effect waves-cyan">
-                                <i class="material-icons">check</i>
-                                <span>Alle reserveringen</span>
-                            </a>
-                        </li>
+
                         <li>
                             <a href="{{ path('admin-dashboard') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">local_phone</i>
                                 <span>Maak Reservering (telefoonisch of aan de bar)</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                         <li>
+                            <a href="{{ path('admin-CourtReservations') }}" class=" waves-effect waves-cyan">
+                                <i class="material-icons">check</i>
+                                <span>Alle reserveringen</span>
                             </a>
                         </li>
                         <li>

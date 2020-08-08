@@ -53,7 +53,7 @@ class CheckCourtsController extends AbstractController
             }
         }
         $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
-        return $this->render('Court_reservation/seePlayersPerCourt.html.twig', [
+        return $this->render('check_Court/seePlayersPerCourt.html.twig', [
             'controller_name' => 'CourtReservationController',
             'allReservations' => $takenSpots,
             'times'=>$timeArray,

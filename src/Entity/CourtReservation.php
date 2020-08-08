@@ -43,6 +43,16 @@ class CourtReservation
      */
     private $OtherPlayers;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $MemoText;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ReservationType;
+
     public function __construct()
     {
         $this->OtherPlayers = new ArrayCollection();
@@ -135,6 +145,30 @@ class CourtReservation
         if ($this->OtherPlayers->contains($otherPlayer)) {
             $this->OtherPlayers->removeElement($otherPlayer);
         }
+
+        return $this;
+    }
+
+    public function getMemoText(): ?string
+    {
+        return $this->MemoText;
+    }
+
+    public function setMemoText(?string $MemoText): self
+    {
+        $this->MemoText = $MemoText;
+
+        return $this;
+    }
+
+    public function getReservationType(): ?int
+    {
+        return $this->ReservationType;
+    }
+
+    public function setReservationType(?int $ReservationType): self
+    {
+        $this->ReservationType = $ReservationType;
 
         return $this;
     }

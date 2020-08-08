@@ -109,6 +109,7 @@
                                         <th>Telefoon</th>
                                         <th>hoeveelheid</th>
                                         <th>Speeltijd</th>
+                                        <th>Zie Reservering</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -137,6 +138,7 @@
                                                     </span>
                                                 speel tijd
                                             </td>
+                                            <td><a class="btn" href="{{ path('check_Court',{time:CourtReservation.StartTime|date('U'),Court:CourtReservation.Court}) }}">kies</a></td>
                                         </tr>
                                         {% elseif date(CourtReservation.StartTime) < date() and date(CourtReservation.StartTime) > date() and today == true %}
                                             <tr>
