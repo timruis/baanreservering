@@ -22,12 +22,6 @@
             <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd bent. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
         </div>
     {% endif %}
-    {% if app.user.BackgroundImage is null %}
-        <div class="alert alert-danger">
-            <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
-                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
-        </div>
-    {% endif %}
     <div class="row w-100">
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
 
@@ -77,11 +71,17 @@
                 <h4>Reglement Baan Reserveren:</h4>
                 <ol>
                     <li>U kunt één uur spelen per reservering.</li>
-                    <li>Elke reservering per speler heeft een blokade van twee uur ervoor en erna. Dat betekent in 5 uur kan je maar 1 uur van spelen. 2 uur na het spelen kan je weer reserveren.</li>
-                    <li>Elke wijziging buiten het reserveer plan om, moet besproken worden met de medewerker achter de bar.</li>
-                    <li>U dient toestemming te hebben van elke speler die u toevoegd.</li>
-                    <li>Indien alles is goedgekeurd kunt u reserveren.</li>
-
+                    <li>U kunt alleen reserveren of toegevoegd worden aan een reservering wanneer u spelend lid bent met een actief account.</li>
+                    <li>Spreek af met je tennisgroep wie de reservering maakt en u dient toestemming van elke speler te hebben die u toevoegt.</li>
+                    <li>U kunt niet in aansluitende uren reserveren, hiervoor zit een blokkade in het systeem.</li>
+                    <li>Met andere spelers op de baan staan dan in het reserveersysteem staan is niet toegestaan.  Bij wijzigingen belt u het clubhuis.</li>
+                    <li>Onze medewerkers houden ook toezicht en zijn beschikbaar voor alle vragen over afhangen en spelen.</li>
+                    <li>
+                        Spelers die gaan tennissen zonder actief account zullen worden verzocht de baan en het park te verlaten.
+                    </li>
+                    <li>
+                        Bij onbespeelbare banen, langer doorspelen en andere vragen gaat u naar het clubhuis. De in Zon en Wind medewerkers bepalen de indeling en verdeling van de beschikbare banen.
+                     </li>
                 </ol>
             </div>
         </div>

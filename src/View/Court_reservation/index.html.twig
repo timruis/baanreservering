@@ -7,9 +7,9 @@
     <h1> welcome to IZEW webpanel!!!</h1>
     {% if app.user.ProfileImage is null %}
         <div class="alert alert-danger">
-            <strong>Configure your profile!</strong> Your Profile Image is not set yet. <a class="badge badge-important"
-                                                                                           href="{{ path('accountSettings') }}">do
-                it here</a>
+            Zonder profiel foto word u niet geactiveerd! voeg uw profiel foto toe. <a class="badge badge-important"
+                                                                                           href="{{ path('accountSettings') }}">doe
+                het hier</a>
         </div>
     {% endif %}
     {% if app.user.Firstname is null or app.user.Lastname is null %}
