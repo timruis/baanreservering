@@ -31,16 +31,20 @@
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c~2 in allReservations or date~c~4 in allReservations or  Previousdate~c~4 in allReservations or date~c~3 in allReservations or  Previousdate~c~3 in allReservations %}
-                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% if date~c in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif Previousdate~c in allReservations %}
+                                   <a href="#" class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date()|date_modify("+6 day") < date(stringdate) or date(stringdate) < date() or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled
                                     {% endif %}"
-                                       href="{{ path('adminRegisterGame',{time:date,Court:c}) }}">kies</a>
+                                       href="{{ path('adminRegisterGame',{time:date,Court:c}) }}">
+
+                                        kies</a>
                                 {% endif %}
-                        </td>
+                            </td>
                             {% set PreviousTime = ChosenDate~" "~t~":00" %}
                         {% endfor %}
                     </tr>

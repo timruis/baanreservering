@@ -64,7 +64,7 @@
 {% block body %}
     <h1> welcome to IZEW webpanel!!!</h1>
 
-    <div class="row w-100">
+     <div class="row w-100">
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
             <div class="card-body">
                 <div class="card-title">
@@ -83,9 +83,123 @@
             </div>
         </div>
     </div>
+    <div class="row w-100">
+        <div class="card col-sm-3" style="overflow-x: scroll; padding: 50px;">
+            <div class="card-body">
+                <div class="card-title">
+                    <h3 class="text-center">Soorten Legenda</h3>
+                </div>
+                <hr>
+                <ol class="list-group">
+                    <li class="list-group-item"><h2 style="font-size: 30px;">1. Les</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d95e8;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">2.Toss</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#05c5e2;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">3. Competitie</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ece109;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">4. Event</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d23e8;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">5. Verhuur</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ff790f;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">6. Tennis Kamp</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0de823;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">7. Overig</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#727274;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">8. reservering</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#e70808;"></div></li>
+                </ol>
+            </div>
+        </div>
+        <div class="card col-sm-9" style="overflow-x: scroll; padding: 50px;">
+            <div class="card-body">
+                <div class="card-title">
+                    <h3 class="text-center">Calender</h3>
+                </div>
+                <hr>
+                <h3 id="monthYear">
+
+                </h3>
+                <div class="span12">
+                    <table class="table-condensed table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th><span id="Day1"></span></th>
+                            <th><span id="Day2"></span></th>
+                            <th><span id="Day3"></span></th>
+                            <th><span id="Day4"></span></th>
+                            <th><span id="Day5"></span></th>
+                            <th><span id="Day6"></span></th>
+                            <th><span id="Day7"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set day = 0 %}
+                        {% set dayButton = 0 %}
+                        {% for i in 0..4 %}
+                            <tr>
+                                {% for i in 0..6 %}
+                                    {% set date = '+'~day ~ ' day' %}
+                                    <td>{{ "now"|date_modify(date)|date("d/m/Y") }}</td>
+                                    {% set day = day+1 %}
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                {% for i in 0..6 %}
+                                    {% set date = '+'~dayButton ~ ' day' %}
+                                    <td><a class="btn
+                                {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+                                   disabled
+                                {% endif %}" href="{{ path('CourtPlayersReservationAdmin',{date:"now"|date_modify(date)|date("Y-m-d")}) }}">
+                                            kies
+                                        </a>
+                                    </td>
+                                    {% set dayButton = dayButton+1 %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-<script></script>
-{% endblock %}
+            {% block javascripts %}
+                {{ parent() }}
+                <script type="text/javascript">
+                    var dt = new Date();
+                    var day = dt.getDay();
+                    dt.getDay();
+                    const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
+                        "juli", "August", "september", "oktober", "november", "december"
+                    ];
+
+                    document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
+
+                    for (i = 1; i < 8; i++) {
+                        switch (day) {
+                            case 0:
+                                document.getElementById('Day' + i).innerHTML = "zo";
+                                break;
+                            case 1:
+                                document.getElementById('Day' + i).innerHTML = "ma";
+                                break;
+                            case 2:
+                                document.getElementById('Day' + i).innerHTML = "di";
+                                break;
+                            case 3:
+                                document.getElementById('Day' + i).innerHTML = "wo";
+                                break;
+                            case 4:
+                                document.getElementById('Day' + i).innerHTML = "do";
+                                break;
+                            case 5:
+                                document.getElementById('Day' + i).innerHTML = "vr";
+                                break;
+                            case 6:
+                                document.getElementById('Day' + i).innerHTML = "za";
+                                break;
+                        }
+                        if (day === 6) {
+                            day = 0;
+                        } else {
+                            day++;
+                        }
+                    }
+                    dt.getFullYear();
+                    dt.getDate();
+                </script>
+            {% endblock %}

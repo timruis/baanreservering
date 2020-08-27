@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CourtReservation;
-use App\Form\CourtReservationType;
-use App\Form\ReservationAdminType;
-use App\Form\ReservationType;
+use App\Form\CourtBlockerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -19,7 +17,7 @@ class CourtBlockerController extends AbstractController
      */
     public function RegisteredCourtReservation(EntityManagerInterface $em, Request $request)
     {
-        $form = $this->createForm(CourtReservationType::class);
+        $form = $this->createForm(CourtBlockerType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,6 +40,9 @@ class CourtBlockerController extends AbstractController
                             $InfoCourtReservation->setCourt($court);
                             $InfoCourtReservation->setPlayers(2);
                             $InfoCourtReservation->setPlayer($this->getUser());
+                            $InfoCourtReservation->setMemoText($this->getMemoText());
+                            $InfoCourtReservation->setReservationType($this->getReservationType());
+
                             $em->persist($InfoCourtReservation);
                             $em->flush();
                         }

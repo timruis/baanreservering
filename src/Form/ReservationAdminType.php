@@ -7,7 +7,10 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -29,6 +32,7 @@ class ReservationAdminType extends AbstractType
             ->add('OtherPlayers', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
+                'required'=> false,
                 'label'=>'Vul de spelers in:',
                 'query_builder' => function (UserRepository $er) {
                     return $er->createQueryBuilder('u')
@@ -123,6 +127,23 @@ class ReservationAdminType extends AbstractType
                 'choice_label' => function (User $user) {
                     return  $user->getFirstname()." ".$user->getLastname() ;
                 },])
+            ->add('ReservationType', CheckboxType::class, [
+                'label'    => 'Is dit baan verhuur?',
+                'required' => false,
+                'attr'=>['id'=>'verhuur'],
+            ])
+            ->add('MemoText',TextareaType::class,[
+                'label'    => 'Wie spelen er? (bij verhuur)',
+                'required' => false,
+                'label_attr'=>['class'=>'verhuurLabel d-none'],
+                'attr'=>['id'=>'verhuurBox', 'class'=>'d-none']
+                ])
+            ->add('Players',NumberType::class,[
+                'label'    => 'Hoeveel spelen er? (bij verhuur)',
+                'required' => false,
+                'label_attr'=>['class'=>'verhuurLabel d-none'],
+                'attr'=>['id'=>'verhuurNumber', 'class'=>'d-none']
+            ])
             ->add('Save', SubmitType::class)
         ;
     }

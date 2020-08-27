@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CourtReservation;
-use App\Form\CourtReservationType;
+use App\Form\CourtBlockerType;
 use App\Form\ReservationAdminType;
 use App\Form\ReservationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +24,7 @@ class CourtManagerController extends AbstractController
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
-            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getPlayers());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
         }
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {
@@ -66,42 +66,46 @@ class CourtManagerController extends AbstractController
             $InfoCourtReservation = $this->getUser()->getCourtReservations();
 
             $data=$form->getData();
-            $date = new \DateTime(date('m/d/Y H:i:s', $time));
-            $TwoHoursinfuture = $date->add(new \DateInterval("PT3H"));
-            $date = new \DateTime(date('m/d/Y H:i:s', $time));
-            $TwoHoursInPast = $date->sub(new \DateInterval("PT2H"));
+            if ($data->getReservationType()=== false) {
+                $date = new \DateTime(date('m/d/Y H:i:s', $time));
+                $TwoHoursinfuture = $date->add(new \DateInterval("PT3H"));
+                $date = new \DateTime(date('m/d/Y H:i:s', $time));
+                $TwoHoursInPast = $date->sub(new \DateInterval("PT2H"));
 
-            $cannotMakeReservation = false;
+                $cannotMakeReservation = false;
 
-            foreach ($data->getOtherPlayers() as $Player) {
-                foreach ($Player->getCourtReservations() as $courtReservation){
-                    if(($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true){
+                foreach ($data->getOtherPlayers() as $Player) {
+                    foreach ($Player->getCourtReservations() as $courtReservation) {
+                        if (($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true) {
+                            $cannotMakeReservation = true;
+                        } else {
+                            $cannotMakeReservation = false;
+                        }
+                    }
+                    foreach ($Player->getCourtReservationsTeam() as $courtReservationTeam) {
+                        if (($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true) {
+                            $cannotMakeReservation = true;
+                        } else {
+                            $cannotMakeReservation = false;
+                        }
+                    }
+                }
+                foreach ($this->getUser()->getCourtReservations() as $courtReservation) {
+                    if (($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation) {
                         $cannotMakeReservation = true;
-                    }else{
+                    } else {
                         $cannotMakeReservation = false;
                     }
                 }
-                foreach ($Player->getCourtReservationsTeam() as $courtReservationTeam){
-                    if(($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true){
+                foreach ($this->getUser()->getCourtReservationsTeam() as $courtReservationTeam) {
+                    if (($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation) {
                         $cannotMakeReservation = true;
-                    }else{
+                    } else {
                         $cannotMakeReservation = false;
                     }
                 }
-            }
-            foreach ($this->getUser()->getCourtReservations() as $courtReservation){
-                if(($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation){
-                    $cannotMakeReservation = true;
-                }else{
-                    $cannotMakeReservation = false;
-                }
-            }
-            foreach ($this->getUser()->getCourtReservationsTeam() as $courtReservationTeam){
-                if(($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation){
-                    $cannotMakeReservation = true;
-                }else{
-                    $cannotMakeReservation = false;
-                }
+            }else{
+                $cannotMakeReservation = false;
             }
             if($cannotMakeReservation) {
                 $form->addError(new FormError('Niet toegestaan dubbele reservering.'));
@@ -110,11 +114,20 @@ class CourtManagerController extends AbstractController
                 $date = new \DateTime(date('m/d/Y H:i:s', $time));
                 $InfoCourtReservation->setStartTime($date);
                 $InfoCourtReservation->setCourt($Court);
-                $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
-                foreach ($data->getOtherPlayers() as $Player) {
-                    $InfoCourtReservation->addOtherPlayer($Player);
+
+                if ($data->getReservationType()){
+                    $InfoCourtReservation->setPlayers($data->getPlayers());
+                    $InfoCourtReservation->setMemoText($data->getMemoText());
+                    $InfoCourtReservation->setReservationType(5);
+                }else{
+                    $InfoCourtReservation->setReservationType(8);
+                    foreach ($data->getOtherPlayers() as $Player) {
+                        $InfoCourtReservation->addOtherPlayer($Player);
+                    }
+                    $InfoCourtReservation->setPlayer($data->getPlayer());
+                    $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
                 }
-                $InfoCourtReservation->setPlayer($data->getPlayer());
+
                 $em->persist($InfoCourtReservation);
                 $em->flush();
                 return $this->redirectToRoute('admin-dashboard');
@@ -134,7 +147,7 @@ class CourtManagerController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->find($CourtReservationId);
 
-        $form = $this->createForm(CourtReservationType::class, $CourtReservation);
+        $form = $this->createForm(CourtBlockerType::class, $CourtReservation);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -190,4 +203,18 @@ class CourtManagerController extends AbstractController
             'Title'=> "CourtReservations"
         ]);
     }
+    /**
+     * @Route("/admin/DeleteCourtReservation/{time}/{Court}", name="DeleteRegisterGame")
+     */
+    public function AdminDeleteRegister(EntityManagerInterface $em, Request $request,$time,$Court)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        $em->remove($CourtReservations);
+        $em->flush();
+        $date = new \DateTime(date('m/d/Y', $time));
+        return $this->redirectToRoute('CourtPlayersReservationAdmin', array('date' => $date->format('Y-m-d')));
+
+    }
+
 }

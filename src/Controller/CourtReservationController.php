@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CourtReservation;
-use App\Form\CourtReservationType;
+use App\Form\CourtBlockerType;
 use App\Form\ReservationAdminType;
 use App\Form\ReservationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +23,7 @@ class CourtReservationController extends AbstractController
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
-            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getPlayers());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
         }
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {

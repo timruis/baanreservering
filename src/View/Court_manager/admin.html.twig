@@ -18,12 +18,6 @@
                     class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
         </div>
     {% endif %}
-    {% if app.user.BackgroundImage is null %}
-        <div class="alert alert-danger">
-            <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
-                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
-        </div>
-    {% endif %}
     <div class="row w-100">
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
             <h3 id="monthYear">
@@ -56,16 +50,17 @@
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c~2 in allReservations or date~c~4 in allReservations or  Previousdate~c~4 in allReservations or date~c~3 in allReservations or  Previousdate~c~3 in allReservations %}
+                                {% if date~c in allReservations or Previousdate~c in allReservations %}
                                     <a class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate) < date() or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled
                                     {% endif %}"
-                                       href="{{ path('adminRegisterGame',{time:date,Court:c}) }}">kies</a>
+                                       href="{{ path('adminRegisterGame',{time:date,Court:c}) }}">
+                                                kies</a>
                                 {% endif %}
-                        </td>
+                            </td>
                             {% set PreviousTime = ChosenDate~" "~t~":00" %}
                         {% endfor %}
                     </tr>

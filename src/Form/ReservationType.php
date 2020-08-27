@@ -83,7 +83,7 @@ class ReservationType extends AbstractType
                         ;
                 },
                 'label'=>'Tweede speler',
-                'required'=>false,
+                'required'=>true,
                 'attr'=>['id'=>'combobox', 'class'=>'d-none'],
                 'choice_label' => function (User $user) {
                     return  $user->getFirstname()." ".$user->getLastname() ;

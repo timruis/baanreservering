@@ -31,7 +31,7 @@ class CheckCourtsController extends AbstractController
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
-            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getPlayers());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
         }
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {
@@ -61,4 +61,34 @@ class CheckCourtsController extends AbstractController
             'sundown'=>$sundown
         ]);
     }
+
+    /**
+     * @Route("/Players/check/Court", name="checkOwnReservations")
+     */
+    public function checkOwnReservations(EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $CourtReservations = $this->getUser()->getCourtReservations();
+        $NotReservedCourtReservation = $this->getUser()->getCourtReservationsTeam();
+        return $this->render('check_Court/CheckReservation.html.twig', [
+            'Title' => 'CheckCourtsController',
+            'CourtReservations'=>$CourtReservations,
+            'TeamCourtReservations'=>$NotReservedCourtReservation,
+        ]);
+    }
+    /**
+     * @Route("/DeleteCourtReservation/{time}/{Court}", name="PlayerDeleteReservation")
+     */
+    public function AdminDeleteRegister(EntityManagerInterface $em, Request $request,$time,$Court)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        if($this->getUser() === $CourtReservations->getPlayer()){
+        $em->remove($CourtReservations);
+        $em->flush();
+        }
+        return $this->redirectToRoute('checkOwnReservations');
+
+    }
+
 }

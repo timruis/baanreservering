@@ -1,40 +1,46 @@
 {% extends 'UserLogedin.html.twig' %}
 
 {% block title %} IZEW - DASHBOARD{% endblock %}
-{% block stylesheets %}
-    {{ parent() }}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<style>
-    .custom-combobox {
-        position: relative;
-        display: inline-block;
+{%  block stylesheets %}
 
-    }
-    .custom-combobox-toggle {
-        height: 44px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin-left: -1px;
-        padding: 0;
-    }
-    form label{
-    font-size:20px;
-    }
-    form label[for*="reservation_admin_addedText"]{
-        color: black;
-    }
-    .custom-combobox-input {
-        width: auto !important;
-        margin: 0;
-        padding: 5px 10px;
-    }
+    {{ parent() }}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+
+        }
+        .custom-combobox-toggle {
+            height: 44px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+        form label{
+            font-size:20px;
+        }
+        form label[for*="reservation_admin_addedText"]{
+            color: black;
+        }
+        .custom-combobox-input {
+            width: auto !important;
+            margin: 0;
+            padding: 5px 10px;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
     <script type="text/javascript">
         $( document ).ready( function() {
+            $('#reservation_admin_ReservationType').on('click',function(){
+                console.log("test");
+                $('#reservation_admin_MemoText').toggleClass('d-none');
+                $('.verhuurLabel').toggleClass('d-none');
+                $('#reservation_admin_Players').toggleClass('d-none');
+            })
             $.widget("custom.combobox", {
                 _create: function () {
                     this.wrapper = $("<span>")
@@ -181,18 +187,27 @@
                 $("#reservation_admin_OtherPlayers option:selected").prop("selected", false);
                 $("#reservation_admin_Player option:selected").prop("selected", false);
                 $(".custom-combobox-input").each( function () {
-                   if( $(this).val().match(/([a-zA-Z])+([ -~])*/) ) {
+                    if( $(this).val().match(/([a-zA-Z])+([ -~])*/) ) {
 
-                       if(( !$(this).parent().parent().has( "select#reservation_admin_Player" ).length )) {
-                           $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
-                       }else{
-                           $("#reservation_admin_Player option:contains(" + $(this).val() + ")").prop("selected", true);
-                       }
-                   }
+                        if(( !$(this).parent().parent().has( "select#reservation_admin_Player" ).length )) {
+                            $("#reservation_admin_OtherPlayers option:contains(" + $(this).val() + ")").prop("selected", true);
+                        }else{
+                            $("#reservation_admin_Player option:contains(" + $(this).val() + ")").prop("selected", true);
+                        }
+                    }
                 });
             });
         });
+
     </script>
+    <style type="text/css">
+        input[type="checkbox"] {
+         opacity: 1 !important;
+         pointer-events: visibleStroke !important;
+        }
+
+</style>
+
 {% endblock %}
 
 {% block body %}
@@ -202,7 +217,7 @@
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
             <div class="card-body">
                 <div class="card-title">
-                    <h3 class="text-center">Fill in Account</h3>
+                    <h3 class="text-center">Vul de reserverin in</h3>
                 </div>
                 <hr>
                 {{ form_start(reservation) }}

@@ -29,12 +29,6 @@
                     <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd bent. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
                 </div>
             {% endif %}
-            {% if app.user.BackgroundImage is null %}
-                <div class="alert alert-danger">
-                    <strong>Configure your profile!</strong> Your Background Image is not set yet. <a
-                            class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
-                </div>
-            {% endif %}
             <div class="row w-100">
                 <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
                     <h3 id="monthYear">
@@ -104,6 +98,7 @@
                                         <th>CourtReservationss ID</th>
                                         <th>tijd</th>
                                         <th>baan</th>
+                                        <th>Memo</th>
                                         <th>Speler</th>
                                         <th>Email</th>
                                         <th>Telefoon</th>
@@ -119,6 +114,7 @@
                                             <td>{{ CourtReservation.id }}</td>
                                             <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                             <td>{{ CourtReservation.Court }}</td>
+                                            <td>{{ CourtReservation.MemoText }}</td>
                                             <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
                                             <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
                                             <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
