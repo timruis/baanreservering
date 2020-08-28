@@ -11,7 +11,6 @@
         {% endblock %}
 
         {% block body %}
-            <h1> welcome to IZEW webpanel!!!</h1>
             {% if app.user.ProfileImage is null %}
                 <div class="alert alert-danger">
                     <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto toe. <a class="badge badge-important" href="{{ path('accountSettings') }}">doe
