@@ -103,11 +103,17 @@ class CourtReservationController extends AbstractController
                         $cannotMakeReservation = false;
                     }
                 }
+            $date = new \DateTime(date('m/d/Y H:i:s', $time));
+            $em = $this->getDoctrine()->getManager();
+            $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($date->format("U"),$Court);
+            if ($CourtReservations){
+                $cannotMakeReservation = true;
+            }
             if($cannotMakeReservation) {
                 $form->addError(new FormError('Niet toegestaan dubbele reservering.'));
             }else{
                 $InfoCourtReservation = new CourtReservation();
-                $date = new \DateTime(date('m/d/Y H:i:s', $time));
+
                 $InfoCourtReservation->setStartTime($date);
                 $InfoCourtReservation->setCourt($Court);
                 $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);

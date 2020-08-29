@@ -57,6 +57,22 @@ class CourtReservationRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findReservations($date, $court)
+    {
+        $date = new \DateTime(date('m/d/Y H:i:s', $date));
+
+
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.StartTime = :stamp')
+            ->andWhere('c.Court = :court')
+            ->setParameter('stamp', $date)
+            ->setParameter('court', $court)
+            ->orderBy('c.StartTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     /*
     public function findOneBySomeField($value): ?CourtReservation
     {

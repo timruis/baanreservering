@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,11 +16,21 @@ class CheckCourtsController extends AbstractController
     public function index(EntityManagerInterface $em, Request $request,$time,$Court)
     {
         $em = $this->getDoctrine()->getManager();
-        $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time, $Court);
-        return $this->render('check_Court/index.html.twig', [
-            'Title' => 'CheckCourtsController',
-            'CourtReservation'=>$CourtReservation,
-        ]);
+        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservations($time, $Court);
+           if(count($CourtReservations)>1) {
+
+                   return $this->render('check_Court/CheckDoubleReservation.html.twig', [
+                       'Title' => 'CheckCourtsController',
+                       'CourtReservations'=>$CourtReservations,
+                   ]);
+           }else{
+               $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time, $Court);
+               return $this->render('check_Court/index.html.twig', [
+                   'Title' => 'CheckCourtsController',
+                   'CourtReservation'=>$CourtReservation,
+               ]);
+           }
+
     }
 
     /**
@@ -79,10 +90,14 @@ class CheckCourtsController extends AbstractController
     /**
      * @Route("/DeleteCourtReservation/{time}/{Court}", name="PlayerDeleteReservation")
      */
-    public function AdminDeleteRegister(EntityManagerInterface $em, Request $request,$time,$Court)
+    public function DeleteRegister(EntityManagerInterface $em, Request $request,$time,$Court)
     {
         $em = $this->getDoctrine()->getManager();
-        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        try {
+            $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
         if($this->getUser() === $CourtReservations->getPlayer()){
         $em->remove($CourtReservations);
         $em->flush();
