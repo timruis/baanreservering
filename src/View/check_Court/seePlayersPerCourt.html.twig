@@ -32,7 +32,7 @@
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
                                 {% if date~c in allReservations %}
-                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">Verwijderen</a>
                                 {% elseif Previousdate~c in allReservations %}
                                    <a href="#" class="btn btn-danger">bezet</a>
                                 {% else %}
