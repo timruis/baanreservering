@@ -36,8 +36,8 @@
                                         <th>Accounts ID</th>
                                         <th>Account</th>
                                         {% if is_granted('ROLE_ADMIN') %}
-                                        <th>Change</th>
-                                        <th>Delete</th>
+                                        <th>Aanpassen</th>
+                                        <th>Verwijderen</th>
                                         {% endif %}
                                     </tr>
                                     </thead>
@@ -49,10 +49,10 @@
                                             <td>{{ Account.Email }}</td>
                                             <td>{{ Account.Password }}</td>
                                             {% if is_granted('ROLE_ADMIN') %}
-                                                <td><a class="btn btn-outline-primary" href="{{ path('Account-Change',{AccountId: Account.id}) }}">Change <span class="fa fa-pencil-square"></span></a></td>
+                                                <td><a class="btn btn-outline-primary" href="{{ path('Account-Change',{AccountId: Account.id}) }}">Aanpassen <span class="fa fa-pencil-square"></span></a></td>
                                                 <td>
                                                     <button type="button" id="{{ Account.id }}" class="DeleteCerification btn btn-outline-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Account-Delete',{AccountId: Account.id}) }}">
-                                                        Delete <span class="fa fa-times-rectangle"></span>
+                                                        Verwijderen <span class="fa fa-times-rectangle"></span>
                                                     </button>
                                                 </td>
                                             {% endif %}
