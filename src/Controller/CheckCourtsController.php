@@ -42,7 +42,7 @@ class CheckCourtsController extends AbstractController
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
-            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getReservationType());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt()."b".$CourtReservation->getReservationType());
             array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
         }
         $timeArray = [];

@@ -50,23 +50,23 @@
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c~0 in allReservations or date~c~9 in allReservations %}
+                                {% if date~c~"b"~0 in allReservations or date~c~"b"~9 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~1 in allReservations %}
+                                {% elseif date~c~"b"~1 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d95e8 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~2 in allReservations %}
+                                {% elseif date~c~"b"~2 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#05c5e2 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~3 in allReservations %}
+                                {% elseif date~c~"b"~3 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ece109 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~4 in allReservations %}
+                                {% elseif date~c~"b"~4 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d23e8 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~5 in allReservations %}
+                                {% elseif date~c~"b"~5 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ff790f !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~6 in allReservations %}
+                                {% elseif date~c~"b"~6 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#880ba7 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~7 in allReservations %}
+                                {% elseif date~c~"b"~7 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0de823 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
-                                {% elseif date~c~8 in allReservations %}
+                                {% elseif date~c~"b"~8 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#727274 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
                                 {% elseif Previousdate~c in allReservations %}
                                    <a href="#" class="btn btn-danger">bezet</a>

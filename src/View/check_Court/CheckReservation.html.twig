@@ -84,7 +84,7 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in TeamCourtReservations|sort %}
-                                        {% if date(CourtReservation.StartTime) > date() or CourtReservation.ReservationType in range(0, 8) %}
+                                        {% if date(CourtReservation.StartTime) > date() and CourtReservation.ReservationType in range(0, 8) %}
                                             <tr>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>
