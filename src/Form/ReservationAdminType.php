@@ -58,7 +58,7 @@ class ReservationAdminType extends AbstractType
                         ->orderBy('u.Firstname, u.Lastname', 'ASC')
                         ;
                 },
-                'label'=>'reserveerende speler',
+                'label'=>'reserverende speler',
                 'required'=>false,
                 'attr'=>['id'=>'combobox', 'class'=>'d-none'],
                 'choice_label' => function (User $user) {
@@ -127,6 +127,11 @@ class ReservationAdminType extends AbstractType
                 'choice_label' => function (User $user) {
                     return  $user->getFirstname()." ".$user->getLastname() ;
                 },])
+            ->add('ReservationType', CheckboxType::class, [
+                'label'    => 'Is dit baan verhuur?',
+                'required' => false,
+                'attr'=>['id'=>'verhuur'],
+            ])
             ->add('ReservationType', CheckboxType::class, [
                 'label'    => 'Is dit baan verhuur?',
                 'required' => false,

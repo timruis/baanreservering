@@ -146,14 +146,15 @@
                                 <span>Maak Reservering (telefoonisch of aan de bar)</span>
                             </a>
                         </li>
-                    {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
+
                          <li>
                             <a href="{{ path('admin-CourtReservations') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">check</i>
                                 <span>Alle reserveringen</span>
                             </a>
                         </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
                         <li>
                             <a href="{{ path('CourtReservation-Registry') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">list</i>

@@ -84,6 +84,96 @@ class UserFixture extends Fixture
 
         $manager->flush();
 
+        $admin = new User();
+        $admin->setUsername('bettinaborreman');
+        $admin->setFirstname('Bettina');
+        $admin->setLastname('Borreman');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('bettinaborreman@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('ansderuijter');
+        $admin->setFirstname('ans');
+        $admin->setLastname('deruijter');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('ansderuijter@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('jordidejong');
+        $admin->setFirstname('jordi');
+        $admin->setLastname('dejong');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('jordidejong@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('mikevangarderen');
+        $admin->setFirstname('mike');
+        $admin->setLastname('vangarderen');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('mikevangarderen@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('sjoerdreeskamp');
+        $admin->setFirstname('sjoerd');
+        $admin->setLastname('reeskamp');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('sjoerdreeskamp@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('linda');
+        $admin->setFirstname('linda');
+        $admin->setLastname('linda');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('linda@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
+
+        $admin = new User();
+        $admin->setUsername('folkert');
+        $admin->setFirstname('folkert');
+        $admin->setLastname('folkert');
+        $admin->setPayed(true);
+        $admin->setActivateUser(true);
+        $admin->setEmail('folkert@inzonenwind.nl');
+        $admin->setPassword($this->encoder->encodePassword($admin,'0000'));
+        $admin->setRoles(array('ROLE_USER'));
+        $manager->persist($admin);
+
+        $manager->flush();
 
     }
 }

@@ -7,15 +7,18 @@
 
     {% if app.user.ProfileImage is null %}
         <div class="alert alert-danger">
-            Zonder profiel foto word u niet geactiveerd! voeg uw profiel foto toe. <a class="badge badge-important"
-                                                                                           href="{{ path('accountSettings') }}">doe
-                het hier</a>
+            <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto <a class="badge badge-important" href="{{ path('accountSettings') }}">hier</a> toe.
         </div>
     {% endif %}
     {% if app.user.Firstname is null or app.user.Lastname is null %}
         <div class="alert alert-danger">
-            <strong>Configure your profile!</strong> Your Firstname or Lastname is not set yet. <a
-                    class="badge badge-important" href="{{ path('accountSettings') }}">do it here</a>
+            <strong>Configureer uw profiel!</strong> vul uw voor en achternaam in om verder te gaan. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">dat kan u hier</a>
+        </div>
+    {% endif %}
+    {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
+        <div class="alert alert-danger">
+            <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd wordt. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
         </div>
     {% endif %}
     <div class="row w-100">
@@ -28,7 +31,7 @@
                     <thead>
                     <tr>
                         <th>Tijd</th>
-                        {% for c in 1..10 %}
+                        {% for c in 1..11 %}
                         <th>baan {{ c }}</th>
                         {% endfor %}
 
@@ -40,7 +43,7 @@
                     {% for t in times %}
                     <tr>
                         <th> {{ t }}</th>
-                        {% for c in 1..10 %}
+                        {% for c in 1..11 %}
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
@@ -48,11 +51,12 @@
                                     <a class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
-                                        disabled
-                                    {% endif %}"
-                                       href="{{ path('RegisterGame',{time:date,Court:c}) }}">
-
+                                    {% if date(ChosenDate~" 22:30")|date('U') == date or (date(ChosenDate~" 17:30")|date('U') == date and ChosenDate|date('w') == 0 or ChosenDate|date('w') == 6 )  or date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==1 or c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                        disabled"
+                                       {% else %}
+                                            " href="{{ path('RegisterGame',{time:date,Court:c}) }}"
+                                    {% endif %}
+                                       >
                                         kies</a>
                                 {% endif %}
                         </td>

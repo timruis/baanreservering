@@ -7,19 +7,18 @@
 
     {% if app.user.ProfileImage is null %}
         <div class="alert alert-danger">
-            <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto toe. <a class="badge badge-important" href="{{ path('accountSettings') }}">doe
-                het hier</a>
+            <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto <a class="badge badge-important" href="{{ path('accountSettings') }}">hier</a> toe.
         </div>
     {% endif %}
     {% if app.user.Firstname is null or app.user.Lastname is null %}
         <div class="alert alert-danger">
-            <strong>Configureer uw profiel!</strong> Uw voor en achternaam zijn nog niet ingevoerd. <a
-                    class="badge badge-important" href="{{ path('accountSettings') }}">doe het hier</a>
+            <strong>Configureer uw profiel!</strong> vul uw voor en achternaam in om verder te gaan. <a
+                    class="badge badge-important" href="{{ path('accountSettings') }}">dat kan u hier</a>
         </div>
     {% endif %}
     {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
         <div class="alert alert-danger">
-            <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd bent. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
+            <strong>Je bent nog niet geactiveerd!</strong> Wacht totdat je geactiveerd wordt. Mocht het te lang duren neem dan contact op met info@zonenwind.nl
         </div>
     {% endif %}
     <div class="row w-100">

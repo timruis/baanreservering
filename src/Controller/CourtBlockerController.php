@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 class CourtBlockerController extends AbstractController
 {
     /**
-     * @Route("/admin/CourtReservation-new", name="CourtReservation-Registry")
+     * @Route("/admin/banenBlocker/CourtReservation-new", name="CourtReservation-Registry")
      */
     public function RegisteredCourtReservation(EntityManagerInterface $em, Request $request)
     {
@@ -40,8 +40,8 @@ class CourtBlockerController extends AbstractController
                             $InfoCourtReservation->setCourt($court);
                             $InfoCourtReservation->setPlayers(2);
                             $InfoCourtReservation->setPlayer($this->getUser());
-                            $InfoCourtReservation->setMemoText($this->getMemoText());
-                            $InfoCourtReservation->setReservationType($this->getReservationType());
+                            $InfoCourtReservation->setMemoText($data->getMemoText());
+                            $InfoCourtReservation->setReservationType($data->getReservationType());
 
                             $em->persist($InfoCourtReservation);
                             $em->flush();
@@ -54,6 +54,8 @@ class CourtBlockerController extends AbstractController
                     $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 week", $startingDate->getTimestamp())));
                 } elseif ($form->get('Steps')->getData() === 3) {
                     $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 month", $startingDate->getTimestamp())));
+                }else{
+                    $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 day", $startingDate->getTimestamp())));
                 }
 
             }

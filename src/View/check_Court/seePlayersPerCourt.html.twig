@@ -6,7 +6,26 @@
 {% block body %}
 
     <div class="row w-100">
-        <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+        <div class="card p-0 col-sm-3" style="overflow-x: scroll; padding: 50px;">
+            <div class="card-body p-0">
+                <div class="card-title">
+                    <h3 class="text-center">Soorten Legenda</h3>
+                </div>
+                <hr>
+                <ol class="list-group w-100">
+                    <li class="list-group-item"><h2 style="font-size: 30px;">1. Les</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d95e8;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">2. Toss</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#05c5e2;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">3. Competitie</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ece109;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">4. Event</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d23e8;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">5. Verhuur</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ff790f;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">6. Introduce</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#880ba7;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">7. Tennis Kamp</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0de823;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">8. Overig</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#727274;"></div></li>
+                    <li class="list-group-item"><h2 style="font-size: 30px;">9. reservering</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#e70808;"></div></li>
+                </ol>
+            </div>
+        </div>
+        <div class="card col-sm-9" style="overflow-x: scroll; padding: 50px;">
             <h3 id="monthYear">
 
             </h3>
@@ -15,7 +34,7 @@
                     <thead>
                     <tr>
                         <th>Tijd</th>
-                        {% for c in 1..10 %}
+                        {% for c in 1..11 %}
                         <th>baan {{ c }}</th>
                         {% endfor %}
 
@@ -27,17 +46,33 @@
                     {% for t in times %}
                     <tr>
                         <th> {{ t }}</th>
-                        {% for c in 1..10 %}
+                        {% for c in 1..11 %}
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c in allReservations %}
+                                {% if date~c~0 in allReservations or date~c~9 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~1 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d95e8 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~2 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#05c5e2 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~3 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ece109 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~4 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d23e8 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~5 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ff790f !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~6 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#880ba7 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~7 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0de823 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                {% elseif date~c~8 in allReservations %}
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#727274 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
                                 {% elseif Previousdate~c in allReservations %}
                                    <a href="#" class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                    {% if date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==1 or c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled
                                     {% endif %}"
                                        href="{{ path('adminRegisterGame',{time:date,Court:c}) }}">

@@ -209,9 +209,11 @@ class CourtManagerController extends AbstractController
     public function AdminDeleteRegister(EntityManagerInterface $em, Request $request,$time,$Court)
     {
         $em = $this->getDoctrine()->getManager();
-        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
-        $em->remove($CourtReservations);
-        $em->flush();
+        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservations($time,$Court);
+        foreach ($CourtReservations as $CourtReservation) {
+            $em->remove($CourtReservation);
+            $em->flush();
+        }
         $date = new \DateTime(date('m/d/Y', $time));
         return $this->redirectToRoute('CourtPlayersReservationAdmin', array('date' => $date->format('Y-m-d')));
 

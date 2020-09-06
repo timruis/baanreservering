@@ -52,15 +52,14 @@
 
                                         {% if  CourtReservation is defined  %}
                                             <tr>
-                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
+                                                <td><img alt="Image" style="width:100%;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if CourtReservation.Player.ProfileImage is defined and CourtReservation.Player.ProfileImage is not empty %}{{ CourtReservation.Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
                                                 <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
                                                 <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Email }}{% endif %}</td>
                                                 <td>{% if CourtReservation.Player.Email is defined %}{{ CourtReservation.Player.Mobile }}{% endif %}</td>
-
                                             </tr>
                                             {% for Player in CourtReservation.OtherPlayers%}
                                             <tr>
-                                                <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
+                                                <td><img alt="Image" style="width:100%;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1"></td>
                                                 <td>{% if Player.Firstname is defined %}{{ Player.Firstname }} {% endif %} {% if Player.Lastname is defined %}{{ Player.Lastname }}{% endif %}</td>
                                                 <td>{% if Player.Email is defined %}{{ Player.Email }}{% endif %}</td>
                                                 <td>{% if Player.Email is defined %}{{ Player.Mobile }}{% endif %}</td>

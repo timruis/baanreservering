@@ -167,12 +167,15 @@
 
 
             $( "#reservation_Player" ).combobox();
+            $( "#reservation_OtherPlayers0" ).combobox({
+                pageSize: 5,
+            });
+            $( "#reservation_OtherPlayers1" ).combobox({
 
-            $( "#reservation_OtherPlayers1" ).combobox();
-
-            $( "#reservation_OtherPlayers2" ).combobox();
-
-            $( "#reservation_OtherPlayers0" ).combobox();
+            });
+            $( "#reservation_OtherPlayers2" ).combobox({
+                maximum: 5
+            });
             $( "#toggle" ).on( "click", function() {
                 $( ".form-control" ).toggle();
             });

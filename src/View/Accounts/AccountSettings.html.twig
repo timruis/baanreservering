@@ -14,9 +14,10 @@
                                         <h3 class="text-center">Profiel foto</h3>
                                     </div>
                                     <hr>
-                                    <div class="row static" style="margin-top:150px; object-fit: cover;">
+                                    <div class="row static" style="object-fit: cover;">
                                         <div class="col">
-                                            <div style=" height: 125px;width: 125px;" class="rounded-circle border-white p-0 border-6 profile-image text-white overflow-hidden">
+                                            <div style=" height: 100%;"
+                                                 class="border-white p-0 border-6 profile-image">
                                                 <img class="card-img cover align-bottom static"
                                                      src="{{ asset('uploads/images/profile/') }}{% if AccountData.ProfileImage is defined and AccountData.ProfileImage is not null %}{{ AccountData.ProfileImage }}{% else %}profile.png{% endif %}"
                                                      alt="Card image">

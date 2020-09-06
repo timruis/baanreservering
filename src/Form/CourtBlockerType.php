@@ -138,8 +138,9 @@ class CourtBlockerType extends AbstractType
                     'Competitie' => 3,
                     'Event' => 4,
                     'Verhuur' => 5,
-                    'Tennis Kamp' => 6,
-                    'Overig' => 7,
+                    'Introduce' => 6,
+                    'Tennis Kamp' => 7,
+                    'Overig' => 8,
                 ]
             ])
             ->add('MemoText')

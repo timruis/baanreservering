@@ -4,44 +4,98 @@
 
 
         {% block stylesheets %}
-                {{ parent() }}
+            {{ parent() }}
 
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
         {% endblock %}
 
         {% block body %}
-
-<div class="content mt-3">
-    <div class="animated fadeIn">
-            <div class="card">
-                <div class="card-header">
-                    <strong class="card-title">Member Info</strong>
-                </div>
-                <div class="card-body">
-                    <!-- Credit Card -->
-
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h3 class="text-center">Fill in Member</h3>
+            <div class="row">
+            <div class="col-md-8">
+                <div class="content mt-3">
+                    <div class="animated fadeIn">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">Member Info</strong>
                             </div>
-                            <hr>
-                            {{ form_start(Member) }}
+                            <div class="card-body">
+                                <!-- Credit Card -->
 
-                            <div class="row">
-                                <div class="col">
-                                    {{ form_widget(Member) }}
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h3 class="text-center">Fill in Member</h3>
+                                    </div>
+                                    <hr>
+                                    {{ form_start(Member) }}
+
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form_widget(Member) }}
+                                        </div>
+                                    </div>
+                                    {{ form_end(Member) }}
                                 </div>
+
                             </div>
-                            {{ form_end(Member) }}
+
                         </div>
-
+                    </div>
                 </div>
-
             </div>
 
-    </div>
-</div>
+            <div class="col-md-4">
+                <div class="content mt-3">
+                    <div class="animated fadeIn">
+                        <div class="card">
+                            <!-- Credit Card -->
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h3 class="text-center">Profiel foto</h3>
+                                </div>
+                                <hr>
+                                <div class="row static" style="object-fit: cover;">
+                                    <div class="col">
+                                        <div style=" height: 100%;"
+                                             class="border-white p-0 border-6 profile-image">
+                                            <img class="card-img cover align-bottom static"
+                                                 src="{{ asset('uploads/images/profile/') }}{% if AccountData.ProfileImage is defined and AccountData.ProfileImage is not null %}{{ AccountData.ProfileImage }}{% else %}profile.png{% endif %}"
+                                                 alt="Card image">
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4>Reglement profiel foto:</h4>
+                                <ol>
+                                    <li>
+                                        Uw profielfoto dient een recente pasfoto te zijn.
+                                    </li>
+                                    <li>
+                                        Na het uploaden van deze pasfoto zal deze door het tennispark in het systeem
+                                        toegevoegd worden.
+                                    </li>
+                                    <li>
+                                        Hierna wordt uw account geactiveerd en kunt u reserveren.
+                                    </li>
+
+
+                                </ol>
+                                <h4>upload profiel foto</h4>
+                                <div class="row">
+                                    <div class="col">
+                                        {{ form_start(ImagesProf) }}
+                                        {{ form_widget(ImagesProf) }}
+                                        <button type="submit" class="btn-primary btn">Submit</button>
+                                        {{ form_end(ImagesProf) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
         {% endblock %}
 
 
@@ -53,8 +107,8 @@
 
 
     <script>
-        jQuery(document).ready(function() {
-            $('.js-datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+        jQuery(document).ready(function () {
+            $('.js-datepicker').datepicker({dateFormat: 'yy-mm-dd'}).val();
         });
     </script>
 

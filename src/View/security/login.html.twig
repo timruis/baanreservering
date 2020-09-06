@@ -20,8 +20,8 @@
     <div class="wrapper fadeInDown">
         <div id="formContent">
             <!-- Tabs Titles -->
-            <h2 class="active"> Sign In </h2>
-            <h2> <a class="" href="{{ path("app_Register") }}"> Sign up </a></h2>
+            <h2 class="active"> Log in </h2>
+            <h2> <a class="" href="{{ path("app_Register") }}"> Registreer </a></h2>
 
             <!-- Icon -->
             <div class="fadeIn first">
@@ -34,21 +34,21 @@
             {% endif %}
             <!-- Login Form -->
             <form action="{{ path('app_login') }}" method="POST">
-                <input type="text" id="login" class="login fadeIn second" name="_username" placeholder="login" value="{{ last_username }}">
-                <input type="password" id="password" class="login fadeIn third" name="_password" placeholder="password">
+                <input type="text" id="login" class="login fadeIn second" name="_username" placeholder="Gebruikersnaam" value="{{ last_username }}">
+                <input type="password" id="password" class="login fadeIn third" name="_password" placeholder="Wachtwoord">
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <div class="checkbox mb-3 fadeIn third">
                     <label>
-                        <input type="checkbox" name="_remember_me"> Remember me
+                        <input type="checkbox" name="_remember_me"> Onthoud mij
                     </label>
                 </div>
-                <button type="submit" class="btn fadeIn fourth">Log In</button>
+                <button type="submit" class="btn fadeIn fourth">Login</button>
             </form>
 
             <!-- Remind Password -->
             <div id="formFooter">
-                <a class="underlineHover" href="#">Forgot Password?(werkt nog niet)</a>
+                <a class="underlineHover" href="#">Wachtwoord vergeten?(werkt nog niet)</a>
             </div>
 
         </div>

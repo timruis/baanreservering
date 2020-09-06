@@ -42,7 +42,7 @@ class CheckCourtsController extends AbstractController
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
-            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getReservationType());
         }
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {
@@ -94,13 +94,15 @@ class CheckCourtsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         try {
-            $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+            $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservations($time,$Court);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
-        if($this->getUser() === $CourtReservations->getPlayer()){
-        $em->remove($CourtReservations);
-        $em->flush();
+        foreach ($CourtReservations as $CourtReservation){
+            if($this->getUser() === $CourtReservation->getPlayer() || $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SUPER-USER') ) {
+                $em->remove($CourtReservation);
+                $em->flush();
+            }
         }
         return $this->redirectToRoute('checkOwnReservations');
 
