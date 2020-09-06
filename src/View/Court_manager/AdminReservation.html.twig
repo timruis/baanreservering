@@ -36,10 +36,36 @@
     <script type="text/javascript">
         $( document ).ready( function() {
             $('#reservation_admin_ReservationType').on('click',function(){
-                console.log("test");
-                $('#reservation_admin_MemoText').toggleClass('d-none');
-                $('.verhuurLabel').toggleClass('d-none');
-                $('#reservation_admin_Players').toggleClass('d-none');
+
+                if ($("input#reservation_admin_ReservationType").prop("checked")) {
+                    $('#reservation_admin_MemoText').removeClass('d-none');
+                    $('.verhuurLabel').removeClass('d-none');
+                    $('#reservation_admin_Players').removeClass('d-none');
+                    $('#reservation_admin_MemoTextIntroduce').addClass('d-none');
+                    $('.IntroduceLabel').addClass('d-none');
+                    $('#reservation_admin_PlayersIntroduce').addClass('d-none');
+                    $("input#reservation_admin_introduce").prop("checked", false);
+                }else{
+                    $('#reservation_admin_MemoText').addClass('d-none');
+                    $('.verhuurLabel').addClass('d-none');
+                    $('#reservation_admin_Players').addClass('d-none');
+                }
+            })
+            $('#reservation_admin_introduce').on('click',function(){
+                if ($("input#reservation_admin_introduce").prop("checked")) {
+                    $('#reservation_admin_MemoTextIntroduce').removeClass('d-none');
+                    $('.IntroduceLabel').removeClass('d-none');
+                    $('#reservation_admin_PlayersIntroduce').removeClass('d-none');
+                    $('#reservation_admin_MemoText').addClass('d-none');
+                    $('.verhuurLabel').addClass('d-none');
+                    $('#reservation_admin_Players').addClass('d-none');
+                    $("input#reservation_admin_ReservationType").prop("checked", false);
+                }else{
+                    $('#reservation_admin_MemoTextIntroduce').addClass('d-none');
+                    $('.IntroduceLabel').addClass('d-none');
+                    $('#reservation_admin_PlayersIntroduce').addClass('d-none');
+                }
+
             })
             $.widget("custom.combobox", {
                 _create: function () {
@@ -216,7 +242,7 @@
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
             <div class="card-body">
                 <div class="card-title">
-                    <h3 class="text-center">Vul de reservering in</h3>
+                    <h3 class="text-center">Wie spelen er?</h3>
                 </div>
                 <hr>
                 {{ form_start(reservation) }}

@@ -43,6 +43,7 @@ class CheckCourtsController extends AbstractController
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
             array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt().$CourtReservation->getReservationType());
+            array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
         }
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {
@@ -105,6 +106,26 @@ class CheckCourtsController extends AbstractController
             }
         }
         return $this->redirectToRoute('checkOwnReservations');
+
+    }
+    /**
+     * @Route("/DeleteCourtDublicate/{id}", name="DeleteDublicate")
+     */
+    public function DeleteDublicate(EntityManagerInterface $em, Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        try {
+            $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->find($id);
+        } catch (FileException $e) {
+
+        }
+        $time=$CourtReservation->getStartTime()->format('U');
+        $court=$CourtReservation->getCourt();
+        if($this->getUser() === $CourtReservation->getPlayer() || $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SUPER-USER') ) {
+            $em->remove($CourtReservation);
+            $em->flush();
+        }
+        return $this->redirectToRoute('check_Court',array('time' => $time,'Court' => $court));
 
     }
 

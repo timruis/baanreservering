@@ -66,7 +66,7 @@ class CourtManagerController extends AbstractController
             $InfoCourtReservation = $this->getUser()->getCourtReservations();
 
             $data=$form->getData();
-            if ($data->getReservationType()=== false) {
+            if ($data->getReservationType() === false and $form->get('introduce')->getData() === false) {
                 $date = new \DateTime(date('m/d/Y H:i:s', $time));
                 $TwoHoursinfuture = $date->add(new \DateInterval("PT3H"));
                 $date = new \DateTime(date('m/d/Y H:i:s', $time));
@@ -124,7 +124,13 @@ class CourtManagerController extends AbstractController
                     $InfoCourtReservation->setPlayers($data->getPlayers());
                     $InfoCourtReservation->setMemoText($data->getMemoText());
                     $InfoCourtReservation->setReservationType(5);
-                }else{
+                }elseif ($form->get('introduce')->getData()){
+
+                    $InfoCourtReservation->setPlayers($form->get('PlayersIntroduce')->getData());
+                    $InfoCourtReservation->setMemoText($form->get('MemoTextIntroduce')->getData());
+                    $InfoCourtReservation->setReservationType(6);
+                }
+                else{
                     $InfoCourtReservation->setReservationType(8);
                     foreach ($data->getOtherPlayers() as $Player) {
                         $InfoCourtReservation->addOtherPlayer($Player);

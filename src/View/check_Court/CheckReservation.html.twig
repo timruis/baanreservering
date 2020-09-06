@@ -15,14 +15,14 @@
                 <div class="animated fadeIn">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Reserveringen door jou geplaatst</strong>
+                            <strong class="card-title">Reserveringen door jou aangemaakt</strong>
                         </div>
                         <div class="card-body">
                             <!-- Credit Card -->
 
                             <div style="padding:1em;overflow-x: scroll;">
                                 <div class="card-title">
-                                    <h3 class="text-center">Jouw Reserveringen</h3>
+                                    <h3 class="text-center">Reserveringen </h3>
                                 </div>
                                 <hr>
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -38,7 +38,7 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in CourtReservations|sort %}
-                                        {% if date(CourtReservation.StartTime) > date() %}
+                                        {% if date(CourtReservation.StartTime) > date() and CourtReservation.ReservationType not in range(1, 8) %}
                                             <tr>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>
@@ -62,14 +62,14 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">Reserveringen door jou geplaatst</strong>
+                            <strong class="card-title">Reserveringen door een ander aangemaakt</strong>
                         </div>
                         <div class="card-body">
                             <!-- Credit Card -->
 
                             <div style="padding:1em;overflow-x: scroll;">
                                 <div class="card-title">
-                                    <h3 class="text-center">Jouw Reserveringen</h3>
+                                    <h3 class="text-center">Reserveringen</h3>
                                 </div>
                                 <hr>
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
@@ -84,7 +84,7 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in TeamCourtReservations|sort %}
-                                        {% if date(CourtReservation.StartTime) > date() %}
+                                        {% if date(CourtReservation.StartTime) > date() or CourtReservation.ReservationType in range(0, 8) %}
                                             <tr>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>

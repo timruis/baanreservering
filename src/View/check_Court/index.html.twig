@@ -46,11 +46,13 @@
                             {% elseif CourtReservation.ReservationType == 5 %}
                             <span class="list-group-item"><h2 style="font-size: 30px;">5. Verhuur</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ff790f;"></div></span>
                             {% elseif CourtReservation.ReservationType == 6 %}
-                            <span class="list-group-item"><h2 style="font-size: 30px;">6. Tennis Kamp</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0de823;"></div></span>
+                                <span class="list-group-item"><h2 style="font-size: 30px;">6. Introduce</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#880ba7;"></div></span>
                             {% elseif CourtReservation.ReservationType == 7 %}
-                            <span class="list-group-item"><h2 style="font-size: 30px;">7. Overig</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#727274;"></div></span>
+                                <span class="list-group-item"><h2 style="font-size: 30px;">7. Tennis Kamp</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0de823;"></div></span>
                             {% elseif CourtReservation.ReservationType == 8 %}
-                            <span class="list-group-item"><h2 style="font-size: 30px;">8. reservering</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#e70808;"></div></span>
+                            <span class="list-group-item"><h2 style="font-size: 30px;">8. Overig</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#727274;"></div></span>
+                            {% elseif CourtReservation.ReservationType == 9 %}
+                            <span class="list-group-item"><h2 style="font-size: 30px;">9. reservering</h2> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#e70808;"></div></span>
                             {% endif %}
 
                             <p><span class="list-group-item">Memo: {{ CourtReservation.MemoText }}</span></p>

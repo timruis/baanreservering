@@ -132,22 +132,37 @@ class ReservationAdminType extends AbstractType
                 'required' => false,
                 'attr'=>['id'=>'verhuur'],
             ])
-            ->add('ReservationType', CheckboxType::class, [
-                'label'    => 'Is dit baan verhuur?',
-                'required' => false,
-                'attr'=>['id'=>'verhuur'],
-            ])
             ->add('MemoText',TextareaType::class,[
-                'label'    => 'Wie spelen er? (bij verhuur)',
+                'label'    => 'Wie spelen er? (Vul ook minimaal 1 telefoon nummer in)',
                 'required' => false,
                 'label_attr'=>['class'=>'verhuurLabel d-none'],
                 'attr'=>['id'=>'verhuurBox', 'class'=>'d-none']
                 ])
             ->add('Players',NumberType::class,[
-                'label'    => 'Hoeveel spelen er? (bij verhuur)',
+                'label'    => 'Hoeveel spelen er?',
                 'required' => false,
                 'label_attr'=>['class'=>'verhuurLabel d-none'],
                 'attr'=>['id'=>'verhuurNumber', 'class'=>'d-none']
+            ])
+            ->add('introduce', CheckboxType::class, [
+                'mapped'=> false,
+                'label'    => 'Is dit een introduce?',
+                'required' => false,
+                'attr'=>['id'=>'introduce'],
+            ])
+            ->add('MemoTextIntroduce',TextType::class,[
+                'mapped'=> false,
+                'label'    => 'Wie wordt er geintroduceerd?',
+                'required' => false,
+                'label_attr'=>['class'=>'IntroduceLabel d-none'],
+                'attr'=>['id'=>'introduceBox', 'class'=>'d-none']
+            ])
+            ->add('PlayersIntroduce',NumberType::class,[
+                'mapped'=> false,
+                'label'    => 'Hoeveel spelen er?',
+                'required' => false,
+                'label_attr'=>['class'=>'IntroduceLabel d-none'],
+                'attr'=>['id'=>'introduceNumber', 'class'=>'d-none']
             ])
             ->add('Save', SubmitType::class)
         ;
