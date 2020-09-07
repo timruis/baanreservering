@@ -22,7 +22,7 @@ class RegisterType extends AbstractType
 
         $builder
             ->add('username',TextType::class,[
-                'label'=>'Gebrukersnaam',
+                'label'=>'Gebruikersnaam',
                 'required'=>true,
                 'attr'=> ['class'=>'login fadeIn second']
             ])

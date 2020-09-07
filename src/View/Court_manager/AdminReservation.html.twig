@@ -45,10 +45,19 @@
                     $('.IntroduceLabel').addClass('d-none');
                     $('#reservation_admin_PlayersIntroduce').addClass('d-none');
                     $("input#reservation_admin_introduce").prop("checked", false);
+                    $("#reservation_admin_Players").prop('required',true);
+                    $("#reservation_admin_MemoText").prop('required',true);
+                    $("#reservation_admin_MemoTextIntroduce").prop('required',false);
+                    $("#reservation_admin_PlayersIntroduce").prop('required',false);
                 }else{
                     $('#reservation_admin_MemoText').addClass('d-none');
                     $('.verhuurLabel').addClass('d-none');
                     $('#reservation_admin_Players').addClass('d-none');
+
+                    $("#reservation_admin_Players").prop('required',false);
+                    $("#reservation_admin_MemoText").prop('required',false);
+                    $("#reservation_admin_MemoTextIntroduce").prop('required',false);
+                    $("#reservation_admin_PlayersIntroduce").prop('required',false);
                 }
             })
             $('#reservation_admin_introduce').on('click',function(){
@@ -60,10 +69,19 @@
                     $('.verhuurLabel').addClass('d-none');
                     $('#reservation_admin_Players').addClass('d-none');
                     $("input#reservation_admin_ReservationType").prop("checked", false);
+
+                    $("#reservation_admin_Players").prop('required',false);
+                    $("#reservation_admin_MemoText").prop('required',false);
+                    $("#reservation_admin_MemoTextIntroduce").prop('required',true);
+                    $("#reservation_admin_PlayersIntroduce").prop('required',true);
                 }else{
                     $('#reservation_admin_MemoTextIntroduce').addClass('d-none');
                     $('.IntroduceLabel').addClass('d-none');
                     $('#reservation_admin_PlayersIntroduce').addClass('d-none');
+                    $("#reservation_admin_Players").prop('required',false);
+                    $("#reservation_admin_MemoText").prop('required',false);
+                    $("#reservation_admin_MemoTextIntroduce").prop('required',false);
+                    $("#reservation_admin_PlayersIntroduce").prop('required',false);
                 }
 
             })

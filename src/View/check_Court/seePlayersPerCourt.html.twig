@@ -75,7 +75,7 @@
                                     {% if date(ChosenDate~" 22:30")|date('U') == date or (date(ChosenDate~" 17:30")|date('U') == date and ChosenDate|date('w') == 0 or ChosenDate|date('w') == 6 )  or date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date()|date_modify("+2 hour") or  (date(ChosenDate~sundown) < date(stringdate) and (c==1 or c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled"
                                     {% else %}
-                                        " href="{{ path('RegisterGame',{time:date,Court:c}) }}"
+                                        " href="{{ path('adminRegisterGame',{time:date,Court:c}) }}"
                                     {% endif %}
                                         >
                                     kies</a>
