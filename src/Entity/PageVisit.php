@@ -17,18 +17,36 @@ class PageVisit
     private $id;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $Time;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $CurrentUrl;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\ManyToOne(targetEntity="App\Entity\user")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $Time;
+    private $User;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTime(): ?\DateTimeInterface
+    {
+        return $this->Time;
+    }
+
+    public function setTime(\DateTimeInterface $Time): self
+    {
+        $this->Time = $Time;
+
+        return $this;
     }
 
     public function getCurrentUrl(): ?string
@@ -43,14 +61,14 @@ class PageVisit
         return $this;
     }
 
-    public function getTime(): ?\DateTimeInterface
+    public function getUser(): ?user
     {
-        return $this->Time;
+        return $this->User;
     }
 
-    public function setTime(\DateTimeInterface $Time): self
+    public function setUser(?user $User): self
     {
-        $this->Time = $Time;
+        $this->User = $User;
 
         return $this;
     }

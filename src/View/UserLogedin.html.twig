@@ -207,9 +207,10 @@
             $( "body" ).toggleClass( "ls-closed" );
             }
         );
-        $.post("{{ path('Courter') }}",   // url
+        $.post("{{ path('User_Tracker') }}",   // url
             {
-                Link: window.location.href
+                Link: window.location.href,
+                UserID: "{{ app.user.id }}"
             }, // data to be submit
         )
     </script>

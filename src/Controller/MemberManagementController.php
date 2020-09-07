@@ -199,5 +199,43 @@ class MemberManagementController extends AbstractController
             json_encode($User->getActivateUser())
         );
     }
+    /**
+     * @Route("/admin/check/Wintermembership", name="WinterMember")
+     */
+    public function changeWinterMember(EntityManagerInterface $em,Request $request)
+    {
 
+        $id = $request->get('id');
+        $User = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if ($User->getWinterMember()){
+            $User->setWinterMember(false);
+        }else {
+            $User->setWinterMember(true);
+        }
+        $em->persist($User);
+        $em->flush();
+        return new \Symfony\Component\HttpFoundation\Response(
+            json_encode($User->getWinterMember())
+        );
+    }
+
+    /**
+     * @Route("/admin/check/Summermembership", name="SummerMember")
+     */
+    public function changeSummerMember(EntityManagerInterface $em,Request $request)
+    {
+
+        $id = $request->get('id');
+        $User = $this->getDoctrine()->getRepository(User::class)->find($id);
+        if ($User->getSummerMember()){
+            $User->setSummerMember(false);
+        }else {
+            $User->setSummerMember(true);
+        }
+        $em->persist($User);
+        $em->flush();
+        return new \Symfony\Component\HttpFoundation\Response(
+            json_encode($User->getSummerMember())
+        );
+    }
 }

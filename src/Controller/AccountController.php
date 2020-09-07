@@ -124,23 +124,27 @@ class AccountController extends AbstractController
         ]);
     }
     /**
-     * @Route("/Courter", name="Courter")
+     * @Route("/Usertrace/Tracker", name="User_Tracker")
      * @Method("POST")
      */
-    public function UserCourter(EntityManagerInterface $em, Request $request)
+    public function UserTracker(EntityManagerInterface $em, Request $request)
     {
+        $UserID = $request->get('UserID');
         $Link = $request->get('Link');
+        $User = $this->getDoctrine()->getRepository(User::class)->find($UserID);
 
         $pageVisit = new PageVisit();
+        $pageVisit->setUser($User);
         $pageVisit->setCurrentUrl($Link);
         $pageVisit->setTime(new \DateTime());
 
         $em->persist($pageVisit);
         $em->flush();
         return new Response(
-            json_encode("Uploaded")
+            json_encode("Uploaded". $User->getId().$User->getFirstname().$Link)
         );
     }
+
 
     /**
      * @Route("/email")

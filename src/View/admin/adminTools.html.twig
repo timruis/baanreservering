@@ -106,25 +106,31 @@
                 <div class="content-list">
                     <div class="row content-list-head">
                         <div class="col-auto">
-                            <h3>UserCourter</h3>
+                            <h3>UserTracker</h3>
                         </div>
                     </div>
-                        <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
-                            <thead>
+                    <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>User Image</th>
+                            <th>User Name</th>
+                            <th>Link</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for PageVisit in PageVisits %}
                             <tr>
-                                <th>Link</th>
-                                <th>Date</th>
+                                <td>
+                                    <img alt="Image" src="{{ asset('uploads/Images/profile/') }}{{ PageVisit.User.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                </td>
+                                <td>{{ PageVisit.User.Username }} - {{ PageVisit.User.Firstname }} {{ PageVisit.User.Lastname }}</td>
+                                <td><a class="badge badge-dark" href="{{ PageVisit.CurrentUrl }}">{{ PageVisit.CurrentUrl }}</a></td>
+                                <td>{{ PageVisit.Time|date("F jS \\a\\t g:ia") }}</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for PageVisit in PageVisits %}
-                                <tr>
-                                    <td><a class="badge badge-dark" href="{{ PageVisit.CurrentUrl }}">{{ PageVisit.CurrentUrl }}</a></td>
-                                    <td>{{ PageVisit.Time|date("F jS \\a\\t g:ia") }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
                 <!--end of content list-->
             </div>

@@ -123,6 +123,16 @@ class User implements UserInterface, \Serializable
      */
     private $Payed;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $SummerMember;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $WinterMember;
+
     public function __construct()
     {
         $this->CourtReservations = new ArrayCollection();
@@ -413,6 +423,30 @@ class User implements UserInterface, \Serializable
     public function setPayed(bool $Payed): self
     {
         $this->Payed = $Payed;
+
+        return $this;
+    }
+
+    public function getSummerMember(): ?bool
+    {
+        return $this->SummerMember;
+    }
+
+    public function setSummerMember(bool $SummerMember): self
+    {
+        $this->SummerMember = $SummerMember;
+
+        return $this;
+    }
+
+    public function getWinterMember(): ?bool
+    {
+        return $this->WinterMember;
+    }
+
+    public function setWinterMember(bool $WinterMember): self
+    {
+        $this->WinterMember = $WinterMember;
 
         return $this;
     }
