@@ -45,6 +45,8 @@ class AdminController extends AbstractController
             $InfoAccount->setRoles($data->getRoles());
             $InfoAccount->setActivateUser(1);
             $InfoAccount->setPayed(1);
+            $InfoAccount->setSummerMember(1);
+            $InfoAccount->setWinterMember(1);
             $InfoAccount->setPassword($this->encoder->encodePassword($InfoAccount,$data->getPassword()));
             $em->persist($InfoAccount);
             $em->flush();

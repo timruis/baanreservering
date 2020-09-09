@@ -79,21 +79,17 @@
                 <div class="animated fadeIn">
                     <div class="card">
                         <div class="card-header">
-                            <strong class="card-title">CourtReservations Info</strong>
+                            <strong class="card-title">Reserveringen</strong>
                         </div>
                         <div class="card-body">
                             <!-- Credit Card -->
 
                             <div style="padding:1em;overflow-x: scroll;">
-                                <div class="card-title">
-                                    <h3 class="text-center">Table Of CourtReservations</h3>
-                                </div>
-                                <hr>
-                                <h1>All CourtReservations</h1>
+                                <h1>Alle reserveringen</h1>
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>CourtReservationss ID</th>
+                                        <th>id</th>
                                         <th>tijd</th>
                                         <th>baan</th>
                                         <th>Memo</th>
@@ -120,12 +116,8 @@
                                             <td>
                                                 deze group heeft recht op
                                                     <span class="badge badge-light">
-                                                    {% if CourtReservation.Players == 4 %}
+                                                    {% if CourtReservation.Players == 4 or CourtReservation.Players == 3 or CourtReservation.Players == 2 %}
                                                          1 uur
-                                                    {% elseif CourtReservation.Players == 3  %}
-                                                        3 kwartier
-                                                    {% elseif CourtReservation.Players == 2  %}
-                                                        één half uur
                                                     {% else  %}
                                                         onbekende
                                                     {% endif %}

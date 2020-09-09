@@ -37,18 +37,6 @@ class AccountController extends AbstractController
         $form = $this->createForm(AccountType::class, $user);
         $form->handleRequest($request);
 
-        if ( $form->isSubmitted() && $form->isValid() ) {
-            $data = $form->getData();
-            $user->setEmail($data->getEmail());
-            $user->setFirstname($data->getFirstname());
-            $user->setLastname($data->getLastname());
-            $user->setMobile($data->getMobile());
-            $user->setDescription($data->getDescription());
-            $em->persist($user);
-            $em->flush();
-            return $this->redirectToRoute('accountSettings');
-        }
-
         $formProfImages = $this->createForm(ProfileImageType::class);
         $formProfImages->handleRequest($request);
         if ($formProfImages->isSubmitted() && $formProfImages->isValid()) {
@@ -76,8 +64,22 @@ class AccountController extends AbstractController
                 $user->setProfileImage($fileNameProfile);
                 $em->persist($user);
                 $em->flush();
+
+                return $this->redirectToRoute('accountSettings');
             }
         }
+        if ( $form->isSubmitted() ) {
+            $data = $form->getData();
+            $user->setEmail($data->getEmail());
+            $user->setFirstname($data->getFirstname());
+            $user->setLastname($data->getLastname());
+            $user->setMobile($data->getMobile());
+            $user->setDescription($data->getDescription());
+            $em->persist($user);
+            $em->flush();
+            return $this->redirectToRoute('accountSettings');
+        }
+
         return $this->render('Accounts/AccountSettings.html.twig', [
             'AccountData' => $user,
             'Account' => $form->createView(),

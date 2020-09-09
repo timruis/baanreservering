@@ -28,12 +28,20 @@ class CourtReservationController extends AbstractController
         $timeArray = [];
         if(date('N', strtotime($date)) >= 6) {
 
-            for ($x = 9; $x <= 17; $x++) {
-                array_push($timeArray, $x . ":00", $x . ":30");
+            for ($x = 8; $x <= 17; $x++) {
+                if ($x ===8){
+                    array_push($timeArray, $x . ":30");
+                }else {
+                    array_push($timeArray, $x . ":00", $x . ":30");
+                }
             }
         }else {
-            for ($x = 9; $x <= 22; $x++) {
-                array_push($timeArray, $x . ":00", $x . ":30");
+            for ($x = 8; $x <= 22; $x++) {
+                if ($x ===8){
+                    array_push($timeArray, $x . ":30");
+                }else {
+                    array_push($timeArray, $x . ":00", $x . ":30");
+                }
             }
         }
         $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
@@ -108,6 +116,7 @@ class CourtReservationController extends AbstractController
 
                 $InfoCourtReservation->setStartTime($date);
                 $InfoCourtReservation->setCourt($Court);
+                $InfoCourtReservation->setReservationType(9);
                 $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
                 foreach ($data->getOtherPlayers() as $Player) {
                     $InfoCourtReservation->addOtherPlayer($Player);
