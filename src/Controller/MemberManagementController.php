@@ -58,14 +58,7 @@ class MemberManagementController extends AbstractController
             $ProfileImage = $formProfImages->get('ProfileImage')->getData();
             if (isset($ProfileImage)) {
                 $fileNameProfile = $this->generateUniqueFileName() . $ProfileImage->guessExtension();
-                $file = new Filesystem();
-                $fileName = $Member->getProfileImage();
 
-                try {
-                    $file->remove($this->getParameter('profile_directory') . DIRECTORY_SEPARATOR . $fileName);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
                 try {
                     $ProfileImage->move(
                         $this->getParameter('profile_directory'),

@@ -58,11 +58,12 @@ class AccountController extends AbstractController
                 $fileNameProfile = $this->generateUniqueFileName() . $ProfileImage->guessExtension();
                 $file = new Filesystem();
                 $fileName = $user->getProfileImage();
-
-                try {
-                    $file->remove($this->getParameter('profile_directory') . DIRECTORY_SEPARATOR . $fileName);
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+                if (isset($fileName) && !empty($fileName) && $fileName != NULL) {
+                    try {
+                        $file->remove($this->getParameter('profile_directory') . DIRECTORY_SEPARATOR . $fileName);
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
                 }
                 try {
                     $ProfileImage->move(

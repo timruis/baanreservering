@@ -43,9 +43,8 @@ class UserChangeType extends AbstractType
                 'attr'=> ['class'=>'login fadeIn thirth']
             ])
 
-            ->add('Create', SubmitType::class, ['label' => 'Save / add new'])
-            ->add('StayOn', SubmitType::class, ['label' => 'Save / keep model'])
-            ->add('OpenList', SubmitType::class, ['label' => 'Save / open list']);
+            ->add('submit', SubmitType::class, ['label' => 'opslaan']);
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

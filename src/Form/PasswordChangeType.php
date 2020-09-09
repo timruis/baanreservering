@@ -21,11 +21,11 @@ class PasswordChangeType extends AbstractType
         $builder
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'options' => ['attr' => ['class' => 'password-field']],
+                'invalid_message' => 'De wachtwoorden moeten matchen.',
+                'options' => ['attr' => ['class'=>'login fadeIn thirth password-field',"pattern"=>"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$","title"=> "Uw wachtwoord dient minimaal 8 karakters te hebben, minimaal 1 hoofdletter, minimaal 1 cijfer en minimaal 1 letter.","minlength"=>"8"]],
                 'required' => true,
-                'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password'],
+                'first_options'  => ['label' => 'Wachtwoord'],
+                'second_options' => ['label' => 'Herhaal Wachtwoord'],
             ])
             ->add('Create', SubmitType::class, ['label' => 'Save'])
     ;
