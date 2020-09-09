@@ -45,9 +45,9 @@ class RegisterType extends AbstractType
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'De wachtwoorden moeten matchen.',
-                'options' => ['attr' => ['class'=>'login fadeIn thirth password-field',"pattern"=>"[a-z]{1,15}","minlength"=>"8"]],
+                'options' => ['attr' => ['class'=>'login fadeIn thirth password-field',"title"=> "Uw wachtwoord moet bestaan uit minimaal 8 karakters, 2 hoofdletters, letters en 1 cijfer","pattern"=>"(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}","minlength"=>"8"]],
                 'required' => true,
-                'first_options'  => ['label' => 'Wachtwoord (wachtwoord moet bestaan uit letters en cijfers)'],
+                'first_options'  => ['label' => 'Wachtwoord '],
                 'second_options' => ['label' => 'Herhaal Wachtwoord'],
             ])
             ->add('maak_account', SubmitType::class, ['label' => 'registreer mij']);

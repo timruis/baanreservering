@@ -50,7 +50,7 @@
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
-                                {% if date~c~"b"~0 in allReservations or date~c~"b"~9 in allReservations %}
+                                {% if date~c~"b" in allReservations or date~c~"b"~9 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
                                 {% elseif date~c~"b"~1 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d95e8 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
