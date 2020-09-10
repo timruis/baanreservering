@@ -5,9 +5,13 @@
 
         {% block stylesheets %}
             {{ encore_entry_link_tags('DataTables') }}
-
+            <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"
+                  rel="stylesheet" type="text/css">
+            <link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"
+                  rel="stylesheet" type="text/css">
 
             {{ parent() }}
+
         {% endblock %}
 
         {% block body %}
@@ -29,7 +33,7 @@
                                     <h3 class="text-center">Ledenregister tabel</h3>
                                 </div>
                                 <hr>
-                                <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                <table id="bootstrap-data-table{% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}-local{% else %}-export{% endif %}" class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
                                         <th>Members ID</th>
@@ -51,13 +55,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for Member in Members %}
-                                        <tr class="tbrw{{ Member.Id }}
+                                    {% set i = 1 %}
+                                    {% for Member in Members|sort %}
+                                        <tr class="tbrw{{ Member.id }}
                                                {% if Member.payed == 0 %}
                                                     yellow
                                                 {% endif %}">
-                                            <td>{{ Member.id }}</td>
-                                            <td><img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{{ Member.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                            <td>{{ i }}</td>
+                                            <td>
+                                                {% if Member.ProfileImage is defined and Member.ProfileImage != NULL %}
+                                                    <img alt="Image" style="height:75px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{{ Member.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                                {% else %} geen foto toegevoegd {% endif %}
                                             </td>
                                             <td>{{ Member.Firstname }}</td>
                                             <td>{{ Member.Lastname }}</td>
@@ -66,15 +74,19 @@
                                             {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                                                 <td>
                                                     <label for="payed">Heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
+                                                    <span id="haspayed{{ Member.Id }}">{% if Member.payed == 1 %} ja {% else %} nee {% endif %}</span>
                                                 </td>
                                                 <td>
                                                     <label for="payed">Is actief</label><input class="Active" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                    <span id="hasActivated{{ Member.Id }}">{% if Member.ActivateUser == 1 %} ja {% else %} nee {% endif %}</span>
                                                 </td>
                                                 <td>
                                                     <label for="payed">Is Winterlid</label><input class="Winter" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.WinterMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                    <span id="hasWinterMember{{ Member.Id }}">{% if Member.WinterMember == 1 %} ja {% else %} nee {% endif %}</span>
                                                 </td>
                                                 <td>
                                                     <label for="payed">Is Zomerlid</label><input class="Summer" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.SummerMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                    <span id="hasSummerMember{{ Member.Id }}">{% if Member.SummerMember == 1 %} ja {% else %} nee {% endif %}</span>
                                                 </td>
                                             {% endif %}
                                                 <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
@@ -87,6 +99,7 @@
                                             {% endif %}
 
                                         </tr>
+                                        {% set i = i+1 %}
                                     {% endfor %}
                                     </tbody>
                                 </table>
@@ -126,38 +139,86 @@
 
 
 
-
+                {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+                <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+                {% endif %}
                 {{ encore_entry_script_tags('DataTables') }}
                 <script>
-                    $('.payed').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('Payment') }}", {id: userid});
-                        $(".tbrw"+userid).toggleClass("yellow")
-                    });
-                    $('.Active').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('Activate') }}", {id: userid});
-                    });
-                    $('.Summer').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('SummerMember') }}", {id: userid});
-                    });
-                    $('.Winter').on('click', function (e) {
-                        var userid = $(this).val();
-                        $.post("{{ path('WinterMember') }}", {id: userid});
-                    });
+                    $(document).ready(function() {
+                        {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
+                        $('#bootstrap-data-table-local').DataTable( {
+                            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'copyHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                                'pdfHtml5'
+                            ]
+                        } );
 
-                    $('[data-toggle="modal"]').on('click', function (e) {
-                        // convert target (e.g. the button) to jquery object
-                        var $target = $(e.target);
+                        $('.payed').on('click', function (e) {
+                            var userid = $(this).val();
+                            $.post("{{ path('Payment') }}", {id: userid});
+                            var item = $("#haspayed"+userid);
+                            if (item.html() === " nee ") {
+                                item.html(" ja ");
+                            }else if (item.html() === " ja "){
+                                item.html(" nee ");
+                            }
+                            $(".tbrw"+userid).toggleClass("yellow")
 
-                        // modal targeted by the button
-                        var modalSelector = $target.data('target');
-                        // retrieve the dom element corresponding to current attribute
-                        var $modalAttribute = $(modalSelector + ' #modal-link');
-                        var dataValue = $target.data('link');
-                        $modalAttribute.attr('href', dataValue);
-                    });
+                        });
+                        $('.Active').on('click', function (e) {
+                            var userid = $(this).val();
+                            $.post("{{ path('Activate') }}", {id: userid});
+                            var item = $("#hasActivated"+userid);
+                            if (item.html() === " nee ") {
+                                item.html(" ja ");
+                            }else if (item.html() === " ja "){
+                                item.html(" nee ");
+                            }
+                        });
+                        $('.Summer').on('click', function (e) {
+                            var userid = $(this).val();
+                            $.post("{{ path('SummerMember') }}", {id: userid});
+                            var item = $("#hasSummerMember"+userid);
+                            if (item.html() === " nee ") {
+                                item.html(" ja ");
+                            }else if (item.html() === " ja "){
+                                item.html(" nee ");
+                            }
+                        });
+                        $('.Winter').on('click', function (e) {
+                            var userid = $(this).val();
+                            $.post("{{ path('WinterMember') }}", {id: userid});
+                            var item = $("#hasWinterMember"+userid);
+                            if (item.html() === " nee ") {
+                                item.html(" ja ");
+                            }else if (item.html() === " ja "){
+                                item.html(" nee ");
+                            }
+                        });
+
+                        $('[data-toggle="modal"]').on('click', function (e) {
+                            // convert target (e.g. the button) to jquery object
+                            var $target = $(e.target);
+
+                            // modal targeted by the button
+                            var modalSelector = $target.data('target');
+                            // retrieve the dom element corresponding to current attribute
+                            var $modalAttribute = $(modalSelector + ' #modal-link');
+                            var dataValue = $target.data('link');
+                            $modalAttribute.attr('href', dataValue);
+                        });
+                        {% endif %}
+                    } );
 
                 </script>
             {% endblock %}

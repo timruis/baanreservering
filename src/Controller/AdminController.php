@@ -69,7 +69,7 @@ class AdminController extends AbstractController
         $formAccount = $this->createForm(AccountType::class, $Account);
         $formAccount->handleRequest($request);
 
-        $form = $this->createForm(UserChangeType::class, $Account);
+        $form = $this->createForm(UserType::class, $Account);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $data=$form->getData();

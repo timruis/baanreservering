@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Member;
 use App\Entity\User;
 use App\Form\MemberType;
+use App\Form\PasswordChangeType;
 use App\Form\ProfileImageType;
 use App\Form\RegisterType;
 use App\Form\UserChangeType;
@@ -16,24 +17,42 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Flex\Response;
 
 class MemberManagementController extends AbstractController
 {
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
 
     /**
      * @Route("/admin/Change-Member-Info/{MemberId}", name="Member-Change")
      */
-    public function ChangeMember($MemberId,EntityManagerInterface $em, Request $request)
+    public function ChangeMember($MemberId,EntityManagerInterface $em, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $em = $this->getDoctrine()->getManager();
         $Member = $em->getRepository('App\Entity\User')->find($MemberId);
 
 
+        $formPass = $this->createForm(PasswordChangeType::class);
+        $formPass->handleRequest($request);
+        if ($formPass->isSubmitted() && $formPass->isValid()) {
+            $data=$formPass->getData();
+            $checkPass = $passwordEncoder->encodePassword($Member, $data->getPassword());
+            $Member->setPassword($checkPass);
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
+
+        }
         $form = $this->createForm(UserChangeType::class, $Member);
         $form->handleRequest($request);
-        if ($form->isSubmitted() ) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $Member->setEmail($data->getEmail());
             $Member->setFirstname($data->getFirstname());
@@ -42,13 +61,8 @@ class MemberManagementController extends AbstractController
             $Member->setDescription($data->getDescription());
             $em->persist($Member);
             $em->flush();
-            if ($form->get('OpenList')->isClicked()) {
-                return $this->redirectToRoute('Members');
-            }elseif ($form->get('StayOn')->isClicked()){
-                return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
-            } else {
-                return $this->redirectToRoute('Member-Registry');
-            }
+            return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
+
         }
 
         $formProfImages = $this->createForm(ProfileImageType::class);
@@ -75,6 +89,7 @@ class MemberManagementController extends AbstractController
 
         return $this->render('Member/MemberRegistry.html.twig', [
             'Member' => $form->createView(),
+            'Password' => $formPass->createView(),
             'AccountData' => $Member,
             'ImagesProf' => $formProfImages->createView(),
             'Title'=> "Change Existing Member"

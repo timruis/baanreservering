@@ -27,6 +27,7 @@ Encore
     .addEntry('login', './assets/js/login.js')
     .addEntry('UserPanel', './assets/js/UserPanel.js')
     .addEntry('DataTables', './assets/js/DataTables.js')
+    .addEntry('crop', './assets/js/crop.js')
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
     // will require an extra script tag for runtime.js
