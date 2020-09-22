@@ -92,7 +92,7 @@
                                                 <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
                                             {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                                                 <td>
-                                                    <button type="button" id="{{ Member.id }}" class="DeleteCerification btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
+                                                    <button type="button" onclick="window.location.href = '{{ Member.id }}';" id="{{ Member.id }}" class="delete-button btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
                                                         Delete <span class="fas fa-times-circle"></span>
                                                     </button>
                                                 </td>

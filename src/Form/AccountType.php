@@ -42,11 +42,6 @@ class AccountType extends AbstractType
                 'required'=>true,
                 'attr'=> ['class'=>'login fadeIn third']
             ])
-            ->add('description',TextType::class,[
-                'label'=>'Beschrijving',
-                'required'=>false,
-                'attr'=> ['class'=>'login fadeIn second']
-            ])
             ->add('Save', SubmitType::class)
         ;
     }

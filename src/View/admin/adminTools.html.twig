@@ -122,7 +122,7 @@
                         {% for PageVisit in PageVisits %}
                             <tr>
                                 <td>
-                                    <img alt="Image" src="{{ asset('uploads/Images/profile/') }}{{ PageVisit.User.ProfileImage }}" class="avatar avatar-lg mt-1">
+                                    <img alt="Image" style="max-height: 100px" src="{{ asset('uploads/images/profile/') }}{{ PageVisit.User.ProfileImage }}" class="avatar avatar-lg mt-1">
                                 </td>
                                 <td>{{ PageVisit.User.Username }} - {{ PageVisit.User.Firstname }} {{ PageVisit.User.Lastname }}</td>
                                 <td><a class="badge badge-dark" href="{{ PageVisit.CurrentUrl }}">{{ PageVisit.CurrentUrl }}</a></td>

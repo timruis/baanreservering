@@ -52,7 +52,7 @@ class MemberManagementController extends AbstractController
         }
         $form = $this->createForm(UserChangeType::class, $Member);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $data = $form->getData();
             $Member->setEmail($data->getEmail());
             $Member->setFirstname($data->getFirstname());
