@@ -73,26 +73,46 @@
                                             <td>{{ Member.Mobile }}</td>
                                             {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                                                 <td>
-                                                    <label for="payed">Heeft betaald</label><input class="payed" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
-                                                    <span id="haspayed{{ Member.Id }}">{% if Member.payed == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    <p>
+                                                        <label for="payed">
+                                                            <input class="payed filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" {% if Member.payed == 1 %}checked{% endif %}  name="payed" value="{{ Member.id }}"/>
+                                                            <span>Heeft betaald</span>
+                                                        </label>
+                                                        <span id="haspayed{{ Member.Id }}">{% if Member.payed == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    </p>
                                                 </td>
                                                 <td>
-                                                    <label for="payed">Is actief</label><input class="Active" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
-                                                    <span id="hasActivated{{ Member.Id }}">{% if Member.ActivateUser == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    <p>
+                                                        <label for="payed">
+                                                            <input class="Active filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" {% if Member.ActivateUser == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                            <span>Is actief</span>
+                                                        </label>
+                                                        <span id="hasActivated{{ Member.Id }}">{% if Member.ActivateUser == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    </p>
                                                 </td>
                                                 <td>
-                                                    <label for="payed">Is Winterlid</label><input class="Winter" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.WinterMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                    <p>
+                                                        <label for="payed">
+                                                            <input class="Winter  filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" {% if Member.WinterMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                            <span>Is Winterlid</span>
+                                                        </label>
+                                                    </p>
                                                     <span id="hasWinterMember{{ Member.Id }}">{% if Member.WinterMember == 1 %} ja {% else %} nee {% endif %}</span>
                                                 </td>
                                                 <td>
-                                                    <label for="payed">Is Zomerlid</label><input class="Summer" type="checkbox" style="opacity: 1;pointer-events: all;" {% if Member.SummerMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
-                                                    <span id="hasSummerMember{{ Member.Id }}">{% if Member.SummerMember == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    <p>
+                                                        <label for="payed">
+                                                            <input class="Summer  filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" {% if Member.SummerMember == 1 %}checked{% endif %}  name="Active" value="{{ Member.id }}"/>
+                                                            <span>Is Zomerlid</span>
+                                                            </label>
+                                                        <span id="hasSummerMember{{ Member.Id }}">{% if Member.SummerMember == 1 %} ja {% else %} nee {% endif %}</span>
+                                                    </p>
                                                 </td>
                                             {% endif %}
                                                 <td><a class="btn btn-primary" href="{{ path('Member-Change',{MemberId: Member.id}) }}">Change <span class="fas fa-pen-square"></span></a></td>
                                             {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                                                 <td>
-                                                    <button type="button" onclick="window.location.href = '{{ path('Member-Delete',{MemberId: Member.id}) }}';" id="{{ Member.id }}" class="delete-button btn btn-danger" data-toggle="modal" data-target="#DeleteCerification" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
+                                                    <button type="button" id="{{ Member.id }}" class="DeletePlayer btn btn-danger" data-toggle="modal" data-target="#DeletePlayer" data-link="{{ path('Member-Delete',{MemberId: Member.id}) }}">
                                                         Delete <span class="fas fa-times-circle"></span>
                                                     </button>
                                                 </td>
@@ -112,7 +132,7 @@
 
         {% endblock %}
 {% block modals %}
-    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="DeletePlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -185,7 +205,7 @@
                             }
                         });
 
-                        $('[data-toggle="modal"]').on('click', function (e) {
+                        $('.DeletePlayer').on('click', function (e) {
                             // convert target (e.g. the button) to jquery object
                             var $target = $(e.target);
 
