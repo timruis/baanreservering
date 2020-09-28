@@ -52,6 +52,7 @@
                         <th><span id="Day5"></span></th>
                         <th><span id="Day6"></span></th>
                         <th><span id="Day7"></span></th>
+                        <th><span id="Day8"></span></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,7 +60,7 @@
                     </tr>
                     <tr>
                         <td>{{ "now"|date("d/m/Y") }}</td>
-                        {% for i in 1..6 %}
+                        {% for i in 1..7 %}
                             {% set date = '+'~i ~ ' day' %}
                             <td>{{ "now"|date_modify(date)|date("d/m/Y") }}</td>
                         {% endfor %}
@@ -70,7 +71,7 @@
                                    disabled
                                 {% endif %}
                             " href="{{ path('CourtReservationAdmin',{date:"now"|date("d-m-Y")}) }}">kies</a></td>
-                        {% for i in 1..6 %}
+                        {% for i in 1..7 %}
                             {% set date = '+'~i ~ ' day' %}
                             <td><a class="btn
                                 {% if app.user.ActivateUser is null or app.user.ActivateUser == 0 %}
@@ -98,7 +99,7 @@
 
         document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
 
-        for (i = 1; i < 8; i++) {
+        for (i = 1; i <= 8; i++) {
             switch (day) {
                 case 0:
                     document.getElementById('Day' + i).innerHTML = "zo";

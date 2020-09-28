@@ -133,11 +133,17 @@ class User implements UserInterface, \Serializable
      */
     private $WinterMember;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PageVisit", mappedBy="User")
+     */
+    private $pageVisits;
+
     public function __construct()
     {
         $this->CourtReservations = new ArrayCollection();
         $this->CourtReservationsTeam = new ArrayCollection();
         $this->trainings = new ArrayCollection();
+        $this->PageVisits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -447,6 +453,36 @@ class User implements UserInterface, \Serializable
     public function setWinterMember(bool $WinterMember): self
     {
         $this->WinterMember = $WinterMember;
+
+        return $this;
+    }
+    /**
+     * @return Collection|PageVisit[]
+     */
+    public function getPageVisits(): Collection
+    {
+        return $this->pageVisits;
+    }
+
+    public function addPageVisit(PageVisit $pageVisit): self
+    {
+        if (!$this->pageVisits->contains($pageVisit)) {
+            $this->pageVisits[] = $pageVisit;
+            $pageVisit->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePageVisit(PageVisit $pageVisit): self
+    {
+        if ($this->pageVisits->contains($pageVisit)) {
+            $this->pageVisits->removeElement($pageVisit);
+            // set the owning side to null (unless already changed)
+            if ($pageVisit->getUser() === $this) {
+                $pageVisit->setUser(null);
+            }
+        }
 
         return $this;
     }

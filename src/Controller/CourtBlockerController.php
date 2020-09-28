@@ -27,8 +27,8 @@ class CourtBlockerController extends AbstractController
             $endingDate = new \DateTime(date("Y/m/d H:i:s",  $form->get('EndDate')->getData()->getTimestamp()));
            while ($startingDate->getTimestamp() <= $endingDate->getTimestamp()) {
 
-                $startingtime = $form->get('startingTime')->getData()->getTimestamp();
-                $endingtime = $form->get('endingTime')->getData()->getTimestamp();
+                $startingtime = $form->get('startingTime')->getData()->getTimestamp()+3600;
+                $endingtime = $form->get('endingTime')->getData()->getTimestamp()+1800;
                 $date = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $startingtime));
                 $infuture = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $endingtime));
                 while ($date < $infuture) {

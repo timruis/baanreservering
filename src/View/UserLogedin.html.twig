@@ -155,7 +155,7 @@
                             </a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
                         <li>
                             <a href="{{ path('CourtReservation-Registry') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">list</i>

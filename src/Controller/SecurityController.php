@@ -8,6 +8,7 @@ use App\Form\ForgotPasswordType;
 use App\Form\RegisterType;
 use App\Form\UserChangeType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +47,20 @@ class SecurityController extends AbstractController
         ]);
     }
     /**
+     * @Route("/admin/email/{id}", name="email")
+     */
+    public function email(EntityManagerInterface $em, Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Account = $em->getRepository('App\Entity\User')->find($id);
+
+        return $this->render('Emails/ForgetPassword.html.twig', [
+            'expiration_date' => new \DateTime('+1 days'),
+            'Account' => $Account,
+            'imgnumber' => rand(1, 3)
+        ]);
+    }
+    /**
      * @Route("/login/Forgot-Password", name="forgotpassword")
      */
     public function ForgetPassword(MailerInterface $mailer,EntityManagerInterface $em, Request $request)
@@ -59,16 +74,16 @@ class SecurityController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $Account = $em->getRepository('App\Entity\User')->findOneBy(['email'=>$data->getEmail()]);
             if(isset($Account)&& !empty($Account)){
-                $email = (new Email())
-                    ->from('hello@example.com')
+                $email = (new TemplatedEmail())
+                    ->from('NO-REPLY@baanreserverenzonenwind.nl')
                     ->to($Account->getEmail())
-                    ->cc('cc@example.com')
-                    ->bcc('bcc@example.com')
-                    ->replyTo('fabien@example.com')
-                    ->priority(Email::PRIORITY_HIGH)
-                    ->subject('Time for Symfony Mailer!')
-                    ->text('Sending emails is fun again!')
-                    ->html('<p>See Twig integration for better HTML integration!</p>');
+                    ->subject('Zon en Wind Wachtwoord Reset')
+                    ->htmlTemplate('Emails/ForgetPassword.html.twig')
+                    ->context([
+                        'expiration_date' => new \DateTime('+1 days'),
+                        'Account' => $Account,
+                        'imgnumber' => rand(1, 3)
+                    ]);
 
                 $mailer->send($email);
                 return $this->redirectToRoute('app_login');
@@ -76,7 +91,6 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/forgotpassword.html.twig', [
-            'controller_name' => 'CourtReservationController',
             'passforgot'=>$form->createView(),
             'imgnumber' => rand(1, 3)
         ]);

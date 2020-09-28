@@ -151,6 +151,10 @@ class MemberManagementController extends AbstractController
 
 
         $em= $this->getDoctrine()->getManager();
+        foreach ($Member->getPageVisits() as $pageVisit){
+            $em->remove($pageVisit);
+            $em->flush();
+        }
         $em->remove($Member);
         $em->flush();
         return $this->redirectToRoute('Members');
