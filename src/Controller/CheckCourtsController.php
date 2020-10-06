@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\CourtReservation;
+use App\Form\ReservationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -106,6 +109,54 @@ class CheckCourtsController extends AbstractController
             }
         }
         return $this->redirectToRoute('checkOwnReservations');
+
+    }
+
+    /**
+     * @Route("/ChangeCourtReservation/{time}/{Court}", name="PlayerChangeReservation")
+     */
+    public function ChangeRegister(EntityManagerInterface $em, Request $request,$time,$Court)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        $form = $this->createForm(ReservationType::class, $CourtReservation , ['ChosenDate'=>$time] );
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach ($CourtReservation->getOtherPlayers() as $Player) {
+                $Player->removeCourtReservationsTeam($CourtReservation);
+                $em->persist($Player);
+                $em->flush();
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $FormCourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+
+            $data=$form->getData();
+            $FormCourtReservation->setReservationType(9);
+            $FormCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
+            foreach ($data->getOtherPlayers() as $Player) {
+                $FormCourtReservation->addOtherPlayer($Player);
+            }
+            $FormCourtReservation->setPlayer($this->getUser());
+            $em->persist($FormCourtReservation);
+            $em->flush();
+            return $this->redirectToRoute('checkOwnReservations');
+
+
+            }else{
+                $form->get('OtherPlayers0')->setData($CourtReservation->getOtherPlayers()[0]);
+                $form->get('OtherPlayers1')->setData($CourtReservation->getOtherPlayers()[1]);
+                $form->get('OtherPlayers2')->setData($CourtReservation->getOtherPlayers()[2]);
+            }
+
+            return $this->render('Court_reservation/Reservation.html.twig', [
+                'controller_name' => 'CourtReservationController',
+                'reservation'=>$form->createView(),
+            ]);
 
     }
     /**

@@ -48,6 +48,11 @@
                                                     speel tijd
                                                 </td>
                                                 <td>
+                                                    <a class="btn btn-secondary" href="{{ path('PlayerChangeReservation',{time:CourtReservation.StartTime|date('U'),Court:CourtReservation.Court}) }}">
+                                                        aanpassen
+                                                    </a>
+                                                </td>
+                                                <td>
                                                     <a class="btn btn-danger" href="{{ path('PlayerDeleteReservation',{time:CourtReservation.StartTime|date('U'),Court:CourtReservation.Court}) }}">
                                                         verwijder
                                                     </a>
