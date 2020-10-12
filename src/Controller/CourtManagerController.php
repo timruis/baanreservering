@@ -126,8 +126,12 @@ class CourtManagerController extends AbstractController
                     $InfoCourtReservation->setReservationType(5);
                 }elseif ($form->get('introduce')->getData()){
 
-                    $InfoCourtReservation->setPlayers($form->get('PlayersIntroduce')->getData());
                     $InfoCourtReservation->setMemoText($form->get('MemoTextIntroduce')->getData());
+                    $InfoCourtReservation->setPlayer($data->getPlayer());
+                    foreach ($data->getOtherPlayers() as $Player) {
+                        $InfoCourtReservation->addOtherPlayer($Player);
+                    }
+                    $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
                     $InfoCourtReservation->setReservationType(6);
                 }
                 else{

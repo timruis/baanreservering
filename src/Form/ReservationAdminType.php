@@ -146,7 +146,7 @@ class ReservationAdminType extends AbstractType
             ])
             ->add('introduce', CheckboxType::class, [
                 'mapped'=> false,
-                'label'    => 'Is dit een introduce?',
+                'label'    => 'Is dit een introduce?(maximaal 2 te introduceren)',
                 'required' => false,
                 'attr'=>['id'=>'introduce'],
             ])
@@ -156,13 +156,6 @@ class ReservationAdminType extends AbstractType
                 'required' => false,
                 'label_attr'=>['class'=>'IntroduceLabel d-none'],
                 'attr'=>['id'=>'introduceBox', 'class'=>'d-none']
-            ])
-            ->add('PlayersIntroduce',NumberType::class,[
-                'mapped'=> false,
-                'label'    => 'Hoeveel spelen er?',
-                'required' => false,
-                'label_attr'=>['class'=>'IntroduceLabel d-none'],
-                'attr'=>['id'=>'introduceNumber', 'class'=>'d-none']
             ])
             ->add('Save', SubmitType::class)
         ;

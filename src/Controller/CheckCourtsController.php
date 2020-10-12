@@ -125,25 +125,28 @@ class CheckCourtsController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $arrayMakeNewTeam=[];
+            $data=$form->getData();
+            foreach ($data->getOtherPlayers() as $Player) {
+                array_push($arrayMakeNewTeam , $Player);
+            }
             foreach ($CourtReservation->getOtherPlayers() as $Player) {
                 $Player->removeCourtReservationsTeam($CourtReservation);
                 $em->persist($Player);
                 $em->flush();
             }
-
             $em = $this->getDoctrine()->getManager();
             $FormCourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
 
-            $data=$form->getData();
             $FormCourtReservation->setReservationType(9);
-            $FormCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
-            foreach ($data->getOtherPlayers() as $Player) {
+            $FormCourtReservation->setPlayers(count($arrayMakeNewTeam) + 1);
+            foreach ($arrayMakeNewTeam as $Player) {
                 $FormCourtReservation->addOtherPlayer($Player);
             }
             $FormCourtReservation->setPlayer($this->getUser());
             $em->persist($FormCourtReservation);
             $em->flush();
+
             return $this->redirectToRoute('checkOwnReservations');
 
 
