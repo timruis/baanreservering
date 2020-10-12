@@ -127,7 +127,8 @@ class ReservationAdminType extends AbstractType
                 'choice_label' => function (User $user) {
                     return  $user->getFirstname()." ".$user->getLastname() ;
                 },])
-            ->add('ReservationType', CheckboxType::class, [
+            ->add('Rent', CheckboxType::class, [
+                'mapped'=> false,
                 'label'    => 'Is dit baan verhuur?',
                 'required' => false,
                 'attr'=>['id'=>'verhuur'],

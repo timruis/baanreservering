@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\CourtReservation;
 use App\Form\CourtBlockerType;
 use App\Form\ReservationAdminType;
-use App\Form\ReservationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -233,5 +232,81 @@ class CourtManagerController extends AbstractController
         return $this->redirectToRoute('CourtPlayersReservationAdmin', array('date' => $date->format('Y-m-d')));
 
     }
+    /**
+     * @Route("/admin/ChangeCourtReservation/{time}/{Court}", name="ChangeRegisterGame")
+     */
+    public function AdminChangeRegister(EntityManagerInterface $em, Request $request,$time,$Court)
+    {
+        $em = $this->getDoctrine()->getManager();
 
+        $CourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+        $form = $this->createForm(ReservationAdminType::class, $CourtReservation );
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $arrayMakeNewTeam=[];
+            $data=$form->getData();
+            foreach ($data->getOtherPlayers() as $Player) {
+                array_push($arrayMakeNewTeam , $Player);
+            }
+            foreach ($CourtReservation->getOtherPlayers() as $Player) {
+                $Player->removeCourtReservationsTeam($CourtReservation);
+                $em->persist($Player);
+                $em->flush();
+            }
+            $em = $this->getDoctrine()->getManager();
+            $InfoCourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservation($time,$Court);
+
+            if ($form->get('Rent')->getData()){
+                $InfoCourtReservation->setPlayers($data->getPlayers());
+                $InfoCourtReservation->setMemoText($data->getMemoText());
+                $InfoCourtReservation->setReservationType(5);
+                $InfoCourtReservation->setPlayer(null);
+                foreach ($CourtReservation->getOtherPlayers() as $Player) {
+                    $Player->removeCourtReservationsTeam($CourtReservation);
+                    $em->persist($Player);
+                    $em->flush();
+                }
+            }elseif ($form->get('introduce')->getData()){
+
+                $InfoCourtReservation->setMemoText($form->get('MemoTextIntroduce')->getData());
+                $InfoCourtReservation->setPlayer($data->getPlayer());
+                foreach ($data->getOtherPlayers() as $Player) {
+                    $InfoCourtReservation->addOtherPlayer($Player);
+                }
+                $InfoCourtReservation->setPlayers($data->getOtherPlayers()->count() + 1);
+                $InfoCourtReservation->setReservationType(6);
+            }
+            else{
+                $InfoCourtReservation->setReservationType(9);
+                foreach ($arrayMakeNewTeam as $Player) {
+                    $InfoCourtReservation->addOtherPlayer($Player);
+                }
+                $InfoCourtReservation->setPlayer($data->getPlayer());
+                $InfoCourtReservation->setPlayers(count($arrayMakeNewTeam) + 1);
+            }
+
+            $em->persist($InfoCourtReservation);
+            $em->flush();
+            return $this->redirectToRoute('check_Court',['time'=>$InfoCourtReservation->getStartTime()->format("U"),'Court'=>$InfoCourtReservation->getCourt()]);
+
+
+        }else{
+            $form->get('OtherPlayers0')->setData($CourtReservation->getOtherPlayers()[0]);
+            $form->get('OtherPlayers1')->setData($CourtReservation->getOtherPlayers()[1]);
+            $form->get('OtherPlayers2')->setData($CourtReservation->getOtherPlayers()[2]);
+            if($CourtReservation->getReservationType() === 5) {
+                $form->get('Rent')->setData(true);
+            }elseif ($CourtReservation->getReservationType() === 6){
+                $form->get('Introduce')->setData(true);
+            }
+
+        }
+
+        return $this->render('Court_manager/AdminReservation.html.twig', [
+            'controller_name' => 'CourtReservationController',
+            'reservation'=>$form->createView(),
+        ]);
+    }
 }

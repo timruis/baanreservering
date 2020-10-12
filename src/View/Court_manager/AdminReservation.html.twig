@@ -35,9 +35,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
         $( document ).ready( function() {
-            $('#reservation_admin_ReservationType').on('click',function(){
+            $('#reservation_admin_Rent').on('click',function(){
 
-                if ($("input#reservation_admin_ReservationType").prop("checked")) {
+                if ($("input#reservation_admin_Rent").prop("checked")) {
                     $('#reservation_admin_MemoText').removeClass('d-none');
                     $('.verhuurLabel').removeClass('d-none');
                     $('#reservation_admin_Players').removeClass('d-none');
@@ -59,7 +59,7 @@
                     $("#reservation_admin_MemoTextIntroduce").prop('required',false);
                     $("#reservation_admin_PlayersIntroduce").prop('required',false);
                 }
-            })
+            });
             $('#reservation_admin_introduce').on('click',function(){
                 if ($("input#reservation_admin_introduce").prop("checked")) {
                     $('#reservation_admin_MemoTextIntroduce').removeClass('d-none');
@@ -68,7 +68,7 @@
                     $('#reservation_admin_MemoText').addClass('d-none');
                     $('.verhuurLabel').addClass('d-none');
                     $('#reservation_admin_Players').addClass('d-none');
-                    $("input#reservation_admin_ReservationType").prop("checked", false);
+                    $("input#reservation_admin_Rent").prop("checked", false);
 
                     $("#reservation_admin_Players").prop('required',false);
                     $("#reservation_admin_MemoText").prop('required',false);
