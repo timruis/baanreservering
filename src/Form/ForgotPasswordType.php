@@ -27,7 +27,7 @@ class ForgotPasswordType extends AbstractType
                 'required'=>true,
                 'attr'=> ['class'=>'login fadeIn thirth']
             ])
-            ->add('maak_account', SubmitType::class, ['label' => 'registreer mij']);
+            ->add('maak_account', SubmitType::class, ['label' => 'Stuur mij de mail']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

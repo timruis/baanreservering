@@ -138,12 +138,18 @@ class User implements UserInterface, \Serializable
      */
     private $pageVisits;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ForgetPasswordCode::class, mappedBy="User")
+     */
+    private $forgetPasswordCodes;
+
     public function __construct()
     {
         $this->CourtReservations = new ArrayCollection();
         $this->CourtReservationsTeam = new ArrayCollection();
         $this->trainings = new ArrayCollection();
         $this->PageVisits = new ArrayCollection();
+        $this->forgetPasswordCodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -481,6 +487,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($pageVisit->getUser() === $this) {
                 $pageVisit->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ForgetPasswordCode[]
+     */
+    public function getForgetPasswordCodes(): Collection
+    {
+        return $this->forgetPasswordCodes;
+    }
+
+    public function addForgetPasswordCode(ForgetPasswordCode $forgetPasswordCode): self
+    {
+        if (!$this->forgetPasswordCodes->contains($forgetPasswordCode)) {
+            $this->forgetPasswordCodes[] = $forgetPasswordCode;
+            $forgetPasswordCode->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeForgetPasswordCode(ForgetPasswordCode $forgetPasswordCode): self
+    {
+        if ($this->forgetPasswordCodes->contains($forgetPasswordCode)) {
+            $this->forgetPasswordCodes->removeElement($forgetPasswordCode);
+            // set the owning side to null (unless already changed)
+            if ($forgetPasswordCode->getUser() === $this) {
+                $forgetPasswordCode->setUser(null);
             }
         }
 

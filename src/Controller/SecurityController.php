@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ForgetPasswordCode;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\ForgotPasswordType;
@@ -10,6 +11,7 @@ use App\Form\UserChangeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -73,26 +75,47 @@ class SecurityController extends AbstractController
             $data=$form->getData();
             $em = $this->getDoctrine()->getManager();
             $Account = $em->getRepository('App\Entity\User')->findOneBy(['email'=>$data->getEmail()]);
-            if(isset($Account)&& !empty($Account)){
-                $email = (new TemplatedEmail())
-                    ->from('NO-REPLY@baanreserverenzonenwind.nl')
-                    ->to($Account->getEmail())
-                    ->subject('Zon en Wind Wachtwoord Reset')
-                    ->htmlTemplate('Emails/ForgetPassword.html.twig')
-                    ->context([
-                        'expiration_date' => new \DateTime('+1 days'),
-                        'Account' => $Account,
-                        'imgnumber' => rand(1, 3)
-                    ]);
-
-                $mailer->send($email);
-                return $this->redirectToRoute('app_login');
+            $passwordcode = $Account->getForgetPasswordCodes();
+            if(isset($Account)&& !empty($Account) ) {
+                if(isset($passwordcode)&& !empty($passwordcode) ) {
+                    $numberCode = mt_rand(100000, 999999);
+                    $em = $this->getDoctrine()->getManager();
+                    $codeAlreadyExi = $em->getRepository('App\Entity\ForgetPasswordCode')->findOneBy(['ValidateKey'=>$numberCode]);
+                    while ($codeAlreadyExi == $numberCode) {
+                        $numberCode = mt_rand(100000, 999999);
+                    }
+                    $data = $form->getData();
+                    $ChangePasswordCode = new ForgetPasswordCode();
+                    $ChangePasswordCode->setValidateKey($numberCode);
+                    $ChangePasswordCode->setValidUntil(new \DateTime('+1 days'));
+                    $ChangePasswordCode->setUser($Account);
+                    $em->persist($ChangePasswordCode);
+                    $em->flush();
+                    $email = (new TemplatedEmail())
+                        ->from('NO-REPLY@baanreserverenzonenwind.nl')
+                        ->to($Account->getEmail())
+                        ->subject('Zon en Wind Wachtwoord Reset')
+                        ->htmlTemplate('Emails/ForgetPassword.html.twig')
+                        ->context([
+                            'expiration_date' => new \DateTime('+1 days'),
+                            'Account' => $Account,
+                            'imgnumber' => rand(1, 3),
+                            'code' => $numberCode
+                        ]);
+                    $mailer->send($email);
+                    $data= "codeCheck";
+                }else{
+                    $data= "codeAlreadyExists";
+                }
+            } else {
+                $form->addError(new FormError('Niet toegestaan gebruiker bestaat niet.'));
             }
         }
 
         return $this->render('security/forgotpassword.html.twig', [
             'passforgot'=>$form->createView(),
-            'imgnumber' => rand(1, 3)
+            'imgnumber' => rand(1, 3),
+            'data' => $data
         ]);
     }
     /**
