@@ -44,7 +44,31 @@ class CourtReservationController extends AbstractController
                 }
             }
         }
-        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
+
+        $sunsetTimestamp =strtotime ($date);
+        $season = new \DateTime($date);
+        $spring = new \DateTime('March 20 '.$season->format('Y'));
+        $summer = new \DateTime('June 20 '.$season->format('Y'));
+        $fall = new \DateTime('September 22 '.$season->format('Y'));
+        $winter = new \DateTime('December 21 '.$season->format('Y'));
+
+        switch(true) {
+            case $season >= $spring && $season < $summer:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 96, 1);
+                break;
+
+            case $season >= $summer && $season < $fall:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 100, 1);
+                break;
+
+            case $season >= $fall && $season < $winter:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 86, 1);
+                break;
+
+            default:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 80, 1);
+        }
+
         return $this->render('Court_reservation/index.html.twig', [
             'controller_name' => 'CourtReservationController',
             'allReservations' => $takenSpots,

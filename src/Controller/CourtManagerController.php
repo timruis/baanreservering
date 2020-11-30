@@ -44,7 +44,31 @@ class CourtManagerController extends AbstractController
                 }
             }
         }
-        $sundown=date_sunset(time(), SUNFUNCS_RET_STRING, 52.29583, 5.1625, 92, 1);
+
+        $sunsetTimestamp =strtotime ($date);
+        $season = new \DateTime($date);
+        $spring = new \DateTime('March 20 '.$season->format('Y'));
+        $summer = new \DateTime('June 20 '.$season->format('Y'));
+        $fall = new \DateTime('September 22 '.$season->format('Y'));
+        $winter = new \DateTime('December 21 '.$season->format('Y'));
+
+        switch(true) {
+            case $season >= $spring && $season < $summer:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 96, 1);
+                break;
+
+            case $season >= $summer && $season < $fall:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 100, 1);
+                break;
+
+            case $season >= $fall && $season < $winter:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 86, 1);
+                break;
+
+            default:
+                $sundown=date_sunset($sunsetTimestamp, SUNFUNCS_RET_STRING, 52.29583, 5.1625, 80, 1);
+        }
+
         return $this->render('Court_manager/admin.html.twig', [
             'controller_name' => 'CourtReservationController',
             'allReservations' => $takenSpots,
@@ -65,7 +89,7 @@ class CourtManagerController extends AbstractController
             $InfoCourtReservation = $this->getUser()->getCourtReservations();
 
             $data=$form->getData();
-            if ($data->getReservationType() === false and $form->get('introduce')->getData() === false) {
+            if ($form->get('Rent')->getData() === false and $form->get('introduce')->getData() === false) {
                 $date = new \DateTime(date('m/d/Y H:i:s', $time));
                 $TwoHoursinfuture = $date->add(new \DateInterval("PT3H"));
                 $date = new \DateTime(date('m/d/Y H:i:s', $time));
@@ -119,7 +143,7 @@ class CourtManagerController extends AbstractController
                 $InfoCourtReservation->setStartTime($date);
                 $InfoCourtReservation->setCourt($Court);
 
-                if ($data->getReservationType()){
+                if ($form->get('Rent')->getData()){
                     $InfoCourtReservation->setPlayers($data->getPlayers());
                     $InfoCourtReservation->setMemoText($data->getMemoText());
                     $InfoCourtReservation->setReservationType(5);
@@ -210,10 +234,8 @@ class CourtManagerController extends AbstractController
      */
     public function ListedCourtReservationsToday()
     {
-        $CourtReservations = $this->getDoctrine()->getRepository(CourtReservation::class)->findAll();
 
         return $this->render('Court_manager/ShowAllCourtReservations.html.twig', [
-            'CourtReservations' => $CourtReservations,
             'Title'=> "CourtReservations"
         ]);
     }
@@ -298,8 +320,10 @@ class CourtManagerController extends AbstractController
             $form->get('OtherPlayers2')->setData($CourtReservation->getOtherPlayers()[2]);
             if($CourtReservation->getReservationType() === 5) {
                 $form->get('Rent')->setData(true);
+
             }elseif ($CourtReservation->getReservationType() === 6){
-                $form->get('Introduce')->setData(true);
+                $form->get('introduce')->setData(true);
+                $form->get('MemoTextIntroduce')->setData($CourtReservation->getMemoText());
             }
 
         }

@@ -29,7 +29,9 @@
                                         <th>baan</th>
                                         <th>Speler</th>
                                         <th>hoeveelheid</th>
+                                        <th>spelers</th>
                                         <th>Speeltijd</th>
+                                        <th>aanpassen</th>
                                         <th>Verwijderen</th>
                                     </tr>
                                     </thead>
@@ -41,6 +43,13 @@
                                                 <td>{{ CourtReservation.Court }}</td>
                                                 <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
                                                 <td>{{ CourtReservation.Players }}</td>
+                                                <td>
+                                                    {% if CourtReservation.OtherPlayers.First.Firstname is defined and CourtReservation.OtherPlayers.First.Lastname is defined %}
+                                                        {% for Player in CourtReservation.OtherPlayers|sort %}
+                                                            <p>{{ Player.Firstname }} {{ Player.Lastname }}</p>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </td>
                                                 <td>je hebt recht op:
                                                     <span class="badge badge-light">
                                                         1 uur
@@ -82,6 +91,7 @@
                                         <th>baan</th>
                                         <th>Speler</th>
                                         <th>hoeveelheid</th>
+                                        <th>Spelers</th>
                                         <th>Speeltijd</th>
                                     </tr>
                                     </thead>
@@ -93,6 +103,13 @@
                                                 <td>{{ CourtReservation.Court }}</td>
                                                 <td>{% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
                                                 <td>{{ CourtReservation.Players }}</td>
+                                                <td>
+                                                    {% if CourtReservation.OtherPlayers.First.Firstname is defined and CourtReservation.OtherPlayers.First.Lastname is defined %}
+                                                        {% for Player in CourtReservation.OtherPlayers|sort %}
+                                                            <p>{{ Player.Firstname }} {{ Player.Lastname }}</p>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </td>
                                                 <td>je hebt recht op:
                                                     <span class="badge badge-light">
                                                         1 uur
@@ -113,7 +130,7 @@
 
         {% endblock %}
 {% block modals %}
-    <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -137,51 +154,6 @@
 
             {% block javascripts %}
                 {{ parent() }}
-                <script type="text/javascript">
-                    var dt = new Date();
-                    var day = dt.getDay();
-                    dt.getDay();
-                    const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
-                        "juli", "August", "september", "oktober", "november", "december"
-                    ];
-
-                    document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
-
-                    for (i = 1; i < 8; i++) {
-                        switch (day) {
-                            case 0:
-                                document.getElementById('Day' + i).innerHTML = "zo";
-                                break;
-                            case 1:
-                                document.getElementById('Day' + i).innerHTML = "ma";
-                                break;
-                            case 2:
-                                document.getElementById('Day' + i).innerHTML = "di";
-                                break;
-                            case 3:
-                                document.getElementById('Day' + i).innerHTML = "wo";
-                                break;
-                            case 4:
-                                document.getElementById('Day' + i).innerHTML = "do";
-                                break;
-                            case 5:
-                                document.getElementById('Day' + i).innerHTML = "vr";
-                                break;
-                            case 6:
-                                document.getElementById('Day' + i).innerHTML = "za";
-                                break;
-                        }
-                        if (day === 6) {
-                            day = 0;
-                        } else {
-                            day++;
-                        }
-                    }
-                    dt.getFullYear();
-                    dt.getDate();
-                </script>
-
-
 
                 {{ encore_entry_script_tags('DataTables') }}
                 <script>

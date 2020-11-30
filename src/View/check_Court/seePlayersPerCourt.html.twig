@@ -51,42 +51,62 @@
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}
                                 {% if date~c~"b" in allReservations or date~c~"b"~9 in allReservations %}
-                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" class="btn btn-danger">bezet</a>  <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
                                 {% elseif date~c~"b"~1 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d95e8 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
                                     {% endif %}
                                 {% elseif date~c~"b"~2 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#05c5e2 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
                                     {% endif %}
                                 {% elseif date~c~"b"~3 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ece109 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>{% endif %}
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>{% endif %}
                                 {% elseif date~c~"b"~4 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0d23e8 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>{% endif %}
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>{% endif %}
                                 {% elseif date~c~"b"~5 in allReservations %}
-                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ff790f !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#ff790f !important;" class="btn btn-danger">bezet</a>
+                                    <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
                                 {% elseif date~c~"b"~6 in allReservations %}
-                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#880ba7 !important;" class="btn btn-danger">bezet</a> <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>
+                                    <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#880ba7 !important;" class="btn btn-danger">bezet</a>
+                                    <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>
                                 {% elseif date~c~"b"~7 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#0de823 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>{% endif %}
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>{% endif %}
                                 {% elseif date~c~"b"~8 in allReservations %}
                                     <a href="{{ path('check_Court',{time:date,Court:c}) }}" style="background-color:#727274 !important;" class="btn btn-danger">bezet</a>
                                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_COURT-BLOCKER') %}
-                                    <a href="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}" class="btn btn-danger">delete</a>{% endif %}
+                                     <button type="button" id="{{c~date }}" class="DeleteCourt btn btn-danger" data-toggle="modal" data-target="#Delete" data-link="{{ path('DeleteRegisterGame',{time:date,Court:c}) }}">
+                                                        Delete <span class="fas fa-times-circle"></span>
+                                                    </button>{% endif %}
                                 {% elseif Previousdate~c in allReservations %}
                                    <a href="#" class="btn btn-danger">bezet</a>
                                 {% else %}
                                     <a class="btn
-                                    {% if date(ChosenDate~" 22:30")|date('U') == date or (date(ChosenDate~" 17:30")|date('U') == date and (ChosenDate|date('w') == 0 or ChosenDate|date('w') == 6) )  or date()|date_modify("+7 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date() or (date(ChosenDate~sundown) < date(stringdate) and (c==1 or c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
+                                    {% if date(ChosenDate~" 22:30")|date('U') == date or (date(ChosenDate~" 17:30")|date('U') == date and (ChosenDate|date('w') == 0 or ChosenDate|date('w') == 6) )  or date()|date_modify("+365 day") < date(stringdate) or date(stringdate)|date_modify("+30 minute")|date('U')~c in allReservations or date(stringdate) < date() or (date(ChosenDate~sundown) < date(stringdate) and (c==1 or c==2 or c==3 or c==4 or c==7 or c==8 or c==9)) %}
                                         disabled"
                                     {% else %}
                                         " href="{{ path('adminRegisterGame',{time:date,Court:c}) }}"
@@ -106,9 +126,42 @@
         </div>
     </div>
 {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
+        $('.DeleteCourt').on('click', function (e) {
+            // convert target (e.g. the button) to jquery object
+            var $target = $(e.target);
+
+            // modal targeted by the button
+            var modalSelector = $target.data('target');
+            // retrieve the dom element corresponding to current attribute
+            var $modalAttribute = $(modalSelector + ' #modal-link');
+            var dataValue = $target.data('link');
+            $modalAttribute.attr('href', dataValue);
+        });
     </script>
 {% endblock %}

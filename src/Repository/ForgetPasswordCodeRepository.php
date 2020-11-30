@@ -22,19 +22,25 @@ class ForgetPasswordCodeRepository extends ServiceEntityRepository
     // /**
     //  * @return ForgetPasswordCode[] Returns an array of ForgetPasswordCode objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findOneByDateAndCode($passwordcode,$account)
     {
+        $from = new \DateTime();
+        $to   = new \DateTime('+24 hours');
+
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('f.ValidUntil BETWEEN :from AND :to')
+            ->andWhere('f.ValidateKey = :ValidateKey')
+            ->andWhere('f.User = :user')
+            ->setParameter('from', $from )
+            ->setParameter('to', $to)
+            ->setParameter('ValidateKey', $passwordcode)
+            ->setParameter('user', $account)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?ForgetPasswordCode

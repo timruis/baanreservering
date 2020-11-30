@@ -68,7 +68,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult()
         ;
     }
+    public function findMembersByOrder()
+    {
 
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.Lastname , u.Firstname', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     /*
     public function findOneBySomeField($value): ?User
     {

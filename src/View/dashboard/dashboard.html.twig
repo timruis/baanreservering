@@ -28,17 +28,17 @@
 
             </h3>
             <div class="span12">
-                <table class="table-condensed table-bordered table-striped">
+                <table id="table1" class="table-condensed table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th><span id="Day1"></span></th>
-                        <th><span id="Day2"></span></th>
-                        <th><span id="Day3"></span></th>
-                        <th><span id="Day4"></span></th>
-                        <th><span id="Day5"></span></th>
-                        <th><span id="Day6"></span></th>
-                        <th><span id="Day7"></span></th>
-                        <th><span id="Day8"></span></th>
+                        <td><b><span id="Day1"></span></b></td>
+                        <td><b><span id="Day2"></span></b></td>
+                        <td><b><span id="Day3"></span></b></td>
+                        <td><b><span id="Day4"></span></b></td>
+                        <td><b><span id="Day5"></span></b></td>
+                        <td><b><span id="Day6"></span></b></td>
+                        <td><b><span id="Day7"></span></b></td>
+                        <td><b><span id="Day8"></span></b></td>
                     </tr>
                     </thead>
                     <tbody>
@@ -91,46 +91,78 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        var dt = new Date();
-        var day = dt.getDay();
-        dt.getDay();
-        const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
-            "juli", "August", "september", "oktober", "november", "december"
-        ];
+        $( document ).ready(function() {
+            fillCurrentYearMonth();
+            fillDaysOfWeek();
+            swapTable();
+            $( window ).resize(function() {swapTable()});
+        });
+        function fillCurrentYearMonth(){
+            var dt = new Date();
+            var day = dt.getDay();
+            dt.getDay();
+            const monthNames = ["januari", "februari", "maart", "april", "mei", "juni",
+                "juli", "August", "september", "oktober", "november", "december"
+            ];
+            document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] + " " + dt.getFullYear();
+        }
+        function fillDaysOfWeek() {
+            var dt = new Date();
+            var day = dt.getDay();
 
-        document.getElementById('monthYear').innerHTML = monthNames[dt.getMonth()] +" "+ dt.getFullYear();
-
-        for (i = 1; i <= 8; i++) {
-            switch (day) {
-                case 0:
-                    document.getElementById('Day' + i).innerHTML = "zo";
-                    break;
-                case 1:
-                    document.getElementById('Day' + i).innerHTML = "ma";
-                    break;
-                case 2:
-                    document.getElementById('Day' + i).innerHTML = "di";
-                    break;
-                case 3:
-                    document.getElementById('Day' + i).innerHTML = "wo";
-                    break;
-                case 4:
-                    document.getElementById('Day' + i).innerHTML = "do";
-                    break;
-                case 5:
-                    document.getElementById('Day' + i).innerHTML = "vr";
-                    break;
-                case 6:
-                    document.getElementById('Day' + i).innerHTML = "za";
-                    break;
-            }
-            if (day === 6) {
-                day = 0;
-            } else {
-                day++;
+            for (i = 1; i <= 8; i++) {
+                switch (day) {
+                    case 0:
+                        document.getElementById('Day' + i).innerHTML = "zo";
+                        break;
+                    case 1:
+                        document.getElementById('Day' + i).innerHTML = "ma";
+                        break;
+                    case 2:
+                        document.getElementById('Day' + i).innerHTML = "di";
+                        break;
+                    case 3:
+                        document.getElementById('Day' + i).innerHTML = "wo";
+                        break;
+                    case 4:
+                        document.getElementById('Day' + i).innerHTML = "do";
+                        break;
+                    case 5:
+                        document.getElementById('Day' + i).innerHTML = "vr";
+                        break;
+                    case 6:
+                        document.getElementById('Day' + i).innerHTML = "za";
+                        break;
+                }
+                if (day === 6) {
+                    day = 0;
+                } else {
+                    day++;
+                }
             }
         }
-        dt.getFullYear();
-        dt.getDate();
+        function swapTable() {
+            var collunmCount =document.getElementById('table1').rows[0].cells.length;
+            if ((window.innerWidth < 600 && collunmCount === 8) || (window.innerWidth > 600 && collunmCount === 3)) {
+                $(".table-condensed").each(function () {
+                    var $this = $(this);
+                    var newrows = [];
+                    $this.find("tr").each(function () {
+                        var i = 0;
+                        $(this).find("td").each(function () {
+                            i++;
+                            if (newrows[i] === undefined) {
+                                newrows[i] = $("<tr></tr>");
+                            }
+                            newrows[i].append($(this));
+                        });
+                    });
+                    $this.find("tr").remove();
+                    $.each(newrows, function () {
+                        $this.append(this);
+                    });
+                });
+            }
+        }
     </script>
 {% endblock %}

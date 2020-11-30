@@ -165,7 +165,7 @@ class MemberManagementController extends AbstractController
      */
     public function ListedMember()
     {
-        $Member = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $Member = $this->getDoctrine()->getRepository(User::class)->findMembersByOrder();
 
         return $this->render('Member/ShowAllMember.html.twig', [
             'Members' => $Member,
