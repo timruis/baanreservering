@@ -6,6 +6,11 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>{% block title %}In Zon En Wind{% endblock %}</title>
     {% block stylesheets %}
+        <style>
+            .table-bordered thead tr th{
+                background-color: #ffffff;
+            }
+        </style>
         <link rel="icon" href="{{ asset('images/icons/icon.jpg') }}" type="image/x-icon">
         <!-- Favicon-->
         {{ encore_entry_link_tags('UserPanel') }}

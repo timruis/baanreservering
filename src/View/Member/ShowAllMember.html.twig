@@ -167,13 +167,12 @@
                             $(".tbrw"+userid).toggleClass("yellow")
                             var item = $("#haspayed"+userid);
                             if (item.html() === " nee ") {
-                                item.html(" ja ");
+                                item.html(" ja ") ;
                             }else if (item.html() === " ja "){
                                 item.html(" nee ");
                             }
-
-
                         });
+
                         $('.Active').on('click', function (e) {
                             var userid = $(this).val();
                             $.post("{{ path('Activate') }}", {id: userid});

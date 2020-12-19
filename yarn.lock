@@ -3011,6 +3011,11 @@ findup-sync@3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
+floatthead@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/floatthead/-/floatthead-2.2.1.tgz#7f227c1ec9be9554a1710249f25084251dc365dd"
+  integrity sha512-ePI5bR8nu5dy6TZyLhSmtkCzLiRVp5jmzVzpzQodJZuQae8dDByg6ICYmoJZev6SL21eX1QUAshQ7AnhkT4ZkQ==
+
 flush-write-stream@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-1.1.1.tgz#8dd7d873a1babc207d94ead0c2e0e44276ebf2e8"
