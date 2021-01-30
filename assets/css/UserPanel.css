@@ -37,7 +37,18 @@ nav  i{
     padding-bottom: 0 !important;
     padding-right: 0 !important;
 }
-
+nav{
+    z-index: 101;
+}
+table.table-sticky th {
+    z-index: 5;
+    position: sticky;
+    left: 0;
+    background:white;
+}
+table.table-sticky {
+    padding-left: 0;
+}
 
 
 .userdeets .name{

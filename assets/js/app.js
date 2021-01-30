@@ -9,6 +9,7 @@ import 'animate.css';
 import '../css/app.css';
 import 'bootstrap-colorpicker';
 import 'dropzone';
+import 'floatthead';
 import 'jquery.dropzone';
 import Picker from 'pickerjs';
 
@@ -37,7 +38,6 @@ $(document).ready(function($) {
         addRemoveLinks: true,
         dictRemoveFile: 'Remover foto',
     });
-
 
     $('.search-trigger').on('click', function(event) {
         event.preventDefault();

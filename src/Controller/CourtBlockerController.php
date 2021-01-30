@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CourtReservation;
 use App\Form\CourtBlockerType;
+use App\Form\CourtUnBlockerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -60,6 +61,55 @@ class CourtBlockerController extends AbstractController
 
             }
             return $this->redirectToRoute('CourtReservation-Registry');
+        }
+
+        return $this->render('Court_blocker/AdminCourtReservationRegistry.html.twig', [
+            'CourtReservation' => $form->createView(),
+            'Title'=> "Register new CourtReservation"
+        ]);
+    }
+    /**
+     * @Route("/admin/banenBlocker/removerCourtReservation", name="CourtReservation-remove")
+     */
+    public function RemoveCourtReservation(EntityManagerInterface $em, Request $request)
+    {
+        $form = $this->createForm(CourtUnBlockerType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $startingDate = new \DateTime(date("Y/m/d H:i:s",  $data->getStartTime()->getTimestamp()));
+            $endingDate = new \DateTime(date("Y/m/d H:i:s",  $form->get('EndDate')->getData()->getTimestamp()));
+            while ($startingDate->getTimestamp() <= $endingDate->getTimestamp()) {
+
+                $startingtime = $form->get('startingTime')->getData()->getTimestamp()+3600;
+                $endingtime = $form->get('endingTime')->getData()->getTimestamp()+1800;
+                $date = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $startingtime));
+                $infuture = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $endingtime));
+                while ($date < $infuture) {
+
+                    $courts=$form->get('ChooseCourt')->getData();
+                    foreach ($courts as $court) {
+                        $InfoCourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservations($date,$court);
+                        dd($InfoCourtReservation);
+                        $em->persist($InfoCourtReservation);
+                        $em->flush();
+                    }
+                    $date = new \DateTime(date("Y/m/d H:i:s", strtotime("+30 minutes", $date->getTimestamp())));
+                }
+                if ($form->get('Steps')->getData() === 1) {
+                    $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 day", $startingDate->getTimestamp())));
+                } elseif ($form->get('Steps')->getData() === 2) {
+                    $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 week", $startingDate->getTimestamp())));
+                } elseif ($form->get('Steps')->getData() === 3) {
+                    $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 month", $startingDate->getTimestamp())));
+                }else{
+                    $startingDate = new \DateTime(date("Y/m/d H:i:s", strtotime("+1 day", $startingDate->getTimestamp())));
+                }
+
+            }
+            return $this->redirectToRoute('CourtReservation-remove');
         }
 
         return $this->render('Court_blocker/AdminCourtReservationRegistry.html.twig', [

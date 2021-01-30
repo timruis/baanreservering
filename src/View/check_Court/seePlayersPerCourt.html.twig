@@ -25,15 +25,15 @@
                 </ol>
             </div>
         </div>
-        <div class="card col-sm-9" style="overflow-x: scroll; padding: 50px;">
+        <div class="card col-sm-9" style="overflow-x: scroll; padding: 50px;padding-left: 0px;">
             <h3 id="monthYear">
 
             </h3>
             <div class="span12">
-                <table class="table-condensed table-bordered table-striped">
+                <table class="table-condensed table-sticky table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Tijd</th>
+                        <th style="z-index: 6;">Tijd</th>
                         {% for c in 1..11 %}
                         <th>baan {{ c }}</th>
                         {% endfor %}

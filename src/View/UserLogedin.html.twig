@@ -61,11 +61,11 @@
         </i>
     </button>
         <div class="navbar-header">
-            <a class="hide-on-med-and-down right navbar-brand p-t-10" style="line-height: 13px;" href="{{ path('dashboard') }}"><span
+            <a class="hide-on-med-and-down right navbar-brand p-t-10" style="overflow:visible;line-height: 13px; margin-top: -20px;" href="{{ path('dashboard') }}"><span
                         class="font-bold">
-                    <img class=" pull-left p-t-5 m-t--10" style="height: 40px;" src="{{ asset('images/logo.jpg') }}">
+                    <img class=" pull-left p-t-5 m-t--10" style="z-index:100;margin-right:30px;margin-left:30px;height: 80px;" src="{{ asset('images/logo.png') }}">
                   </span>
-                <span class="p-t-10 font-bold">
+                <span class="font-bold">
                     In Zon En Wind - Baanreserveringsysteem
                 </span>
             </a>
@@ -206,8 +206,10 @@
 {% endblock %}
 
 {% block javascripts %}
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.1/jquery.floatThead.js" integrity="sha512-kBvoZVF+tXbN40CoGPeUGPIhIPsVf9Idu8uhNCFifO+dNXrbERzSAyNpzlBqn6Ix/JgPirAHFqfRBCDr6peqRQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/2.2.1/jquery.floatThead.min.js">
+    </script>
     <script>
         $("#toggle").click(function(){
             $( "body" ).toggleClass( "ls-closed" );
@@ -219,6 +221,11 @@
                 UserID: "{{ app.user.id }}"
             }, // data to be submit
         )
+
+        $(".table-sticky").floatThead({
+            top: 80,
+            position: 'absolute'
+        });
     </script>
     <script src="//code.jquery.com/jquery-1.12.4.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

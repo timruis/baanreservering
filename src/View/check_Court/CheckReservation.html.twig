@@ -37,7 +37,7 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in CourtReservations|sort %}
-                                        {% if date(CourtReservation.StartTime) > date() and (CourtReservation.ReservationType == 0 or CourtReservation.ReservationType == 9) %}
+                                        {% if date(CourtReservation.StartTime) > date()|date_modify("-1 hour") and (CourtReservation.ReservationType == 0 or CourtReservation.ReservationType == 9) %}
                                             <tr>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>
@@ -97,7 +97,7 @@
                                     </thead>
                                     <tbody>
                                     {% for CourtReservation in TeamCourtReservations|sort %}
-                                        {% if date(CourtReservation.StartTime) > date() and (CourtReservation.ReservationType == 0 or  CourtReservation.ReservationType == 9) %}
+                                        {% if date(CourtReservation.StartTime) > date()|date_modify("-1 hour") and (CourtReservation.ReservationType == 0 or  CourtReservation.ReservationType == 9) %}
                                             <tr>
                                                 <td>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
                                                 <td>{{ CourtReservation.Court }}</td>

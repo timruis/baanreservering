@@ -2,6 +2,24 @@
 
 {% block title %} IZEW - DASHBOARD{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+<style>
+
+    nav{
+        z-index: 101;
+    }
+    table.table-sticky th {
+        z-index: 5;
+        position: sticky;
+        left: 0;
+        background:white;
+    }
+    table.table-sticky {
+        padding-left: 0;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
 
@@ -22,17 +40,19 @@
         </div>
     {% endif %}
     <div class="row w-100">
-        <div class="card w-100" style="overflow-x: scroll; padding: 50px;">
+        <div class="card w-100" style="overflow-x: scroll; padding: 50px;padding-left:0px;">
             <h3 id="monthYear">
 
             </h3>
             <div class="span12">
-                <table class="table-condensed table-bordered table-striped">
+
+
+                <table class="table-condensed table-sticky table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>tijd</th>
+                        <th style="z-index: 6;">tijd</th>
                         {% for c in 1..11 %}
-                            <th>baan {{ c }}</th>
+                            <th >baan {{ c }}</th>
                         {% endfor %}
                     </tr>
                     </thead>
@@ -71,8 +91,3 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-    </script>
-{% endblock %}

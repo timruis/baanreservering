@@ -252,4 +252,103 @@ class MemberManagementController extends AbstractController
             json_encode($User->getSummerMember())
         );
     }
+
+    /**
+     * @Route("/priviliged/Members/list", name="Member_List_data")
+     */
+    public function CarListData()
+    {
+        $Members = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+        $allMember = array();
+        $i=1;
+        foreach ($Members as $Member) {
+            $urlChange = $this->generateUrl(
+                'Member-Change',
+                [
+                    'MemberId' => $Member->getId(),
+                    'tabNR' => '1'
+                ]
+            );
+            $urlDelete = $this->generateUrl(
+                'Member-Delete',
+                ['MemberId' => $Member->getId()]
+            );
+            $profile=$Member->getProfileImage();
+            if(isset($profile) && !empty($profile != NULL )){
+                $image='<img alt = "Image" style = "height:75px;object-fit: cover" src="/uploads/images/profile/'.$Member->getProfileImage() .'" class="avatar avatar-lg mt-1" >';
+                }else {
+                $image='geen foto toegevoegd ';
+                }
+            if( $Member->getpayed() == 1 ){
+                $payed="checked";
+                $payedYN="Ja";
+            }else{
+                $payed=" ";
+                $payedYN="Nee";
+            }
+            if( $Member->getActivateUser() == 1 ){
+                $ActivateUser="checked";
+                $ActivateUserYN="Ja";
+            }else{
+                $ActivateUser=" ";
+                $ActivateUserYN="Nee";
+            }
+            if( $Member->getWinterMember() == 1 ){
+                $WinterMember="checked";
+                $WinterMemberYN="Ja";
+            }else{
+                $WinterMember=" ";
+                $WinterMemberYN="Nee";
+            }
+            if( $Member->getSummerMember() == 1 ){
+                $SummerMember="checked";
+                $SummerMemberYN="Ja";
+            }else{
+                $SummerMember=" ";
+                $SummerMemberYN="Nee";
+            }
+
+            array_push($allMember, array(
+                $i,
+                $image,
+                $Member->getFirstname(),
+                $Member->getLastname(),
+                $Member->getEmail(),
+                $Member->getMobile(),
+                '<p><label for="payed">
+                    <input class="payed filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$payed.'  name="payed" value="'.$Member->getId().'"/>
+                        <span>Heeft betaald</span>
+                    </label>
+                    <span id="haspayed'.$Member->getId().'">'.$payedYN.'</span>
+                </p>',
+                '<p><label for="Active">
+                    <input class="Active filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$ActivateUser.'  name="Active" value="Active'.$Member->getId().'"/>
+                        <span>Is actief</span>
+                    </label>
+                    <span id="hasActived'.$Member->getId().'">'.$ActivateUserYN.'</span>
+                </p>',
+                '<p><label for="Winter">
+                    <input class="Winter filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$WinterMember.'  name="Winter" value="'.$Member->getId().'"/>
+                        <span>Is Winterlid</span>
+                    </label>
+                    <span id="hasWinterMember'.$Member->getId().'">'.$WinterMemberYN.'</span>
+                </p>',
+                '<p><label for="Summer">
+                    <input class="Summer filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$SummerMember.'  name="Summer" value="'.$Member->getId().'"/>
+                        <span>Is Zomerlid</span>
+                    </label>
+                    <span id="hasSummerMember'.$Member->getId().'">'.$SummerMemberYN.'</span>
+                </p>',
+                '<a class="btn btn-outline-primary" href="' . $urlChange . '">Change <span class="fas fa-pen-square"></span></a>',
+                ' <button type="button" id="' .$Member->getId() . '" class="Delete btn btn-danger" onclick="ModalDelete(\'' . $urlDelete . '\')" data-toggle="modal" data-target="#DeletePlayer">Delete <span class="fas fa-times-circle"></span></button>'
+            ));
+            $i++;
+        }
+        $GoodArray = array('data' => $allMember);
+        return new \Symfony\Component\HttpFoundation\Response(
+            json_encode($GoodArray)
+        );
+    }
+
 }

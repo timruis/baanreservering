@@ -23,6 +23,8 @@ $('.profile-image').hover(
         $('.change-image-tool-tip').css({'font-size': '5px'}).hide();
     }
 );
+
+
 $(document).ready(function() {
     $("#pills-tab").tab();
     $('.change-image-tool-tip').hide();
