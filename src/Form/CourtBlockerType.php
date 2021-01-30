@@ -145,7 +145,7 @@ class CourtBlockerType extends AbstractType
                 ]
             ])
             ->add('MemoText')
-            ->add('Save', SubmitType::class)
+            ->add('Reserveer', SubmitType::class)
 
         ;
     }

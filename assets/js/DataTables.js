@@ -29,6 +29,8 @@ $(document).ready(function($) {
         ajax: "/priviliged/Members/list",
 
     } );
+    $(this).closest("tr").addClass("current");
+
     $('#bootstrap-data-table-export').DataTable( {
         select: true,
         buttons: ['copyHtml5',

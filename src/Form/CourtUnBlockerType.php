@@ -130,7 +130,9 @@ class CourtUnBlockerType extends AbstractType
                 // adds a class that can be selected in JavaScript
                 'attr' => ['class' => 'timepickerEnd'],
             ])
-            ->add('Save', SubmitType::class)
+            ->add('VerwijderReserveringen', SubmitType::class,[
+                'attr' => ['class' => 'btn-danger'],
+            ])
 
         ;
     }

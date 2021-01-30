@@ -83,18 +83,21 @@ class CourtBlockerController extends AbstractController
             $endingDate = new \DateTime(date("Y/m/d H:i:s",  $form->get('EndDate')->getData()->getTimestamp()));
             while ($startingDate->getTimestamp() <= $endingDate->getTimestamp()) {
 
-                $startingtime = $form->get('startingTime')->getData()->getTimestamp()+3600;
-                $endingtime = $form->get('endingTime')->getData()->getTimestamp()+1800;
+                $startingtime = $form->get('startingTime')->getData()->getTimestamp()+1800;
+                $endingtime = $form->get('endingTime')->getData()->getTimestamp()+3600;
                 $date = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $startingtime));
                 $infuture = new \DateTime(date('m/d/Y H:i:s', $startingDate->getTimestamp() + $endingtime));
                 while ($date < $infuture) {
 
                     $courts=$form->get('ChooseCourt')->getData();
                     foreach ($courts as $court) {
-                        $InfoCourtReservation = $em->getRepository('App\Entity\CourtReservation')->findReservations($date,$court);
-                        dd($InfoCourtReservation);
-                        $em->persist($InfoCourtReservation);
-                        $em->flush();
+                        $InfoCourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservations($date->format('U'),$court);
+                        if (isset($InfoCourtReservations)&& !empty($InfoCourtReservations)) {
+                            foreach ($InfoCourtReservations as $InfoCourtReservation) {
+                                $em->remove($InfoCourtReservation);
+                                $em->flush();
+                            }
+                        }
                     }
                     $date = new \DateTime(date("Y/m/d H:i:s", strtotime("+30 minutes", $date->getTimestamp())));
                 }
@@ -112,7 +115,7 @@ class CourtBlockerController extends AbstractController
             return $this->redirectToRoute('CourtReservation-remove');
         }
 
-        return $this->render('Court_blocker/AdminCourtReservationRegistry.html.twig', [
+        return $this->render('Court_blocker/AdminAntiCourtReservationRegistry.html.twig', [
             'CourtReservation' => $form->createView(),
             'Title'=> "Register new CourtReservation"
         ]);
