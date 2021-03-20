@@ -247,7 +247,70 @@ class SecurityController extends AbstractController
             'data' => "NoAccount"
         ]);
     }
+    /**
+     * @Route("/admin/Registry/Change-Account-Info/{AccountId}", name="Account-Change")
+     */
+    public function ChangeAccount($AccountId,EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Account = $em->getRepository('App\Entity\User')->find($AccountId);
+        $formAccount = $this->createForm(AccountType::class, $Account);
+        $formAccount->handleRequest($request);
 
+        $form = $this->createForm(UserChangeType::class, $Account);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $data=$form->getData();
+            $Account->setUsername($data->getUsername());
+            $Account->setEmail($data->getEmail());
+            $Account->setRoles($data->getRoles());
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            if ($form->get('OpenList')->isClicked()) {
+                return $this->redirectToRoute('admin-Tools');
+            }elseif ($form->get('StayOn')->isClicked()){
+                return $this->redirectToRoute('Account-Change', array('AccountId' => $AccountId));
+            } else {
+                return $this->redirectToRoute('Account-Registry');
+            }
+        }
+        if ($formAccount->isSubmitted()) {
+            $data = $formAccount->getData();
+            $Account->setEmail($data->getEmail());
+            $Account->setFirstname($data->getFirstname());
+            $Account->setLastname($data->getLastname());
+            $Account->setProfileImage($Account->getProfileImage());
+            $Account->setBackgroundImage($Account->getBackgroundImage());
+            $Account->setAddress($data->getAddress());
+            $Account->setMobile($data->getMobile());
+            $Account->setDescription($data->getDescription());
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirectToRoute('Account-Change', array('AccountId' => $AccountId));
+
+        }
+
+
+        return $this->render('Accounts/AccountRegistry.html.twig', [
+            'Account' => $form->createView(),
+            'Accountprofile' => $formAccount->createView(),
+            'Title'=> "Change Existing Account"
+        ]);
+    }
+    /**
+     * @Route("/admin/Registry/Delete-Account-Info/{AccountId}", name="Account-Delete")
+     */
+    public function DeleteAccount($AccountId,EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Account = $em->getRepository('App\Entity\User')->find($AccountId);
+
+
+        $em= $this->getDoctrine()->getManager();
+        $em->remove($Account);
+        $em->flush();
+        return $this->redirectToRoute('Listed-Accounts');
+    }
     /**
      * @Route("/logout", name="logout")
      */

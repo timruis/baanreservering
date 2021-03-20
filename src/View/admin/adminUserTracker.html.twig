@@ -1,0 +1,99 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} ISSIMI - DASHBOARD{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('DataTables') }}
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-52115242-14');
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A project management Bootstrap theme by Medium Rare">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="col-12">
+
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#" role="tab" aria-controls="UserTracker" aria-selected="false">User Tracker</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false">Notification</a>
+            </li>
+        </ul>
+
+              <div class="content-list">
+                    <div class="row content-list-head">
+                        <div class="col-auto">
+                            <h3>UserTracker</h3>
+                        </div>
+                    </div>
+                        <table id="bootstrap-data-table-export-local-usertracker" class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>User Image</th>
+                                <th>User Name</th>
+                                <th>Link</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+
+                        </table>
+                </div>
+
+
+
+{% endblock %}
+
+        {% block modals %}
+            <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            If you click delete the object will be permanently be deleted.
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="btn btn-danger" id="deleteLinkBtn modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    function ModalDelete(Link) {
+                        $("#deleteLinkBtn").attr("href", Link);
+                    }
+
+
+
+                </script>
+
+            {% endblock %}

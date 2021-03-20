@@ -25,8 +25,9 @@
 
             <!-- Icon -->
             <div class="fadeIn first">
-                <h1><img src="{{ asset('images/logo.jpg') }}" id="icon" style="width:100px;height:100px;object-fit: cover;" /></h1>
+                <h1><img src="{{ asset('images/logo.png') }}" id="icon" style="width:100px;height:100px;object-fit: cover;" /></h1>
             </div>
+
             {% if error %}
                 <div class="alert alert-danger">
                     {{ error.messageKey|trans(error.messageData, 'security') }}

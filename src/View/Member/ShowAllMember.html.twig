@@ -4,14 +4,27 @@
 
 
         {% block stylesheets %}
-            {{ encore_entry_link_tags('DataTables') }}
-            <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"
-                  rel="stylesheet" type="text/css">
             <link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"
-                  rel="stylesheet" type="text/css">
+                                     rel="stylesheet" type="text/css">
+            {{ encore_entry_link_tags('DataTables') }}
 
             {{ parent() }}
+            <style>
+                .dt-button-collection{
+                    overflow: visible !important;
+                    background: none !important;
+                    border:none !important;
+                    box-shadow: none !important;
+                }
+                a.dt-button{
+                   background: green !important;
+                }
+                .dropdown-menu{
+                    top:30px;
+                    background-color: green !important;
 
+                }
+            </style>
         {% endblock %}
 
         {% block body %}
@@ -24,7 +37,6 @@
                         </div>
                         <div class="card-body">
                             <!-- Credit Card -->
-
                             <a href="{{ path('new-member-Registry') }}" class="btn btn-outline-primary pull-right">
                                 Create <span class="fa fa-plus-circle"></span>
                             </a>
@@ -84,6 +96,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -116,6 +129,35 @@
                 {{ encore_entry_script_tags('DataTables') }}
                 {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                 <script>
+                    function previewFiles() {
+
+                        var preview = document.querySelector('#preview');
+                        var files   = document.querySelector('input[type=file]').files;
+
+                        function readAndPreview(file) {
+
+                            // Make sure `file.name` matches our extensions criteria
+                            if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+                                var reader = new FileReader();
+
+                                reader.addEventListener("load", function () {
+                                    var image = new Image();
+                                    image.height = 100;
+                                    image.title = file.name;
+                                    image.src = this.result;
+                                    preview.appendChild( image );
+                                }, false);
+
+                                reader.readAsDataURL(file);
+                            }
+
+                        }
+
+                        if (files) {
+                            [].forEach.call(files, readAndPreview);
+                        }
+
+                    }
                     $(document).ready(function() {
 
                         $('.payed').on('click', function (e) {
@@ -173,19 +215,6 @@
                             $modalAttribute.attr('href', dataValue);
                         });
 
-                        /*$('#bootstrap-data-table-export-local').DataTable( {
-                            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'copyHtml5',
-                                'excelHtml5',
-                                'csvHtml5',
-                                'pdfHtml5'
-                            ],
-                            select: true,
-                            ajax: "/priviliged/Members/list",
-
-                        } );*/
                     } );
 
                 </script>

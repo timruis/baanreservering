@@ -48,8 +48,8 @@ class MemberManagementController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->flush();
             return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
-
         }
+
         $form = $this->createForm(UserChangeType::class, $Member);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -62,7 +62,6 @@ class MemberManagementController extends AbstractController
             $em->persist($Member);
             $em->flush();
             return $this->redirectToRoute('Member-Change', array('MemberId' => $MemberId));
-
         }
 
         $formProfImages = $this->createForm(ProfileImageType::class);
@@ -87,10 +86,117 @@ class MemberManagementController extends AbstractController
             }
         }
 
+        // See on what days the players play and how often
+        $days= [
+            0=>['day'=>'zondag','amount'=>0],
+            1=>['day'=>'maandag','amount'=>0],
+            2=>['day'=>'dinsdag','amount'=>0],
+            3=>['day'=>'woensdag','amount'=>0],
+            4=>['day'=>'donderdag','amount'=>0],
+            5=>['day'=>'vrijdag','amount'=>0],
+            6=>['day'=>'zaterdag','amount'=>0]
+        ];
+        foreach($Member->getCourtReservations() as $courtReservation) {
+            $weekday=$courtReservation->getStartTime()->format('w');
+            $days[$weekday]["amount"]++;
+        }
+        foreach($Member->getCourtReservationsTeam() as $courtReservation) {
+            $weekday=$courtReservation->getStartTime()->format('w');
+            $days[$weekday]["amount"]++;
+        }
+
+        // See with whom the member has played with and how much
+        $Players= [];
+        foreach($Member->getCourtReservations() as $courtReservation) {
+            foreach($courtReservation->getOtherPlayers() as $Player) {
+                if (!isset($Players[$Player->getId()]) && empty($Players[$Player->getId()])) {
+                    $Players[$Player->getId()]["amount"] = 0;
+                    $Players[$Player->getId()]["Name"] = $Player->getFirstname() . " " . $Player->getLastname();
+                }
+                $Players[$Player->getId()]["amount"] ++;
+            }
+            if ($courtReservation->getReservationType()==6) {
+                if (!isset($Players[ucwords($courtReservation->getMemoText())]) && empty($Players[ucwords($courtReservation->getMemoText())])) {
+                    $Players[ucwords($courtReservation->getMemoText())]["amount"] = 0;
+                    $Players[ucwords($courtReservation->getMemoText())]["Name"] = ucwords($courtReservation->getMemoText())." (introduce)";
+                }
+                $Players[ucwords($courtReservation->getMemoText())]["amount"] ++;
+            }
+        }
+        foreach($Member->getCourtReservationsTeam() as $courtReservation) {
+             $Player = $courtReservation->getPlayer();
+            if (!isset($Players[$Player->getId()]) && empty($Players[$Player->getId()])) {
+                $Players[$Player->getId()]["amount"] = 0;
+                $Players[$Player->getId()]["Name"] = $Player->getFirstname() . " " . $Player->getLastname();
+            }
+            $Players[$Player->getId()]["amount"] ++;
+        }
+        arsort($Players);
+
+        // The court that the member play on, so you can see what the player likes
+        $Courts= [];
+        foreach($Member->getCourtReservations() as $courtReservation) {
+            if (!isset($Courts[$courtReservation->getCourt()]) && empty($Courts[$courtReservation->getCourt()])) {
+                $Courts[$courtReservation->getCourt()]["amount"] = 0;
+                $Courts[$courtReservation->getCourt()]["Court"] = $courtReservation->getCourt();
+            }
+            $Courts[$courtReservation->getCourt()]["amount"] ++;
+        }
+        foreach($Member->getCourtReservationsTeam() as $courtReservation) {
+            if (!isset($Courts[$courtReservation->getCourt()]) && empty($Courts[$courtReservation->getCourt()])) {
+                $Courts[$courtReservation->getCourt()]["amount"] = 0;
+                $Courts[$courtReservation->getCourt()]["Court"] = $courtReservation->getCourt();
+            }
+            $Courts[$courtReservation->getCourt()]["amount"] ++;
+        }
+        ksort($Courts);
+
+        // Speeltype reserveringen
+        $TYPEs= [];
+        foreach($Member->getCourtReservations() as $courtReservation) {
+            if (!isset($TYPEs[$courtReservation->getReservationType()]) && empty($TYPEs[$courtReservation->getReservationType()])) {
+                $TYPEs[$courtReservation->getReservationType()]["amount"] = 0;
+                $TYPEs[$courtReservation->getReservationType()]["Court"] = $courtReservation->getReservationType();
+            }
+            $TYPEs[$courtReservation->getReservationType()]["amount"] ++;
+        }
+        foreach($Member->getCourtReservationsTeam() as $courtReservation) {
+            if (!isset($TYPEs[$courtReservation->getReservationType()]) && empty($TYPEs[$courtReservation->getReservationType()])) {
+                $TYPEs[$courtReservation->getReservationType()]["amount"] = 0;
+                $TYPEs[$courtReservation->getReservationType()]["Court"] = $courtReservation->getReservationType();
+            }
+            $TYPEs[$courtReservation->getReservationType()]["amount"] ++;
+        }
+        ksort($TYPEs);
+
+
+        //makes a graph of for reservations on every month
+        $Reservations= [];
+        foreach($Member->getCourtReservations() as $courtReservation) {
+            if (!isset($Reservations[$courtReservation->getStartTime()->format('Ymm')]) && empty($Reservations[$courtReservation->getStartTime()->format('Ymm')])) {
+                $Reservations[$courtReservation->getStartTime()->format('Ymm')]["amount"] = 0;
+                $Reservations[$courtReservation->getStartTime()->format('Ymm')]["Date"] = new \DateTime("01-".$courtReservation->getStartTime()->format('m-Y'));
+            }
+            $Reservations[$courtReservation->getStartTime()->format('Ymm')]["amount"] ++;
+        }
+        foreach($Member->getCourtReservationsTeam() as $courtReservation) {
+            if (!isset($Reservations[$courtReservation->getStartTime()->format('Ymm')]) && empty($Reservations[$courtReservation->getStartTime()->format('Ymm')])) {
+                $Reservations[$courtReservation->getStartTime()->format('Ymm')]["amount"] = 0;
+                $Reservations[$courtReservation->getStartTime()->format('Ymm')]["Date"] = new \DateTime("01-".$courtReservation->getStartTime()->format('m-Y'));
+            }
+            $Reservations[$courtReservation->getStartTime()->format('Ymm')]["amount"] ++;
+        }
+        ksort($Reservations);
+
         return $this->render('Member/MemberRegistry.html.twig', [
             'Member' => $form->createView(),
             'Password' => $formPass->createView(),
             'AccountData' => $Member,
+            'days'=>$days,
+            'Reservations'=>$Reservations,
+            'Courts'=>$Courts,
+            'types'=>$TYPEs,
+            'Players'=>$Players,
             'ImagesProf' => $formProfImages->createView(),
             'Title'=> "Change Existing Member"
         ]);
@@ -256,7 +362,7 @@ class MemberManagementController extends AbstractController
     /**
      * @Route("/priviliged/Members/list", name="Member_List_data")
      */
-    public function CarListData()
+    public function MemberListData()
     {
         $Members = $this->getDoctrine()->getRepository(User::class)->findAll();
 
@@ -276,7 +382,7 @@ class MemberManagementController extends AbstractController
             );
             $profile=$Member->getProfileImage();
             if(isset($profile) && !empty($profile != NULL )){
-                $image='<img alt = "Image" style = "height:75px;object-fit: cover" src="/uploads/images/profile/'.$Member->getProfileImage() .'" class="avatar avatar-lg mt-1" >';
+                $image='<img alt = "Image" style="height:95px;object-fit: cover" id="image'.$i.'" data-canvasId="canvas'.$i.'" data-id="image'.$i.'" data-src="/uploads/images/profile/'.$Member->getProfileImage() .'" src="/uploads/images/profile/'.$Member->getProfileImage() .'" class="member avatar avatar-lg mt-1" >';
                 }else {
                 $image='geen foto toegevoegd ';
                 }
@@ -290,9 +396,11 @@ class MemberManagementController extends AbstractController
             if( $Member->getActivateUser() == 1 ){
                 $ActivateUser="checked";
                 $ActivateUserYN="Ja";
+                $ActivateClass="IsActive";
             }else{
                 $ActivateUser=" ";
                 $ActivateUserYN="Nee";
+                $ActivateClass="IsNotActive";
             }
             if( $Member->getWinterMember() == 1 ){
                 $WinterMember="checked";
@@ -322,8 +430,8 @@ class MemberManagementController extends AbstractController
                     </label>
                     <span id="haspayed'.$Member->getId().'">'.$payedYN.'</span>
                 </p>',
-                '<p><label for="Active">
-                    <input class="Active filled-in" type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$ActivateUser.'  name="Active" value="Active'.$Member->getId().'"/>
+                '<p class="'.$ActivateClass.'"><label for="Active">
+                    <input class="Active filled-in " type="checkbox" style="z-index:100;height:100px;width:100px;opacity: 0;pointer-events: all;" '.$ActivateUser.'  name="Active" value="'.$Member->getId().'"/>
                         <span>Is actief</span>
                     </label>
                     <span id="hasActived'.$Member->getId().'">'.$ActivateUserYN.'</span>

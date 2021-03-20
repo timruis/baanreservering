@@ -66,7 +66,6 @@ class CourtManagerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $InfoCourtReservation = $this->getUser()->getCourtReservations();
 
             $data=$form->getData();
             if ($form->get('Rent')->getData() === false and $form->get('introduce')->getData() === false) {
@@ -79,31 +78,31 @@ class CourtManagerController extends AbstractController
 
                 foreach ($data->getOtherPlayers() as $Player) {
                     foreach ($Player->getCourtReservations() as $courtReservation) {
-                        if (($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true) {
+                        if (($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) && ($courtReservation->getReservationType() == 9 || $courtReservation->getReservationType() == 6) || $cannotMakeReservation === true) {
                             $cannotMakeReservation = true;
                         } else {
                             $cannotMakeReservation = false;
                         }
                     }
                     foreach ($Player->getCourtReservationsTeam() as $courtReservationTeam) {
-                        if (($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation === true) {
+                        if (($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U'))&& ($courtReservationTeam->getReservationType() == 9 || $courtReservationTeam->getReservationType() == 6) || $cannotMakeReservation === true) {
                             $cannotMakeReservation = true;
                         } else {
                             $cannotMakeReservation = false;
                         }
                     }
                 }
-                foreach ($this->getUser()->getCourtReservations() as $courtReservation) {
-                    if (($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation) {
+                foreach ($data->getPlayer()->getCourtReservations() as $courtReservation){
+                    if(($courtReservation->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservation->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) && ($courtReservation->getReservationType() == 9 || $courtReservation->getReservationType() == 6) || $cannotMakeReservation){
                         $cannotMakeReservation = true;
-                    } else {
+                    }else{
                         $cannotMakeReservation = false;
                     }
                 }
-                foreach ($this->getUser()->getCourtReservationsTeam() as $courtReservationTeam) {
-                    if (($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) || $cannotMakeReservation) {
+                foreach ($data->getPlayer()->getCourtReservationsTeam() as $courtReservationTeam){
+                    if(($courtReservationTeam->getStartTime()->format('U') >= $TwoHoursInPast->format('U') && $courtReservationTeam->getStartTime()->format('U') <= $TwoHoursinfuture->format('U')) && ($courtReservationTeam->getReservationType() == 9 || $courtReservationTeam->getReservationType() == 6)  || $cannotMakeReservation){
                         $cannotMakeReservation = true;
-                    } else {
+                    }else{
                         $cannotMakeReservation = false;
                     }
                 }
@@ -113,12 +112,20 @@ class CourtManagerController extends AbstractController
             $date = new \DateTime(date('m/d/Y H:i:s', $time));
             $em = $this->getDoctrine()->getManager();
             $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findReservation($date->format("U"),$Court);
-            if ($CourtReservations){
+            $date->add(new \DateInterval("PT30M"));
+            $CourtReservationsSecond = $em->getRepository('App\Entity\CourtReservation')->findReservation($date->format("U"),$Court);
+            $date->sub(new \DateInterval("PT1H"));
+            $CourtReservationsThirth = $em->getRepository('App\Entity\CourtReservation')->findReservation($date->format("U"),$Court);
+
+            if ($CourtReservations || $CourtReservationsSecond || $CourtReservationsThirth){
                 $cannotMakeReservation = true;
             }
+
             if($cannotMakeReservation) {
                 $form->addError(new FormError('Niet toegestaan dubbele reservering.'));
             }else{
+                $date = new \DateTime(date('m/d/Y H:i:s', $time));
+
                 $InfoCourtReservation = new CourtReservation();
                 $InfoCourtReservation->setStartTime($date);
                 $InfoCourtReservation->setCourt($Court);
@@ -311,6 +318,18 @@ class CourtManagerController extends AbstractController
         return $this->render('Court_manager/AdminReservation.html.twig', [
             'controller_name' => 'CourtReservationController',
             'reservation'=>$form->createView(),
+        ]);
+    }
+    /**
+     * @Route("/superuser/check/all/current/reservations", name="currentReservations")
+     */
+    public function checkCurrentReservations(EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findNow();
+        return $this->render('Court_manager/CheckReservation.html.twig', [
+            'Title' => 'CheckCourtsController',
+            'CourtReservations'=>$CourtReservations,
         ]);
     }
 }

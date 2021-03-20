@@ -4,7 +4,13 @@
 
 
 {% block body %}
-
+    {% for message in Messages %}
+        <div class="alert alert-{{ message.color }}">
+            {% autoescape %}
+                {{ message.message | raw }}
+            {% endautoescape %}
+        </div>
+    {% endfor %}
     {% if app.user.ProfileImage is null %}
         <div class="alert alert-danger">
             <strong>Zonder profiel foto word u niet geactiveerd!</strong> voeg uw profiel foto <a class="badge badge-important" href="{{ path('accountSettings') }}">hier</a> toe.

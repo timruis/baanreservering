@@ -110,6 +110,18 @@
                                     Admin Tools
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ path('adminUserTracker') }}" class=" waves-effect waves-block">
+                                    <i class="fas fa-video"></i>
+                                    Gebruiker surveillance
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('see-admin-Messages') }}" class=" waves-effect waves-block">
+                                    <i class="fas fa-envelope-open"></i>
+                                     dashboard berichten
+                                </a>
+                            </li>
                         {% endif %}
                         <hr/>
                         <li><a href="{{ path('logout') }}" class=" waves-effect waves-block">
@@ -140,12 +152,23 @@
                     </li>
                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SUPER-USER') %}
                         <li>
+                            <a href="{{ path('currentReservations') }}" class=" waves-effect waves-cyan">
+                                <i class="material-icons">find_in_page</i>
+                                <span>Huidige reserveringen</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ path('Members') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">supervisor_account</i>
                                 <span>Ledenregister</span>
                             </a>
                         </li>
-
+                        <li>
+                            <a href="{{ path('Introduces') }}" class=" waves-effect waves-cyan">
+                                <i class="material-icons">how_to_reg</i>
+                                <span>Introduces</span>
+                            </a>
+                        </li>
                         <li>
                             <a href="{{ path('admin-dashboard') }}" class=" waves-effect waves-cyan">
                                 <i class="material-icons">local_phone</i>

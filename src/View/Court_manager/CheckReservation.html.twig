@@ -1,0 +1,144 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}IZEW - {{ Title }}{% endblock %}
+
+
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('DataTables') }}
+
+
+            {{ parent() }}
+        {% endblock %}
+
+        {% block body %}
+            <div class="content mt-3">
+                <div class="animated fadeIn">
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Credit Card -->
+
+                            <div style="padding:1em;overflow-x: scroll;">
+                                <div class="card-title">
+                                    <h3 class="text-center">Reserveringen binnen twee uur</h3>
+                                </div>
+                                <hr>
+                                <table class="bootstrap-data-table table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>tijd</th>
+                                        <th>baan</th>
+                                        <th>Memo</th>
+                                        <th>Speler</th>
+                                        <th>reserveer Type</th>
+                                        <th>spelers</th>
+                                        <th>Speeltijd</th>
+                                        <th>aanpassen</th>
+                                        <th>Verwijderen</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for CourtReservation in CourtReservations %}
+                                            <tr>
+                                                <td><h2>tijd</h2>{{ CourtReservation.StartTime|date('d-m-Y H:i:s') }}</td>
+                                                <td><h2>Baan</h2><h1>{{ CourtReservation.Court }}</h1></td>
+                                                <td>{{ CourtReservation.MemoText }}</td>
+                                                <td><img alt="Image" style="width:80px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if CourtReservation.Player.ProfileImage is defined and CourtReservation.Player.ProfileImage is not empty %}{{ CourtReservation.Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1">
+                                                {% if CourtReservation.Player.Firstname is defined %}{{ CourtReservation.Player.Firstname }} {% endif %} {% if CourtReservation.Player.Lastname is defined %}{{ CourtReservation.Player.Lastname }}{% endif %}</td>
+                                                <td>{% if CourtReservation.ReservationType == 1 %}
+                                                        <h5>1. Les</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d95e8;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 2 %}
+                                                        <h5>2.Toss</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#05c5e2;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 3 %}
+                                                        <h5>3. Competitie</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ece109;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 4 %}
+                                                        <h5>4. Event</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0d23e8;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 5 %}
+                                                        <h5>5. Verhuur</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#ff790f;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 6 %}
+                                                        <h5>6. Introduce</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#880ba7;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 7 %}
+                                                        <h5>7. Tennis Kamp</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#0de823;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 8 %}
+                                                        <h5>8. Overig</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#727274;"></div>
+                                                    {% elseif CourtReservation.ReservationType == 9 %}
+                                                        <h5>9. reservering</h5> <div class="border-dark" style="height:20px;width:100%;border: 1px black solid;background-color:#e70808;"></div>
+                                                    {% endif %}</td>
+                                                <td>
+                                                    {% if CourtReservation.OtherPlayers.First.Firstname is defined and CourtReservation.OtherPlayers.First.Lastname is defined %}
+                                                        {% for Player in CourtReservation.OtherPlayers|sort %}
+                                                            <img alt="Image" style="width:80px;object-fit: cover" src="{{ asset('uploads/images/profile/') }}{% if Player.ProfileImage is defined and Player.ProfileImage is not empty %}{{ Player.ProfileImage }}{% else %}profile.png{% endif %}" class="avatar avatar-lg mt-1">
+                                                            <p>{{ Player.Firstname }} {{ Player.Lastname }}</p>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </td>
+                                                <td>je hebt recht op:
+                                                    <span class="badge badge-light">
+                                                        1 uur
+                                                    </span>
+                                                    speel tijd
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-secondary" href="{{ path('PlayerChangeReservation',{time:CourtReservation.StartTime|date('U'),Court:CourtReservation.Court}) }}">
+                                                        aanpassen
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" href="{{ path('PlayerDeleteReservation',{time:CourtReservation.StartTime|date('U'),Court:CourtReservation.Court}) }}">
+                                                        verwijder
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endblock %}
+{% block modals %}
+    <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    If you click delete the object will be permanently be deleted.
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a class="btn btn-danger" id="modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    $('[data-toggle="modal"]').on('click', function (e) {
+                        // convert target (e.g. the button) to jquery object
+                        var $target = $(e.target);
+
+                        // modal targeted by the button
+                        var modalSelector = $target.data('target');
+                        // retrieve the dom element corresponding to current attribute
+                        var $modalAttribute = $(modalSelector + ' #modal-link');
+                        var dataValue = $target.data('link');
+                        $modalAttribute.attr('href', dataValue);
+                    });
+
+                </script>
+            {% endblock %}
+

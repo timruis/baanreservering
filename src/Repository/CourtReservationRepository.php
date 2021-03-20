@@ -39,7 +39,23 @@ class CourtReservationRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findNow()
+    {
+        $date = new \DateTime();
+        $secdate = new \DateTime();
+        $from=$date->sub(new \DateInterval("PT1H"));
+        $to=$secdate->add(new \DateInterval("PT1H"));
 
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.StartTime > :from')
+            ->andWhere('c.StartTime < :to')
+            ->setParameter('from', $from )
+            ->setParameter('to', $to)
+            ->orderBy('c.StartTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 
     public function findReservation($date, $court)
     {

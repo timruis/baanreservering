@@ -1,0 +1,140 @@
+{% extends 'UserLogedin.html.twig' %}
+
+{% block title %} ISSIMI - DASHBOARD{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('DataTables') }}
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-52115242-14');
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A project management Bootstrap theme by Medium Rare">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Gothic+A1" rel="stylesheet">
+
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="col-12">
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#" role="tab" aria-controls="users" aria-selected="true">Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" role="tab" aria-controls="UserTracker" aria-selected="false">User Tracker</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" role="tab" aria-controls="notification" aria-selected="false">Notification</a>
+            </li>
+        </ul>
+        <div class="row content-list-head">
+            <div class="col-auto">
+                <h3>Notification</h3>
+            </div>
+            <button type="button" class="btn btn-outline-success" onclick="window.location.href = '{{ path('admin-Message') }}';">
+                Make a Message
+                <span class="fa fa-edit"></span>
+            </button>
+            <form class="col-md-auto">
+                <div class="input-group input-group-round">
+                    <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="material-icons">filter_list</i>
+                  </span>
+                    </div>
+                    <input type="search" class="form-control filter-list-input" placeholder="Filter notification" aria-label="Filter Notification">
+                </div>
+            </form>
+        </div>
+        <!--end of content list head-->
+        <div class="content-list-body row filter-list-1565473567098">
+            {% for message in messages %}
+                {% set untilend = date( message.endingDate|date ).diff( date("now") ).days %}
+                {% set FromStart = date( message.startingDate|date ).diff( date("now") ).days %}
+                {% set Percentage = FromStart/(untilend+FromStart) *100 %}
+           <div class="col-12">
+                <div class="card card-task">
+                    <div class="progress">
+                        <div class="progress-bar bg-{{ message.color }}" role="progressbar" style="width: {{ Percentage }}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title">
+                            <div class="alert alert-{{ message.color }}">
+                                {% autoescape %}
+                                    {{ message.message | raw }}
+                                {% endautoescape %}</div>
+                            <span class="text-small">{{ date( message.endingDate|date ).diff( date("now") ).days }} days left</span>
+                        </div>
+                        <div class="card-meta">
+
+                            <div class="d-flex align-items-center">
+                                <i class="material-icons">playlist_add_check</i>
+                                <span>0/6</span>
+                            </div>
+                            <div class="dropdown card-options">
+                                <button class="btn-options" type="button" id="task-dropdown-button-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">more_vert</i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-left" style="margin-left: -9vw;">
+                                    <a class="dropdown-item" href="{{ path('Message-Change',{ MessageId: message.id}) }}">Edit</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="{{ path('Message-Delete',{ MessageId: message.id}) }}">delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+        {% block modals %}
+            <div class="modal fade" id="DeleteCerification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Are you sure</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            If you click delete the object will be permanently be deleted.
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="btn btn-danger" id="deleteLinkBtn modal-link" href="">Delete <span class="fas fa-times-circle"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+            {% block javascripts %}
+                {{ parent() }}
+
+                {{ encore_entry_script_tags('DataTables') }}
+                <script>
+                    function ModalDelete(Link) {
+                        $("#deleteLinkBtn").attr("href", Link);
+                    }
+
+
+
+                </script>
+
+            {% endblock %}

@@ -88,13 +88,14 @@ class CheckCourtsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $CourtReservations = $this->getUser()->getCourtReservations();
-        $NotReservedCourtReservation = $this->getUser()->getCourtReservationsTeam();
+        $CourtReservationsTeam = $this->getUser()->getCourtReservationsTeam();
         return $this->render('check_Court/CheckReservation.html.twig', [
             'Title' => 'CheckCourtsController',
             'CourtReservations'=>$CourtReservations,
-            'TeamCourtReservations'=>$NotReservedCourtReservation,
+            'TeamCourtReservations'=>$CourtReservationsTeam,
         ]);
     }
+
     /**
      * @Route("/DeleteCourtReservation/{time}/{Court}", name="PlayerDeleteReservation")
      */

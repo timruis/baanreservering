@@ -41,9 +41,32 @@
     {% endif %}
     <div class="row w-100">
         <div class="card w-100" style="overflow-x: scroll; padding: 50px;padding-left:0px;">
-            <h3 id="monthYear">
+            <h3 id="monthYear" class="pl-5">
+                U kijkt nu op
+                {% if "now" | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    vandaag
+                {% elseif date("+1 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    morgen
+                {% elseif date("+2 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    overmorgen
+                {% elseif date("+3 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    drie dagen verder
+                {% elseif date("+4 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    vier dagen verder
+                {% elseif date("+5 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    vijf dagen verder
+                {% elseif date("+6 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    zes dagen verder
+                {% elseif date("+7 day") | date("d/m/Y") == ChosenDate | date("d/m/Y") %}
+                    zeven dagen verder
+                {% elseif date("+7 day") | date("d/m/Y") < ChosenDate | date("d/m/Y") %}
+                    een dag(en) te ver
+                {% endif %}
 
             </h3>
+            <h4 class="pl-5">
+                {{ ChosenDate | date("d/m/Y") }}
+            </h4>
             <div class="span12">
 
 

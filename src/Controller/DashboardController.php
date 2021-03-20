@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,8 +13,11 @@ class DashboardController extends AbstractController
      */
     public function dashboard()
     {
+        $Messages = $this->getDoctrine()->getRepository(Message::class)->findAll();
+
         return $this->render('dashboard/dashboard.html.twig', [
-            'Title'=> "Dashboard"
+            'Title'=> "Dashboard",
+            'Messages'=>$Messages,
         ]);
     }
     /**

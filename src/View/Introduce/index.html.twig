@@ -1,0 +1,90 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}IZEW - {{ Title }} {% endblock %}
+
+
+        {% block stylesheets %}
+            {{ parent() }}
+            {{ encore_entry_link_tags('DataTables') }}
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <style>
+                @media (min-width: 62em) {
+                    .card-columns {
+                        -webkit-column-count: 1;
+                        -moz-column-count: 1;
+                        column-count: 1;
+                    }
+                }
+                @media (min-width: 85em) {
+                    .card-columns {
+                        -webkit-column-count: 2;
+                        -moz-column-count: 2;
+                        column-count: 2;
+                    }
+                }
+
+                @media (min-width: 150em) {
+                    .card-columns {
+                        -webkit-column-count: 3;
+                        -moz-column-count: 3;
+                        column-count: 3;
+                    }
+                }
+
+
+
+            </style>
+        {% endblock %}
+
+{% block body %}
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">introduce</strong>
+            </div>
+            <div class="card-body">
+                <div style="padding:1em;overflow-x: scroll;">
+                    <div class="card-title">
+                        <h3 class="text-center">Alle introduces</h3>
+                    </div>
+                    <hr>
+                    <table class="bootstrap-data-table table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>INTRODUCE</th>
+                            <th>HOEVEELHEID</th>
+                            <th>Geintroduceerd door</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for Introduce in Introduces|sort %}
+                                <tr>
+                                    <td>
+                                        {{ Introduce.Name }}
+                                    </td>
+                                    <td>
+                                        {{ Introduce.amount }}
+                                    </td>
+                                    <td>
+                                        {% if Introduce.Introducers is defined %}
+                                            {% for Introducer in Introduce.Introducers|sort %}
+                                                {% for name in Introducer %}
+                                                {{ name }} <br/>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+ {% block javascripts %}
+                {{ parent() }}
+                {{ encore_entry_script_tags('DataTables') }}
+ {% endblock %}

@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\PageVisit;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\BackgroundImagesType;
+use App\Form\MessageType;
 use App\Form\PasswordChangeType;
 use App\Form\ProfileImageType;
 use App\Form\UserChangeType;
@@ -32,6 +34,7 @@ class AdminController extends AbstractController
     {
         $PageVisits = $this->getDoctrine()->getRepository(PageVisit::class)->findAllVisitsOnDate();
         $Accounts = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $Messages = $this->getDoctrine()->getRepository(Message::class)->findAll();
         $form = $this->createForm(UserType::class);
         $form->handleRequest($request);
 
@@ -43,85 +46,136 @@ class AdminController extends AbstractController
             $InfoAccount->setLastname($data->getLastname());
             $InfoAccount->setEmail($data->getEmail());
             $InfoAccount->setRoles($data->getRoles());
-            $InfoAccount->setActivateUser(1);
-            $InfoAccount->setPayed(1);
-            $InfoAccount->setSummerMember(1);
-            $InfoAccount->setWinterMember(1);
             $InfoAccount->setPassword($this->encoder->encodePassword($InfoAccount,$data->getPassword()));
             $em->persist($InfoAccount);
             $em->flush();
+            return $this->redirectToRoute('admin-Tools');
         }
         return $this->render('admin/adminTools.html.twig', [
             'PageVisits'=>$PageVisits,
             'NewAccount' => $form->createView(),
             'Accounts' => $Accounts,
+            'messages'=>$Messages,
             'Title'=> "Admin Tools",
             'TotalUsers'=>$Accounts
         ]);
     }
     /**
-     * @Route("/admin/Registry/Change-Account-Info/{AccountId}", name="Account-Change")
+     * @Route("/admin/admin/tracker", name="adminUserTracker")
      */
-    public function ChangeAccount($AccountId,EntityManagerInterface $em, Request $request)
+    public function adminUserTracker(EntityManagerInterface $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $Account = $em->getRepository('App\Entity\User')->find($AccountId);
-        $formAccount = $this->createForm(AccountType::class, $Account);
-        $formAccount->handleRequest($request);
 
-        $form = $this->createForm(UserType::class, $Account);
-        $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            $data=$form->getData();
-            $Account->setUsername($data->getUsername());
-            $Account->setEmail($data->getEmail());
-            $Account->setRoles($data->getRoles());
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
-            if ($form->get('OpenList')->isClicked()) {
-                return $this->redirectToRoute('admin-Tools');
-            }elseif ($form->get('StayOn')->isClicked()){
-                return $this->redirectToRoute('Account-Change', array('AccountId' => $AccountId));
-            } else {
-                return $this->redirectToRoute('Account-Registry');
-            }
-        }
-        if ($formAccount->isSubmitted()) {
-            $data = $formAccount->getData();
-            $Account->setEmail($data->getEmail());
-            $Account->setFirstname($data->getFirstname());
-            $Account->setLastname($data->getLastname());
-            $Account->setProfileImage($Account->getProfileImage());
-            $Account->setBackgroundImage($Account->getBackgroundImage());
-            $Account->setAddress($data->getAddress());
-            $Account->setMobile($data->getMobile());
-            $Account->setDescription($data->getDescription());
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
-            return $this->redirectToRoute('Account-Change', array('AccountId' => $AccountId));
+        return $this->render('admin/adminUserTracker.html.twig', [
 
-        }
-
-
-        return $this->render('Accounts/AccountRegistry.html.twig', [
-            'Account' => $form->createView(),
-            'userprofile'=>$Account,
-            'Accountprofile' => $formAccount->createView(),
-            'Title'=> "Change Existing Account"
+            'Title'=> "Admin Tools"
         ]);
     }
     /**
-     * @Route("/admin/Registry/Delete-Account-Info/{AccountId}", name="Account-Delete")
+     * @Route("/priviliged/usertracker/list", name="usertracker_List_data")
      */
-    public function DeleteAccount($AccountId,EntityManagerInterface $em, Request $request)
+    public function PageVisitListData()
+    {
+
+        $PageVisits = $this->getDoctrine()->getRepository(PageVisit::class)->findAllVisitsOnDate();
+
+        $allVisits = array();
+        $i=1;
+        foreach ($PageVisits as $PageVisit) {
+            array_push($allVisits, array(
+                    '<img alt="Image" src="uploads/Images/profile/' . $PageVisit->getUser()->getProfileImage() . '" class="avatar avatar-lg mt-1">',
+                    $PageVisit->getUser()->getFirstname() . " " . $PageVisit->getUser()->getLastname(),
+                    $PageVisit->getCurrentUrl(),
+                    $PageVisit->getTime()->format('u'),
+
+                )
+            );
+        }
+
+
+        $GoodArray = array('data' => $allVisits);
+        return new \Symfony\Component\HttpFoundation\Response(
+            json_encode($GoodArray)
+        );
+    }
+
+
+
+    /**
+     * @Route("/admin/messages", name="see-admin-Messages")
+     */
+    public function adminMessage(EntityManagerInterface $em, Request $request)
+    {
+        $Messages = $this->getDoctrine()->getRepository(Message::class)->findAll();
+
+
+        return $this->render('admin/dashboardMessage.html.twig', [
+            'messages'=>$Messages,
+            'Title'=> "Admin Tools",
+        ]);
+    }
+
+    /**
+     * @Route("/admin/admin-Message", name="admin-Message")
+     */
+    public function Message(EntityManagerInterface $em, Request $request)
+    {
+        $form = $this->createForm(MessageType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data=$form->getData();
+            $InfoMessage = new Message();
+            $InfoMessage->setColor($data->getColor());
+            $InfoMessage->setMessage($data->getMessage());
+            $InfoMessage->setEndingDate($data->getEndingDate());
+            $InfoMessage->setStartingDate($data->getStartingDate());
+            $em->persist($InfoMessage);
+            $em->flush();
+            return $this->redirectToRoute('see-admin-Messages');
+        }
+
+        return $this->render('admin/adminMessage.html.twig', [
+            'Message' => $form->createView(),
+            'Title'=> "Admin Message"
+        ]);
+    }
+    /**
+     * @Route("/priviliged/Registry/Change-Message-Info/{MessageId}", name="Message-Change")
+     */
+    public function ChangeMessage($MessageId, EntityManagerInterface $em, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $Account = $em->getRepository('App\Entity\User')->find($AccountId);
+        $Message = $em->getRepository('App\Entity\Message')->find($MessageId);
+
+        $form = $this->createForm(MessageType::class, $Message);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirectToRoute('see-admin-Messages');
+        }
 
 
-        $em= $this->getDoctrine()->getManager();
-        $em->remove($Account);
-        $em->flush();
-        return $this->redirectToRoute('Listed-Accounts');
+        return $this->render('admin/adminMessage.html.twig', [
+            'Message' => $form->createView(),
+            'Title' => "Change Existing Message"
+        ]);
     }
+
+    /**
+     * @Route("/priviliged/Registry/Delete-Message-Info/{MessageId}", name="Message-Delete")
+     */
+    public function DeleteMessage($MessageId, EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Message = $em->getRepository('App\Entity\Message')->find($MessageId);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($Message);
+        $em->flush();
+        return $this->redirectToRoute('see-admin-Messages');
+    }
+
 }
