@@ -252,13 +252,13 @@ class MemberManagementController extends AbstractController
      */
     public function DeleteMember($MemberId,EntityManagerInterface $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $Member = $em->getRepository('App\Entity\User')->find($MemberId);
-
-
-        $em= $this->getDoctrine()->getManager();
         foreach ($Member->getPageVisits() as $pageVisit){
             $em->remove($pageVisit);
+            $em->flush();
+        }
+        foreach ($Member->getCourtReservations() as $CourtReservation){
+            $em->remove($CourtReservation);
             $em->flush();
         }
         $em->remove($Member);

@@ -129,6 +129,11 @@
                 {{ encore_entry_script_tags('DataTables') }}
                 {% if is_granted('ROLE_USERMANAGEMENT') or is_granted('ROLE_ADMIN') %}
                 <script>
+
+                    function ModalDelete(Link) {
+                        $("#modal-link").attr("href", Link);
+                    }
+
                     function previewFiles() {
 
                         var preview = document.querySelector('#preview');
