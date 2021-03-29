@@ -1,0 +1,77 @@
+{% extends 'UserLogedin.html.twig' %}
+
+        {% block title %}ISSIMI - {{ Title }} {% endblock %}
+
+
+        {% block stylesheets %}
+                {{ parent() }}
+
+        {% endblock %}
+
+        {% block body %}
+<div class="breadcrumbs">
+    <div class="col-sm-4">
+        <div class="page-header float-left">
+            <div class="page-title">
+                <h1>{{ Title }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="page-header float-right">
+            <div class="page-title">
+                <ol class="breadcrumb text-right">
+                    <li class="active">{{ Title }}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content mt-3">
+    <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    <strong class="card-title">Instellingen</strong>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <label for="">
+
+                        </label>
+                    </form>
+                </div>
+
+            </div>
+
+    </div>
+</div>
+        {% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+
+
+
+    <script>
+        jQuery(document).ready(function() {
+            $('.js-datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+            var ModelList = SchrinkModelList();
+        });
+        function SchrinkModelList() {
+            var Message_Manufacturer = document.getElementById("Message_Manufacturer");
+            var ClassName = Message_Manufacturer.options[Message_Manufacturer.selectedIndex].value;
+            $('.Models').hide();
+            $('.Model' + ClassName ).show();
+        }
+    </script>
+
+{% endblock %}
+
+
+
+
+
+

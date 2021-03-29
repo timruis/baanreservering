@@ -155,8 +155,6 @@ class AdminController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('see-admin-Messages');
         }
-
-
         return $this->render('admin/adminMessage.html.twig', [
             'Message' => $form->createView(),
             'Title' => "Change Existing Message"
@@ -178,4 +176,18 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('see-admin-Messages');
     }
 
+    /**
+     * @Route("/priviliged/settings", name="settings-Change")
+     */
+    public function ChangeSettings(EntityManagerInterface $em, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Settings = $em->getRepository('App\Entity\Settings')->findAll();
+
+
+        return $this->render('admin/adminMessage.html.twig', [
+            'Settings' => $Settings,
+            'Title' => "Change Existing Message"
+        ]);
+    }
 }
