@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Message;
 use App\Entity\PageVisit;
+use App\Entity\Settings;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\BackgroundImagesType;
 use App\Form\MessageType;
 use App\Form\PasswordChangeType;
 use App\Form\ProfileImageType;
+use App\Form\SettingsType;
 use App\Form\UserChangeType;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -166,7 +168,6 @@ class AdminController extends AbstractController
      */
     public function DeleteMessage($MessageId, EntityManagerInterface $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $Message = $em->getRepository('App\Entity\Message')->find($MessageId);
 
 
@@ -181,12 +182,24 @@ class AdminController extends AbstractController
      */
     public function ChangeSettings(EntityManagerInterface $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $Settings = $em->getRepository('App\Entity\Settings')->findAll();
 
+        $form = $this->createForm(SettingsType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data=$form->getData();
+            $InfoSettings = new Settings();
+            $InfoSettings->setName($data->getName());
+            $InfoSettings->setDescription($data->getDescription());
+            $InfoSettings->setValue($data->getValue());
+            $em->persist($InfoSettings);
+            $em->flush();
+            return $this->redirectToRoute('settings-Change');
+        }
 
-        return $this->render('admin/adminMessage.html.twig', [
+        return $this->render('admin/Settings.html.twig', [
             'Settings' => $Settings,
+            'SettingsForm'=> $form->createView(),
             'Title' => "Change Existing Message"
         ]);
     }

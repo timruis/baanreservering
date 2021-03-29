@@ -32,6 +32,11 @@ class Settings
      */
     private $Value;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class Settings
     public function setValue(string $Value): self
     {
         $this->Value = $Value;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->Type;
+    }
+
+    public function setType(string $Type): self
+    {
+        $this->Type = $Type;
 
         return $this;
     }

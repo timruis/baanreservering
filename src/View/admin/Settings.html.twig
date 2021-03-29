@@ -9,24 +9,7 @@
         {% endblock %}
 
         {% block body %}
-<div class="breadcrumbs">
-    <div class="col-sm-4">
-        <div class="page-header float-left">
-            <div class="page-title">
-                <h1>{{ Title }}</h1>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div class="page-header float-right">
-            <div class="page-title">
-                <ol class="breadcrumb text-right">
-                    <li class="active">{{ Title }}</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="content mt-3">
     <div class="animated fadeIn">
             <div class="card">
@@ -34,11 +17,31 @@
                     <strong class="card-title">Instellingen</strong>
                 </div>
                 <div class="card-body">
-                    <form>
-                        <label for="">
+                    <div class="row">
+                        <div class="col">
+                            <form>
+                                {% for Setting in Settings %}
+                                    <div class="form-group">
+                                        <label for="{{ Setting.Name }}">
+                                            {{ Setting.Description }}
+                                        </label>
+                                        <input name="{{ Setting.Name }}" value="{{ Setting.Value }}" type="{{ Setting.type }}">
+                                    </div>
+                                {% endfor %}
+                                <button class="btn btn-primary" type="submit">save</button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            {{ form_start(SettingsForm) }}
+                            <div class="row">
+                                <div class="col">
+                                    {{ form_widget(SettingsForm) }}
+                                </div>
+                            </div>
+                            {{ form_end(SettingsForm) }}
 
-                        </label>
-                    </form>
+                        </div>
+                    </div>
                 </div>
 
             </div>
