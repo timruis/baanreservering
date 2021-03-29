@@ -63,7 +63,7 @@
                     <thead>
                     <tr>
                         <th style="z-index: 6;">Tijd</th>
-                        {% for c in 1..11 %}
+                        {% for c in 1..CourtAmount %}
                         <th>baan {{ c }}</th>
                         {% endfor %}
 
@@ -75,7 +75,7 @@
                     {% for t in times %}
                     <tr>
                         <th> {{ t }}</th>
-                        {% for c in 1..11 %}
+                        {% for c in 1..CourtAmount %}
                             <td>
                                 {% set stringdate = ChosenDate~" "~t~":00" %}
                                 {% set date = stringdate|date('U') %}

@@ -19,13 +19,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <form>
+                            <form method="post">
                                 {% for Setting in Settings %}
                                     <div class="form-group">
                                         <label for="{{ Setting.Name }}">
                                             {{ Setting.Description }}
                                         </label>
-                                        <input name="{{ Setting.Name }}" value="{{ Setting.Value }}" type="{{ Setting.type }}">
+                                        <input name="SettingsValue[{{ Setting.Name }}]" value="{{ Setting.Value }}" type="{{ Setting.type }}">
                                     </div>
                                 {% endfor %}
                                 <button class="btn btn-primary" type="submit">save</button>

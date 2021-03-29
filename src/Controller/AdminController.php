@@ -192,10 +192,21 @@ class AdminController extends AbstractController
             $InfoSettings->setName($data->getName());
             $InfoSettings->setDescription($data->getDescription());
             $InfoSettings->setValue($data->getValue());
+            $InfoSettings->setType($data->getType());
             $em->persist($InfoSettings);
             $em->flush();
             return $this->redirectToRoute('settings-Change');
         }
+        if(isset($_POST['SettingsValue'])){
+            foreach ($_POST['SettingsValue'] as $key => $data) {
+                $InfoSettings = $em->getRepository(Settings::class)->findOneBy(['Name' => $key]);
+                $InfoSettings->setValue($data);
+                $em->persist($InfoSettings);
+                $em->flush();
+            }
+            return $this->redirectToRoute('settings-Change');
+        }
+
 
         return $this->render('admin/Settings.html.twig', [
             'Settings' => $Settings,

@@ -21,6 +21,7 @@ class CourtReservationController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $CourtReservations = $em->getRepository('App\Entity\CourtReservation')->findToday($date);
+        $CourtAmount = $em->getRepository('App\Entity\Settings')->findOneBy(['Name'=> 'CourtAmount'])->getValue();
         $takenSpots=[];
         foreach ($CourtReservations as $CourtReservation){
             array_push($takenSpots ,$CourtReservation->getStartTime()->format('U').$CourtReservation->getCourt());
@@ -53,7 +54,8 @@ class CourtReservationController extends AbstractController
             'allReservations' => $takenSpots,
             'times'=>$timeArray,
             'ChosenDate'=>$date,
-            'sundown'=>$sundown
+            'sundown'=>$sundown,
+            'CourtAmount'=> $CourtAmount
         ]);
     }
 
